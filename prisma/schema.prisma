@@ -1,0 +1,367 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ====================================================================
+// NEXTAUTH MODELS
+// ====================================================================
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ====================================================================
+// EXSKILL ENUMS
+// ====================================================================
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum Proficiency {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+enum ExchangeStatus {
+  ONGOING
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum MeetingStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  DISMISSED
+}
+
+enum DisputeStatus {
+  OPEN
+  RESOLVED
+}
+
+// ====================================================================
+// EXSKILL MODELS (Dari ERD yang disetujui)
+// ====================================================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String?   @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?   @db.Text
+
+  // ERD Fields
+  auth_provider String?  @db.VarChar(50)
+  provider_id   String?  @db.VarChar(255)
+  name          String?  @db.VarChar(100)
+  university    String?  @db.VarChar(100)
+  major         String?  @db.VarChar(100)
+  bio           String?  @db.Text
+  githubUrl     String?  @db.VarChar(255)
+  linkedinUrl   String?  @db.VarChar(255)
+  portfolioUrl  String?  @db.VarChar(255)
+  points        Int      @default(0)
+  trust_score   Int      @default(0)
+  role          Role     @default(STUDENT)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  // NextAuth Relations
+  accounts Account[]
+  sessions Session[]
+
+  // ExSkill Relations
+  owned_skills            UserSkill[]
+  wanted_skills           WantedSkill[]
+  sent_proposals          ExchangeProposal[]    @relation("SentProposals")
+  received_proposals      ExchangeProposal[]    @relation("ReceivedProposals")
+  participant_a_exchanges Exchange[]            @relation("ParticipantA")
+  participant_b_exchanges Exchange[]            @relation("ParticipantB")
+  session_confirmations   SessionConfirmation[]
+  reviews_given     Review[]              @relation("ReviewsGiven")
+  reviews_received  Review[]              @relation("ReviewsReceived")
+  notifications     Notification[]        @relation("UserNotifications")
+  messages          Message[]             @relation("SentMessages")
+  reports_filed     Report[]              @relation("ReportsFiled")
+  reports_received        Report[]              @relation("ReportsReceived")
+  disputes_raised         Dispute[]
+  blocked_users           Block[]               @relation("Blocker")
+  blocked_by              Block[]               @relation("Blocked")
+
+  @@map("users")
+}
+
+model Skill {
+  id         String   @id @default(cuid())
+  name       String   @unique @db.VarChar(100)
+  category   String   @db.VarChar(100)
+  created_at DateTime @default(now())
+
+  user_skills         UserSkill[]
+  wanted_skills       WantedSkill[]
+  offered_proposals   ExchangeProposal[] @relation("OfferedSkill")
+  requested_proposals ExchangeProposal[] @relation("RequestedSkill")
+
+  @@map("skills")
+}
+
+model UserSkill {
+  id          String      @id @default(cuid())
+  user_id     String
+  skill_id    String
+  proficiency Proficiency
+  created_at  DateTime    @default(now())
+
+  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skill_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, skill_id])
+  @@map("user_skills")
+}
+
+model WantedSkill {
+  id         String   @id @default(cuid())
+  user_id    String
+  skill_id   String
+  created_at DateTime @default(now())
+
+  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skill_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, skill_id])
+  @@map("wanted_skills")
+}
+
+model ExchangeProposal {
+  id                 String         @id @default(cuid())
+  sender_id          String
+  receiver_id        String
+  offered_skill_id   String
+  requested_skill_id String
+  status             ProposalStatus @default(PENDING)
+  message            String?        @db.Text
+  created_at         DateTime       @default(now())
+  updated_at         DateTime       @updatedAt
+
+  sender          User      @relation("SentProposals", fields: [sender_id], references: [id], onDelete: Cascade)
+  receiver        User      @relation("ReceivedProposals", fields: [receiver_id], references: [id], onDelete: Cascade)
+  offered_skill   Skill     @relation("OfferedSkill", fields: [offered_skill_id], references: [id])
+  requested_skill Skill     @relation("RequestedSkill", fields: [requested_skill_id], references: [id])
+  exchange        Exchange?
+
+  @@map("exchange_proposals")
+}
+
+model Exchange {
+  id               String         @id @default(cuid())
+  proposal_id      String         @unique
+  participant_a_id String
+  participant_b_id String
+  status           ExchangeStatus @default(ONGOING)
+  session_status   String         @default("NOT_STARTED")
+  agreed_to_start  String[]       @default([])
+  agreed_to_end    String[]       @default([])
+  created_at       DateTime       @default(now())
+  updated_at       DateTime       @updatedAt
+
+  proposal      ExchangeProposal @relation(fields: [proposal_id], references: [id])
+  participant_a User             @relation("ParticipantA", fields: [participant_a_id], references: [id])
+  participant_b User             @relation("ParticipantB", fields: [participant_b_id], references: [id])
+  milestones    Milestone[]
+  reviews       Review[]
+  disputes      Dispute[]
+  messages      Message[]
+
+  @@map("exchanges")
+}
+
+model Milestone {
+  id           String    @id @default(cuid())
+  exchange_id  String
+  description  String    @db.VarChar(255)
+  target_date  DateTime?
+  is_completed Boolean   @default(false)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  exchange Exchange         @relation(fields: [exchange_id], references: [id], onDelete: Cascade)
+  sessions MeetingSession[]
+
+  @@map("milestones")
+}
+
+model MeetingSession {
+  id               String        @id @default(cuid())
+  milestone_id     String
+  scheduled_at     DateTime
+  duration_minutes Int
+  meeting_link     String?       @db.VarChar(255)
+  status           MeetingStatus @default(SCHEDULED)
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  milestone     Milestone             @relation(fields: [milestone_id], references: [id], onDelete: Cascade)
+  confirmations SessionConfirmation[]
+
+  // Catatan: Model ini direname menjadi "MeetingSession" 
+  // karena "Session" digunakan oleh NextAuth
+  @@map("meeting_sessions")
+}
+
+model SessionConfirmation {
+  id           String   @id @default(cuid())
+  session_id   String
+  user_id      String
+  is_confirmed Boolean  @default(false)
+  created_at   DateTime @default(now())
+
+  session MeetingSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  user    User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([session_id, user_id])
+  @@map("session_confirmations")
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  exchange_id String
+  reviewer_id String
+  reviewee_id String
+  rating      Int
+  comment     String   @db.Text
+  created_at  DateTime @default(now())
+
+  exchange Exchange @relation(fields: [exchange_id], references: [id], onDelete: Cascade)
+  reviewer User     @relation("ReviewsGiven", fields: [reviewer_id], references: [id], onDelete: Cascade)
+  reviewee User     @relation("ReviewsReceived", fields: [reviewee_id], references: [id], onDelete: Cascade)
+
+  @@unique([reviewer_id, exchange_id])
+  @@map("reviews")
+}
+
+model Notification {
+  id         String   @id @default(cuid())
+  user_id    String
+  type       String   @db.VarChar(50)
+  message    String   @db.Text
+  is_read    Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  user User @relation("UserNotifications", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  exchange_id String
+  sender_id   String
+  content     String   @db.Text
+  file_url    String?  @db.Text
+  file_name   String?  @db.Text
+  created_at  DateTime @default(now())
+
+  exchange Exchange @relation(fields: [exchange_id], references: [id], onDelete: Cascade)
+  sender   User     @relation("SentMessages", fields: [sender_id], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model Report {
+  id               String       @id @default(cuid())
+  reporter_id      String
+  reported_user_id String
+  reason           String       @db.Text
+  status           ReportStatus @default(PENDING)
+  created_at       DateTime     @default(now())
+  updated_at       DateTime     @updatedAt
+
+  reporter      User @relation("ReportsFiled", fields: [reporter_id], references: [id], onDelete: Cascade)
+  reported_user User @relation("ReportsReceived", fields: [reported_user_id], references: [id], onDelete: Cascade)
+
+  @@map("reports")
+}
+
+model Dispute {
+  id          String        @id @default(cuid())
+  exchange_id String
+  raiser_id   String
+  reason      String        @db.Text
+  status      DisputeStatus @default(OPEN)
+  resolution  String?       @db.Text
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+
+  exchange Exchange @relation(fields: [exchange_id], references: [id], onDelete: Cascade)
+  raiser   User     @relation(fields: [raiser_id], references: [id], onDelete: Cascade)
+
+  @@map("disputes")
+}
+
+model Block {
+  id         String   @id @default(cuid())
+  blocker_id String
+  blocked_id String
+  created_at DateTime @default(now())
+
+  blocker User @relation("Blocker", fields: [blocker_id], references: [id], onDelete: Cascade)
+  blocked User @relation("Blocked", fields: [blocked_id], references: [id], onDelete: Cascade)
+
+  @@unique([blocker_id, blocked_id])
+  @@map("blocks")
+}

@@ -23,7 +23,7 @@ export default async function ExplorePage() {
 
   if (!currentUser) redirect("/");
 
-  const wantedSkillIds = currentUser.wanted_skills.map(w => w.skill_id);
+  const wantedSkillIds = currentUser.wanted_skills.map((w: any) => w.skill_id);
 
   // Cari partner yang cocok
   let matchedUsers: any[] = [];
@@ -89,7 +89,7 @@ export default async function ExplorePage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {matchedUsers.map((user) => {
+              {matchedUsers.map((user: any) => {
                 const matchedSkills = user.owned_skills.filter((os: any) => wantedSkillIds.includes(os.skill_id));
                 const partnerSkills = user.owned_skills.map((os: any) => os.skill);
 

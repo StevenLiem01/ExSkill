@@ -72,7 +72,7 @@ export default async function ProposalsPage() {
                 <div className="bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl p-8 text-center text-slate-400 font-medium shadow-sm">
                   Belum ada proposal pertukaran yang masuk.
                 </div>
-              ) : incoming.map((p) => (
+              ) : incoming.map((p: any) => (
                 <div key={p.id} className="bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-sm hover:border-[#00DF9A]/50 transition-all duration-300 ease-in-out flex flex-col gap-5 relative">
                   <div className="absolute top-6 right-6">
                     <StatusBadge status={p.status} />
@@ -121,7 +121,7 @@ export default async function ProposalsPage() {
                 <div className="bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl p-8 text-center text-slate-400 font-medium shadow-sm">
                   Kamu belum pernah mengajukan proposal pertukaran.
                 </div>
-              ) : outgoing.map((p) => (
+              ) : outgoing.map((p: any) => (
                 <div key={p.id} className="bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-sm hover:border-[#00DF9A]/50 transition-all duration-300 ease-in-out flex flex-col gap-5 relative opacity-90 hover:opacity-100">
                   <div className="absolute top-6 right-6">
                     <StatusBadge status={p.status} />

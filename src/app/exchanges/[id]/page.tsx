@@ -43,7 +43,7 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
   const weLearn = isParticipantA ? exchange.proposal.requested_skill : exchange.proposal.offered_skill;
   const weTeach = isParticipantA ? exchange.proposal.offered_skill : exchange.proposal.requested_skill;
 
-  const existingReview = exchange.reviews.find(r => r.reviewer_id === currentUser.id);
+  const existingReview = exchange.reviews.find((r: any) => r.reviewer_id === currentUser.id);
 
   return (
     <AuthProvider>

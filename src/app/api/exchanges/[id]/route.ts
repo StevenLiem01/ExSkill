@@ -70,7 +70,7 @@ export async function PATCH(
 
     if (status === "COMPLETED" && exchange.status !== "COMPLETED") {
       // Selesaikan exchange dan tambahkan trust_score secara atomik dengan transaction
-      const updatedExchange = await prisma.$transaction(async (tx) => {
+      const updatedExchange = await prisma.$transaction(async (tx: any) => {
         // 1. Update status exchange
         const ex = await tx.exchange.update({
           where: { id: exchangeId },

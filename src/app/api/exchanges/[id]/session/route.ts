@@ -82,7 +82,7 @@ export async function PATCH(
             where: { id: exchange.participant_b_id },
             data: { trust_score: { increment: 10 } }
           })
-        ]).catch(err => console.error("Error updating trust scores:", err));
+        ]).catch((err: any) => console.error("Error updating trust scores:", err));
       }
 
       return NextResponse.json(updatedExchange, { status: 200 });

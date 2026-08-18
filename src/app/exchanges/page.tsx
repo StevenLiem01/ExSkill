@@ -33,8 +33,8 @@ export default async function ExchangesPage() {
     orderBy: { created_at: 'desc' }
   });
 
-  const activeExchanges = exchanges.filter(e => e.status === "ONGOING");
-  const completedExchanges = exchanges.filter(e => e.status === "COMPLETED");
+  const activeExchanges = exchanges.filter((e: any) => e.status === "ONGOING");
+  const completedExchanges = exchanges.filter((e: any) => e.status === "COMPLETED");
 
   const ExchangeCard = ({ exchange }: { exchange: any }) => {
     // Tentukan siapa partner dari pertukaran ini
@@ -121,7 +121,7 @@ export default async function ExchangesPage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {activeExchanges.map(ex => <ExchangeCard key={ex.id} exchange={ex} />)}
+                  {activeExchanges.map((ex: any) => <ExchangeCard key={ex.id} exchange={ex} />)}
                 </div>
               )}
             </section>
@@ -137,7 +137,7 @@ export default async function ExchangesPage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-80">
-                  {completedExchanges.map(ex => <ExchangeCard key={ex.id} exchange={ex} />)}
+                  {completedExchanges.map((ex: any) => <ExchangeCard key={ex.id} exchange={ex} />)}
                 </div>
               )}
             </section>

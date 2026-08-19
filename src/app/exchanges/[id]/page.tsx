@@ -5,8 +5,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import AuthProvider from "@/components/AuthProvider";
 import ReviewForm from "@/components/ReviewForm";
-import ChatBox from "@/components/ChatBox";
 import SessionControl from "@/components/SessionControl";
+import ExchangeTabs from "./ExchangeTabs";
+import CompleteExchangeButton from "@/components/CompleteExchangeButton";
 
 export default async function ExchangeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: exchangeId } = await params;
@@ -61,12 +62,26 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
           </div>
 
           <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
-            <h1 className="text-3xl font-bold mb-8 text-slate-900">Ruang Kerja: <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{partner.name}</span></h1>
+            
+            {/* HEADER RUANG KERJA */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+              <h1 className="text-3xl font-bold text-slate-900">
+                Ruang Kerja: <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{partner.name}</span>
+              </h1>
+              <CompleteExchangeButton 
+                exchangeId={exchange.id} 
+                isCompleted={exchange.status === "COMPLETED"} 
+              />
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* KOLOM KIRI: Chat Box */}
+              {/* KOLOM KIRI: Ruang Kerja Utama (Tabs: Chat & Milestone) */}
               <div className="lg:col-span-2 flex flex-col">
-                <ChatBox exchangeId={exchange.id} currentUserId={currentUser.id} sessionStatus={exchange.session_status} />
+                <ExchangeTabs 
+                  exchangeId={exchange.id} 
+                  currentUserId={currentUser.id} 
+                  sessionStatus={exchange.session_status} 
+                />
               </div>
 
               {/* KOLOM KANAN: Kontrol Sesi & Info */}

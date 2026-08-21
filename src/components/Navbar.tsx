@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LoginButton from "./LoginButton";
+import NotificationBell from "./NotificationBell";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -19,25 +20,41 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="text-2xl font-extrabold text-white tracking-tight drop-shadow-md">
-              Ex<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Skill</span>
+              Ex<span className="text-[#00DF9A]">Skill</span>
             </Link>
           </div>
           
           {session ? (
             <>
               {/* Desktop Menu */}
-              <div className="hidden md:flex items-center space-x-8">
-                <Link href="/" className="text-slate-300 hover:text-[#00DF9A] hover:scale-105 transition-all font-medium text-sm drop-shadow-sm">Dashboard</Link>
-                <Link href="/explore" className="text-slate-300 hover:text-[#00DF9A] hover:scale-105 transition-all font-medium text-sm drop-shadow-sm">Cari Partner</Link>
-                <Link href="/proposals" className="text-slate-300 hover:text-[#00DF9A] hover:scale-105 transition-all font-medium text-sm drop-shadow-sm">Kotak Masuk</Link>
-                <Link href="/exchanges" className="text-slate-300 hover:text-[#00DF9A] hover:scale-105 transition-all font-medium text-sm drop-shadow-sm">Ruang Pertukaran</Link>
-                <Link href="/profile" className="text-slate-300 hover:text-[#00DF9A] hover:scale-105 transition-all font-medium text-sm drop-shadow-sm">Profil</Link>
+              <div className="hidden md:flex items-center space-x-2">
+                {[
+                  { name: 'Dashboard', path: '/dashboard' },
+                  { name: 'Cari Partner', path: '/explore' },
+                  { name: 'Kotak Masuk', path: '/proposals' },
+                  { name: 'Ruang Pertukaran', path: '/exchanges' },
+                  { name: 'Profil', path: '/profile' },
+                  { name: 'Pengaturan', path: '/settings' },
+                ].map((item) => {
+                  const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
+                  return (
+                    <Link 
+                      key={item.path}
+                      href={item.path} 
+                      className={`transition-all font-medium text-sm drop-shadow-sm px-3 py-2 rounded-lg ${isActive ? 'bg-[#00DF9A]/10 text-[#00DF9A] border border-[#00DF9A]/30 shadow-[0_0_10px_rgba(0,223,154,0.1)]' : 'text-slate-300 hover:text-[#00DF9A] hover:bg-white/5 border border-transparent'}`}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
                 <div className="h-6 w-px bg-white/20 mx-2"></div>
+                <NotificationBell />
                 <LoginButton />
               </div>
 
               {/* Mobile Menu Button */}
-              <div className="md:hidden flex items-center">
+              <div className="md:hidden flex items-center gap-4">
+                <NotificationBell />
                 <button 
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className="text-slate-300 hover:text-[#00DF9A] focus:outline-none transition-colors"
@@ -64,11 +81,26 @@ export default function Navbar() {
       {session && isMenuOpen && (
         <div className="md:hidden bg-slate-800/95 backdrop-blur-md border-b border-white/10 shadow-2xl absolute w-full">
           <div className="px-4 pt-2 pb-4 space-y-2">
-            <Link href="/" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">Dashboard</Link>
-            <Link href="/explore" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">Cari Partner</Link>
-            <Link href="/proposals" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">Kotak Masuk</Link>
-            <Link href="/exchanges" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">Ruang Pertukaran</Link>
-            <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors">Profil</Link>
+            {[
+              { name: 'Dashboard', path: '/dashboard' },
+              { name: 'Cari Partner', path: '/explore' },
+              { name: 'Kotak Masuk', path: '/proposals' },
+              { name: 'Ruang Pertukaran', path: '/exchanges' },
+              { name: 'Profil', path: '/profile' },
+              { name: 'Pengaturan', path: '/settings' },
+            ].map((item) => {
+              const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
+              return (
+                <Link 
+                  key={item.path}
+                  href={item.path} 
+                  onClick={() => setIsMenuOpen(false)} 
+                  className={`block px-4 py-3 rounded-lg text-base font-medium transition-colors ${isActive ? 'bg-[#00DF9A]/10 text-[#00DF9A] border border-[#00DF9A]/30' : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'}`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
             <div className="mt-4 pt-4 border-t border-white/10 flex justify-end items-center">
               <LoginButton />
             </div>

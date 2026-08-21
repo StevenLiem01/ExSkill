@@ -3,103 +3,142 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import LoginButton from "@/components/LoginButton";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-
-  // Jika TIDAK ADA sesi, tampilkan landing page
-  if (!session || !session.user?.email) {
-    return (
-      <main className="flex-1 bg-slate-900 flex flex-col items-center justify-center p-6 relative overflow-hidden text-slate-50">
-        {/* Dekorasi blur modern ala SaaS (Dark mode) */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#00DF9A]/10 rounded-full blur-3xl pointer-events-none transition-all"></div>
-        <div className="absolute bottom-0 right-1/4 w-[30rem] h-[30rem] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none transition-all"></div>
-
-        <div className="relative z-10 max-w-3xl w-full text-center space-y-10 p-10 md:p-16 bg-slate-800/50 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl transition-all duration-300 ease-in-out">
-          <div className="space-y-6">
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-sm">
-              Welcome to <span className="text-[#00DF9A]">ExSkill</span>
-            </h1>
-            <p className="text-lg md:text-xl text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed">
-              Tukar Keahlian, Perluas Relasi. Platform peer-to-peer eksklusif untuk mahasiswa yang ingin belajar hal baru dan berbagi keahlian secara gratis tanpa hambatan.
-            </p>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  // Jika ADA sesi, pastikan data lengkap dari database beserta relasi skill-nya
-  const dbUser = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    include: {
-      owned_skills: { include: { skill: true } },
-      wanted_skills: { include: { skill: true } },
+  
+  // Jika profil belum lengkap, ke onboarding
+  if (session && session.user?.email) {
+    const dbUser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+    if (dbUser && (!dbUser.university || !dbUser.major)) {
+      redirect("/onboarding");
     }
-  });
-
-  // Jika data profil belum lengkap, paksa redirect ke /onboarding
-  if (!dbUser || !dbUser.university || !dbUser.major) {
-    redirect("/onboarding");
   }
 
-  // Tampilan Dasbor untuk yang profilnya sudah lengkap
+  const isLoggedIn = !!session;
+
   return (
-    <main className="flex-1 bg-slate-900 text-slate-50 p-6 md:p-12 relative overflow-hidden pb-20">
-      <div className="absolute top-[-20%] left-[-10%] w-[40rem] h-[40rem] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div className="max-w-5xl mx-auto space-y-8 relative z-10">
-        {/* Header Dasbor */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-white/10 shadow-lg transition-all duration-200 ease-in-out relative z-10">
-          <div>
-            <h1 className="text-3xl font-bold text-white">
-              Dashboard
+    <main className="min-h-screen bg-slate-900 text-slate-50 relative overflow-hidden font-sans">
+      
+      {/* Dekorasi Latar Belakang (Glassmorphism & Cyber Mint/Indigo) */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-[#00DF9A]/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-[20%] right-[-10%] w-[50rem] h-[50rem] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] left-[20%] w-[30rem] h-[30rem] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+      
+      {/* Grid Pattern Ornamen */}
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay"></div>
+      
+      <div className="relative z-10 flex flex-col min-h-screen">
+        
+        {/* HERO SECTION */}
+        <section className="flex-1 flex flex-col items-center justify-center text-center px-6 py-20 md:py-32">
+          <div className="max-w-4xl space-y-8">
+            <div className="inline-block mb-4 px-4 py-1.5 rounded-full border border-[#00DF9A]/30 bg-[#00DF9A]/10 text-[#00DF9A] text-sm font-bold tracking-widest uppercase shadow-[0_0_15px_rgba(0,223,154,0.15)]">
+              🚀 Platform Pertukaran Skill No.1 untuk Mahasiswa
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-lg leading-tight">
+              Tukar Keahlianmu,<br className="hidden md:block"/> Tingkatkan <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00DF9A] to-indigo-400">Potensimu</span>
             </h1>
-            <p className="text-[#00DF9A] font-medium mt-2 flex items-center gap-2">
-              <span className="text-xl">✨</span> Profil Lengkap, Siap Mengeksplorasi!
+            
+            <p className="text-lg md:text-xl text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed">
+              Platform peer-to-peer eksklusif untuk mahasiswa yang ingin belajar hal baru dan berbagi keahlian secara gratis tanpa hambatan. Perluas relasimu sekarang.
             </p>
+            
+            <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
+              {isLoggedIn ? (
+                <Link 
+                  href="/dashboard"
+                  className="px-8 py-4 rounded-xl font-extrabold text-slate-900 bg-[#00DF9A] hover:bg-[#00C285] hover:scale-105 hover:shadow-[0_0_30px_rgba(0,223,154,0.3)] transition-all duration-300 w-full sm:w-auto text-lg text-center"
+                >
+                  Masuk ke Dashboard &rarr;
+                </Link>
+              ) : (
+                <div className="w-full sm:w-auto [&>button]:w-full [&>button]:px-8 [&>button]:py-4 [&>button]:text-lg [&>button]:bg-[#00DF9A] [&>button]:hover:bg-[#00C285] [&>button]:text-slate-900 [&>button]:hover:scale-105 [&>button]:hover:shadow-[0_0_30px_rgba(0,223,154,0.3)] [&>button]:font-extrabold [&>button]:rounded-xl [&>button]:border-0">
+                  <LoginButton text="Mulai Sekarang (Gratis)" />
+                </div>
+              )}
+              
+              <Link 
+                href="/explore" 
+                className="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-white/10 hover:bg-slate-700 hover:border-white/30 transition-all duration-300 w-full sm:w-auto text-lg text-center"
+              >
+                Eksplorasi Keahlian
+              </Link>
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Rangkuman Profil */}
-        <div className="bg-slate-800/50 backdrop-blur-md p-6 md:p-8 rounded-2xl border border-white/10 shadow-lg transition-all duration-200 ease-in-out">
-          <h2 className="text-xl font-bold mb-6 border-b border-white/10 pb-4 text-white">Data Profil</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-slate-400 font-mono uppercase tracking-wider">Nama Lengkap</p>
-              <p className="font-semibold text-white text-lg">{dbUser.name}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-slate-400 font-mono uppercase tracking-wider">Universitas</p>
-              <p className="font-medium text-slate-300">{dbUser.university}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-slate-400 font-mono uppercase tracking-wider">Jurusan</p>
-              <p className="font-medium text-slate-300">{dbUser.major}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-slate-400 font-mono uppercase tracking-wider">Trust Score</p>
-              <p className="font-semibold text-white flex items-center gap-2 text-lg">
-                <span className="text-amber-400">⭐</span> {dbUser.trust_score} <span className="text-slate-400 font-mono text-sm font-medium">pts</span>
+        {/* FEATURES SECTION */}
+        <section className="py-20 px-6 bg-slate-900/50 backdrop-blur-md border-t border-white/5 relative z-20">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-white">
+                Mengapa Memilih <span className="text-[#00DF9A]">ExSkill</span>?
+              </h2>
+              <p className="text-slate-400 font-medium max-w-xl mx-auto">
+                Kami merancang ekosistem belajar yang berfokus pada kolaborasi nyata antar-mahasiswa.
               </p>
             </div>
-            <div className="space-y-1 md:col-span-2 mt-2">
-              <p className="text-xs font-bold text-slate-400 font-mono uppercase tracking-wider">Bio</p>
-              <p className="text-slate-300 bg-slate-900/50 p-5 rounded-lg border border-white/5 mt-2 leading-relaxed">
-                "{dbUser.bio || "Belum ada bio."}"
-              </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Feature 1 */}
+              <div className="bg-slate-800/60 backdrop-blur-sm border border-white/10 rounded-3xl p-8 hover:-translate-y-2 hover:border-[#00DF9A]/50 transition-all duration-300 group">
+                <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                  🧠
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Smart Match Algorithm</h3>
+                <p className="text-slate-400 leading-relaxed text-sm">
+                  Tidak perlu mencari manual. Algoritma kami mencocokkan keahlian yang ingin Anda pelajari dengan pengguna yang tepat menawarkan hal tersebut.
+                </p>
+              </div>
+
+              {/* Feature 2 */}
+              <div className="bg-slate-800/60 backdrop-blur-sm border border-white/10 rounded-3xl p-8 hover:-translate-y-2 hover:border-[#00DF9A]/50 transition-all duration-300 group">
+                <div className="w-16 h-16 rounded-2xl bg-[#00DF9A]/10 border border-[#00DF9A]/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                  🎓
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Ruang Belajar Terintegrasi</h3>
+                <p className="text-slate-400 leading-relaxed text-sm">
+                  Kelola sesi belajar Anda dengan mudah. Buat target (Milestone) dan jadwalkan sesi (Meeting) tanpa perlu keluar dari platform.
+                </p>
+              </div>
+
+              {/* Feature 3 */}
+              <div className="bg-slate-800/60 backdrop-blur-sm border border-white/10 rounded-3xl p-8 hover:-translate-y-2 hover:border-[#00DF9A]/50 transition-all duration-300 group">
+                <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                  🌟
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Sistem Reputasi (Trust Score)</h3>
+                <p className="text-slate-400 leading-relaxed text-sm">
+                  Bangun portofolio dan kredibilitasmu! Kumpulkan Trust Score berdasarkan ulasan jujur setelah berhasil menuntaskan pertukaran keahlian.
+                </p>
+              </div>
             </div>
           </div>
-          
-          <div className="mt-8 border-t border-white/10 pt-6 flex justify-end">
-            <Link 
-              href="/profile" 
-              className="bg-[#00DF9A] hover:bg-[#00C285] text-slate-900 font-bold px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
-            >
-              Kelola Profil & Keahlian &rarr;
-            </Link>
+        </section>
+
+        {/* FOOTER */}
+        <footer className="mt-auto border-t border-white/10 bg-slate-900 py-10 px-6">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex flex-col items-center md:items-start gap-2">
+              <span className="text-2xl font-extrabold text-white tracking-tight">
+                Ex<span className="text-[#00DF9A]">Skill</span>
+              </span>
+              <p className="text-xs text-slate-500">&copy; 2026 ExSkill Platform. All rights reserved.</p>
+            </div>
+            
+            <div className="flex gap-6 text-sm font-medium text-slate-400">
+              <a href="#" className="hover:text-white transition-colors">Tentang Kami</a>
+              <a href="#" className="hover:text-white transition-colors">Kontak</a>
+              <a href="#" className="hover:text-white transition-colors">Kebijakan Privasi</a>
+            </div>
           </div>
-        </div>
+        </footer>
+
       </div>
     </main>
   );

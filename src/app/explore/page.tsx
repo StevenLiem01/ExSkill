@@ -5,8 +5,11 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import AuthProvider from "@/components/AuthProvider";
 import ProposalButton from "@/components/ProposalButton";
+import RecommendedPartners from "@/components/RecommendedPartners";
+import SearchFilterBar from "@/components/SearchFilterBar";
 
-export default async function ExplorePage() {
+export default async function ExplorePage(props: { searchParams?: Promise<{ [key: string]: string | undefined }> }) {
+  const searchParams = await props.searchParams;
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user?.email) {
@@ -25,31 +28,54 @@ export default async function ExplorePage() {
 
   const wantedSkillIds = currentUser.wanted_skills.map((w: any) => w.skill_id);
 
-  // Cari partner yang cocok
-  let matchedUsers: any[] = [];
-  if (wantedSkillIds.length > 0) {
-    matchedUsers = await prisma.user.findMany({
-      where: {
-        id: { not: currentUser.id },
-        owned_skills: {
-          some: {
-            skill_id: { in: wantedSkillIds }
+  const q = searchParams?.q || "";
+  const minScore = parseInt(searchParams?.min_score || "0");
+  const sortParam = searchParams?.sort || "newest";
+
+  let queryWhere: any = { id: { not: currentUser.id } };
+
+  if (q) {
+    queryWhere = {
+      ...queryWhere,
+      OR: [
+        { name: { contains: q, mode: 'insensitive' } },
+        {
+          owned_skills: {
+            some: {
+              skill: {
+                name: { contains: q, mode: 'insensitive' }
+              }
+            }
           }
         }
-      },
-      include: {
-        owned_skills: {
-          include: { skill: true }
-        },
-        wanted_skills: {
-          include: { skill: true }
-        },
-        reviews_received: {
-          orderBy: { created_at: 'desc' }
-        }
-      }
-    });
+      ]
+    };
   }
+
+  if (minScore > 0) {
+    queryWhere.trust_score = { gte: minScore };
+  }
+
+  let orderByQuery: any = { created_at: 'desc' };
+  if (sortParam === 'score_desc') {
+    orderByQuery = { trust_score: 'desc' };
+  }
+
+  const universalSearchUsers = await prisma.user.findMany({
+    where: queryWhere,
+    orderBy: orderByQuery,
+    include: {
+      owned_skills: {
+        include: { skill: true }
+      },
+      wanted_skills: {
+        include: { skill: true }
+      },
+      reviews_received: {
+        orderBy: { created_at: 'desc' }
+      }
+    }
+  });
 
   // Data keahlian saya yang bisa saya tawarkan (Owned Skills)
   const mySkills = currentUser.owned_skills.map((os: any) => os.skill);
@@ -76,32 +102,50 @@ export default async function ExplorePage() {
             </Link>
           </div>
 
-          {wantedSkillIds.length === 0 ? (
-            <div className="text-center p-12 bg-slate-800/50 backdrop-blur-md rounded-2xl border border-white/10 shadow-sm transition-all">
-              <p className="text-slate-300 mb-4 font-medium">Untuk mendapatkan rekomendasi partner, kamu harus menentukan keahlian yang ingin kamu pelajari terlebih dahulu.</p>
-              <Link href="/" className="text-[#00DF9A] hover:text-[#00C285] font-semibold underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#00DF9A] rounded p-1">
-                + Tambahkan "Keahlian yang Dicari" di Dasbor
-              </Link>
+          <RecommendedPartners />
+
+          <div className="pt-8 border-t border-white/10">
+            <div className="mb-6 flex flex-col gap-2">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <span>🌐</span> Pencarian Universal
+              </h2>
+              <p className="text-slate-400 text-sm">Cari keahlian spesifik atau filter berdasarkan reputasi.</p>
             </div>
-          ) : matchedUsers.length === 0 ? (
-            <div className="text-center p-12 bg-slate-800/50 backdrop-blur-md rounded-2xl border border-white/10 shadow-sm transition-all">
-              <p className="text-slate-300 font-medium">Belum ada partner yang cocok dengan daftar keahlian yang kamu cari saat ini. Cek lagi nanti!</p>
+            
+            <SearchFilterBar />
+          </div>
+
+          {universalSearchUsers.length === 0 ? (
+            <div className="text-center p-12 bg-slate-800/50 backdrop-blur-md rounded-2xl border border-white/10 shadow-sm mt-8">
+              <span className="text-5xl opacity-50 mb-4 block">🔍</span>
+              <p className="text-slate-300 font-medium">Partner dengan kriteria tersebut belum ditemukan di ExSkill.</p>
+              <p className="text-slate-400 text-sm mt-2">Coba ubah kata kunci atau kurangi batas filter reputasi.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {matchedUsers.map((user: any) => {
-                const matchedSkills = user.owned_skills.filter((os: any) => wantedSkillIds.includes(os.skill_id));
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              {universalSearchUsers.map((user: any) => {
                 const partnerSkills = user.owned_skills.map((os: any) => os.skill);
 
                 return (
                   <div key={user.id} className="bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:border-[#00DF9A]/50 hover:shadow-lg hover:shadow-[#00DF9A]/5 transition-all duration-300 ease-in-out hover:-translate-y-1 flex flex-col justify-between group shadow-sm">
                     <div className="space-y-5">
                       <div className="flex justify-between items-start gap-4">
-                        <div className="overflow-hidden">
-                          <h3 className="text-xl font-bold text-white truncate" title={user.name}>{user.name}</h3>
-                          <p className="text-xs text-slate-400 font-medium truncate mt-0.5" title={`${user.major} di ${user.university}`}>
-                            {user.major} <span className="opacity-50">&bull;</span> {user.university}
-                          </p>
+                        <div className="flex gap-3">
+                          <div className="w-12 h-12 rounded-full bg-slate-700 overflow-hidden flex-shrink-0 border border-white/10">
+                            {user.image ? (
+                              <img src={user.image} alt={user.name || "User"} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center font-bold text-slate-300 text-lg">
+                                {(user.name || "U")[0]}
+                              </div>
+                            )}
+                          </div>
+                          <div className="overflow-hidden">
+                            <h3 className="text-lg font-bold text-white truncate" title={user.name}>{user.name}</h3>
+                            <p className="text-xs text-slate-400 font-medium truncate mt-0.5" title={`${user.major} di ${user.university}`}>
+                              {user.major} <span className="opacity-50">&bull;</span> {user.university}
+                            </p>
+                          </div>
                         </div>
                         <div className="flex items-center gap-1.5 bg-amber-900/30 px-2.5 py-1.5 rounded-lg border border-amber-500/30 shadow-sm flex-shrink-0">
                           <span className="text-amber-400 text-xs">⭐</span>
@@ -110,19 +154,24 @@ export default async function ExplorePage() {
                       </div>
 
                       <div className="pt-2">
-                        <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-2 font-bold font-mono">Keahlian yang Cocok (Match):</p>
+                        <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-2 font-bold font-mono">Bisa Mengajarkan:</p>
                         <div className="flex flex-wrap gap-2">
-                          {matchedSkills.map((ms: any) => (
-                            <span key={ms.id} className="bg-emerald-900/30 border border-emerald-500/30 text-emerald-300 text-xs px-3 py-1.5 rounded-full font-semibold shadow-sm">
-                              {ms.skill.name} <span className="opacity-70 font-medium ml-1">({ms.proficiency.charAt(0) + ms.proficiency.slice(1).toLowerCase()})</span>
+                          {partnerSkills.slice(0, 3).map((skill: any) => (
+                            <span key={skill.id} className="bg-white/5 border border-white/10 text-slate-300 text-[10px] px-2 py-1 rounded-md font-medium shadow-sm">
+                              {skill.name}
                             </span>
                           ))}
+                          {partnerSkills.length > 3 && (
+                            <span className="bg-white/5 border border-white/10 text-slate-400 text-[10px] px-2 py-1 rounded-md font-medium shadow-sm">
+                              +{partnerSkills.length - 3} lainnya
+                            </span>
+                          )}
                         </div>
                       </div>
 
                       {user.bio && (
                         <div className="bg-slate-900/50 p-4 rounded-xl border border-white/5 shadow-inner">
-                          <p className="text-sm text-slate-300 line-clamp-3 italic font-medium">
+                          <p className="text-xs text-slate-300 line-clamp-2 italic font-medium">
                             "{user.bio}"
                           </p>
                         </div>
@@ -137,7 +186,7 @@ export default async function ExplorePage() {
                             </span>
                             <span className="text-slate-400 text-xs font-medium">({user.reviews_received.length} ulasan)</span>
                           </div>
-                          <p className="text-xs text-slate-300 italic line-clamp-2 font-medium">
+                          <p className="text-xs text-slate-300 italic line-clamp-1 font-medium">
                             💬 "{user.reviews_received[0].comment}"
                           </p>
                         </div>

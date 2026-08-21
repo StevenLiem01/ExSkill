@@ -54,7 +54,7 @@ model VerificationToken {
 // ====================================================================
 
 enum Role {
-  STUDENT
+  USER
   ADMIN
 }
 
@@ -117,7 +117,7 @@ model User {
   portfolioUrl  String?  @db.VarChar(255)
   points        Int      @default(0)
   trust_score   Int      @default(0)
-  role          Role     @default(STUDENT)
+  role          Role     @default(USER)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 
@@ -299,8 +299,10 @@ model Review {
 model Notification {
   id         String   @id @default(cuid())
   user_id    String
-  type       String   @db.VarChar(50)
+  type       String   @db.VarChar(50) @default("INFO")
+  title      String   @db.VarChar(255) @default("Pemberitahuan")
   message    String   @db.Text
+  link       String?  @db.VarChar(255)
   is_read    Boolean  @default(false)
   created_at DateTime @default(now())
 
@@ -329,6 +331,7 @@ model Report {
   reporter_id      String
   reported_user_id String
   reason           String       @db.Text
+  details          String?      @db.Text
   status           ReportStatus @default(PENDING)
   created_at       DateTime     @default(now())
   updated_at       DateTime     @updatedAt

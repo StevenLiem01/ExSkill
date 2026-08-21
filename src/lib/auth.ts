@@ -1,9 +1,21 @@
-import { NextAuthOptions } from "next-auth"
+import { NextAuthOptions, DefaultSession, DefaultUser } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import prisma from "@/lib/prisma"
 import type { Adapter } from "next-auth/adapters"
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      role: string;
+    } & DefaultSession["user"]
+  }
+  interface User extends DefaultUser {
+    role: string;
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
@@ -24,7 +36,7 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email }
         });
         if (user) {
-          return { id: user.id, name: user.name, email: user.email };
+          return { id: user.id, name: user.name, email: user.email, role: user.role };
         }
         return null;
       }
@@ -34,11 +46,16 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
     async session({ session, token }) {
       if (session.user && token.sub) {
-        // Simpan user ID di session agar mudah diakses
-        // @ts-ignore
         session.user.id = token.sub;
+        session.user.role = token.role as string;
       }
       return session;
     }

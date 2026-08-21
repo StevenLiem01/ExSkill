@@ -76,7 +76,8 @@ export async function POST(req: NextRequest) {
     await prisma.notification.create({
       data: {
         user_id: reviewee_id,
-        type: 'REVIEW_RECEIVED',
+        title: 'Ulasan Baru',
+        link: '/profile',
         message: `${reviewer.name} baru saja memberikan ulasan ${parsedRating} Bintang untuk Anda!`
       }
     });

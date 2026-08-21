@@ -52,7 +52,8 @@ export async function PATCH(
       await prisma.notification.create({
         data: {
           user_id: proposal.sender_id,
-          type: 'PROPOSAL_ACCEPTED',
+          title: 'Proposal Diterima',
+          link: '/exchanges',
           message: `${user.name} menerima proposal pertukaranmu! Ruang Pertukaran telah dibuat.`
         }
       });
@@ -61,7 +62,7 @@ export async function PATCH(
       await prisma.notification.create({
         data: {
           user_id: proposal.sender_id,
-          type: 'PROPOSAL_REJECTED',
+          title: 'Proposal Ditolak',
           message: `${user.name} menolak proposal pertukaranmu.`
         }
       });

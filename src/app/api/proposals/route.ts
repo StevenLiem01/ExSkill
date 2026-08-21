@@ -66,7 +66,8 @@ export async function POST(req: NextRequest) {
     await prisma.notification.create({
       data: {
         user_id: receiver_id,
-        type: 'PROPOSAL_RECEIVED',
+        title: 'Proposal Baru',
+        link: '/proposals',
         message: `${user.name} mengajukan proposal pertukaran skill denganmu!`
       }
     });

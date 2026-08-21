@@ -8,6 +8,7 @@ import ReviewForm from "@/components/ReviewForm";
 import SessionControl from "@/components/SessionControl";
 import ExchangeTabs from "./ExchangeTabs";
 import CompleteExchangeButton from "@/components/CompleteExchangeButton";
+import ReportUserButton from "@/components/ReportUserButton";
 
 export default async function ExchangeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: exchangeId } = await params;
@@ -68,10 +69,13 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
               <h1 className="text-3xl font-bold text-slate-900">
                 Ruang Kerja: <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{partner.name}</span>
               </h1>
-              <CompleteExchangeButton 
-                exchangeId={exchange.id} 
-                isCompleted={exchange.status === "COMPLETED"} 
-              />
+              <div className="flex items-center gap-3">
+                <ReportUserButton reportedId={partner.id} />
+                <CompleteExchangeButton 
+                  exchangeId={exchange.id} 
+                  isCompleted={exchange.status === "COMPLETED"} 
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

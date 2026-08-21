@@ -2,9 +2,8 @@
 
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import NotificationBell from "./NotificationBell";
 
-export default function LoginButton() {
+export default function LoginButton({ text }: { text?: string }) {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -13,18 +12,14 @@ export default function LoginButton() {
 
   if (session && session.user) {
     return (
-      <div className="flex items-center gap-4">
-        <NotificationBell />
-        <div className="text-sm hidden sm:block">
+      <div className="flex items-center gap-3">
+        <div className="text-sm hidden sm:block text-right">
           <p className="font-medium text-white">{session.user.name}</p>
-          <p className="text-slate-400 text-xs">{session.user.email}</p>
+          <p className="text-slate-400 text-[10px]">{session.user.email}</p>
         </div>
-        <button
-          onClick={() => signOut()}
-          className="rounded-xl bg-red-500/20 border border-red-500/50 px-4 py-2 text-sm font-bold text-red-400 hover:bg-red-500 hover:text-white transition-colors shadow-md"
-        >
-          Logout
-        </button>
+        <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-[#00DF9A] font-bold border border-[#00DF9A]/50">
+          {(session.user.name || "U")[0].toUpperCase()}
+        </div>
       </div>
     );
   }
@@ -34,7 +29,7 @@ export default function LoginButton() {
       onClick={() => signIn()}
       className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
     >
-      Login / Masuk
+      {text || "Login / Masuk"}
     </button>
   );
 }

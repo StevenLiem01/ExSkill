@@ -75,3 +75,46 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
+
+export async function PUT(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user?.email) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const currentUser = await prisma.user.findUnique({
+      where: { email: session.user.email }
+    });
+
+    if (!currentUser) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    const body = await request.json();
+    const { university, major, bio } = body;
+
+    if (!university || !major) {
+      return NextResponse.json(
+        { message: "Universitas dan Jurusan wajib diisi." },
+        { status: 400 }
+      );
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: currentUser.id },
+      data: {
+        university,
+        major,
+        bio: bio ?? currentUser.bio,
+      },
+    });
+
+    return NextResponse.json({ message: "Onboarding success", user: updatedUser }, { status: 200 });
+
+  } catch (error) {
+    console.error("Error onboarding profile:", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+  }
+}
+

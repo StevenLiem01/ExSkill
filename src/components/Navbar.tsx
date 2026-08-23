@@ -15,12 +15,12 @@ export default function Navbar() {
   if (pathname === "/onboarding") return null;
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-slate-900/80 backdrop-blur-md border-b border-white/10 shadow-lg transition-all duration-300">
+    <nav className="sticky top-0 z-50 w-full bg-[#0B061A]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="text-2xl font-extrabold text-white tracking-tight drop-shadow-md">
-              Ex<span className="text-[#00DF9A]">Skill</span>
+              Ex<span className="text-purple-500 text-shadow-glow">Skill</span>
             </Link>
           </div>
           
@@ -41,7 +41,7 @@ export default function Navbar() {
                     <Link 
                       key={item.path}
                       href={item.path} 
-                      className={`transition-all font-medium text-sm drop-shadow-sm px-3 py-2 rounded-lg ${isActive ? 'bg-[#00DF9A]/10 text-[#00DF9A] border border-[#00DF9A]/30 shadow-[0_0_10px_rgba(0,223,154,0.1)]' : 'text-slate-300 hover:text-[#00DF9A] hover:bg-white/5 border border-transparent'}`}
+                      className={`transition-all font-medium text-sm drop-shadow-sm px-3 py-2 rounded-lg ${isActive ? 'bg-purple-600/10 text-purple-400 border border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'text-slate-300 hover:text-purple-300 hover:bg-white/5 border border-transparent'}`}
                     >
                       {item.name}
                     </Link>
@@ -57,7 +57,7 @@ export default function Navbar() {
                 <NotificationBell />
                 <button 
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="text-slate-300 hover:text-[#00DF9A] focus:outline-none transition-colors"
+                  className="text-slate-300 hover:text-purple-400 focus:outline-none transition-colors"
                 >
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     {isMenuOpen ? (
@@ -79,7 +79,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {session && isMenuOpen && (
-        <div className="md:hidden bg-slate-800/95 backdrop-blur-md border-b border-white/10 shadow-2xl absolute w-full">
+        <div className="md:hidden bg-[#0B061A]/90 backdrop-blur-xl border-b border-white/10 shadow-2xl absolute w-full">
           <div className="px-4 pt-2 pb-4 space-y-2">
             {[
               { name: 'Dashboard', path: '/dashboard' },
@@ -95,7 +95,7 @@ export default function Navbar() {
                   key={item.path}
                   href={item.path} 
                   onClick={() => setIsMenuOpen(false)} 
-                  className={`block px-4 py-3 rounded-lg text-base font-medium transition-colors ${isActive ? 'bg-[#00DF9A]/10 text-[#00DF9A] border border-[#00DF9A]/30' : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'}`}
+                  className={`block px-4 py-3 rounded-lg text-base font-medium transition-colors ${isActive ? 'bg-purple-600/10 text-purple-400 border border-purple-500/30' : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'}`}
                 >
                   {item.name}
                 </Link>

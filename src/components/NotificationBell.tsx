@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Bell, MailOpen } from "lucide-react";
 
 interface Notification {
   id: string;
@@ -81,11 +81,9 @@ export default function NotificationBell() {
     <div className="relative" ref={dropdownRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-slate-300 hover:text-[#00DF9A] transition-colors focus:outline-none"
+        className="relative p-2 text-slate-300 hover:text-[#D946EF] transition-colors focus:outline-none"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
+        <Bell size={24} />
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -101,7 +99,7 @@ export default function NotificationBell() {
             {unreadCount > 0 && (
               <button 
                 onClick={handleMarkAllAsRead}
-                className="text-xs text-[#00DF9A] hover:text-white transition-colors"
+                className="text-xs text-[#D946EF] hover:text-white transition-colors"
               >
                 Tandai semua dibaca
               </button>
@@ -113,7 +111,7 @@ export default function NotificationBell() {
               <div className="p-8 text-center text-slate-400 text-sm">Memuat...</div>
             ) : notifications.length === 0 ? (
               <div className="p-8 text-center text-slate-400 flex flex-col items-center">
-                <span className="text-3xl mb-2 opacity-50">📭</span>
+                <MailOpen size={32} className="mb-2 opacity-50 text-slate-300" />
                 <p className="text-sm">Belum ada notifikasi.</p>
               </div>
             ) : (
@@ -122,11 +120,11 @@ export default function NotificationBell() {
                   <div 
                     key={notif.id} 
                     onClick={() => handleMarkAsRead(notif.id, notif.link)}
-                    className={`p-4 hover:bg-white/5 transition-colors cursor-pointer flex gap-3 ${!notif.is_read ? 'bg-[#00DF9A]/5' : ''}`}
+                    className={`p-4 hover:bg-white/5 transition-colors cursor-pointer flex gap-3 ${!notif.is_read ? 'bg-[#D946EF]/5' : ''}`}
                   >
                     {!notif.is_read && (
                       <div className="mt-1.5 flex-shrink-0">
-                        <div className="h-2 w-2 bg-[#00DF9A] rounded-full shadow-[0_0_5px_rgba(0,223,154,0.8)]"></div>
+                        <div className="h-2 w-2 bg-[#D946EF] rounded-full shadow-[0_0_5px_rgba(0,223,154,0.8)]"></div>
                       </div>
                     )}
                     <div className={`${notif.is_read ? 'ml-5' : ''} flex-1`}>

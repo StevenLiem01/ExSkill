@@ -30,7 +30,7 @@ export async function PATCH(
         return NextResponse.json({ message: "Sesi sudah berjalan atau selesai" }, { status: 400 });
       }
 
-      let agreedToStart = [...exchange.agreed_to_start];
+      const agreedToStart = [...exchange.agreed_to_start];
       if (!agreedToStart.includes(user.id)) {
         agreedToStart.push(user.id);
       }
@@ -53,7 +53,7 @@ export async function PATCH(
         return NextResponse.json({ message: "Sesi belum berjalan atau sudah selesai" }, { status: 400 });
       }
 
-      let agreedToEnd = [...exchange.agreed_to_end];
+      const agreedToEnd = [...exchange.agreed_to_end];
       if (!agreedToEnd.includes(user.id)) {
         agreedToEnd.push(user.id);
       }
@@ -82,7 +82,7 @@ export async function PATCH(
             where: { id: exchange.participant_b_id },
             data: { trust_score: { increment: 10 } }
           })
-        ]).catch((err: any) => console.error("Error updating trust scores:", err));
+        ]).catch((err: unknown) => console.error("Error updating trust scores:", err));
       }
 
       return NextResponse.json(updatedExchange, { status: 200 });

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AuthProvider from "@/components/AuthProvider";
 import Link from "next/link";
+import { Code2, Briefcase, Globe, Settings } from "lucide-react";
 
 function SettingsForm() {
   const router = useRouter();
@@ -96,7 +97,7 @@ function SettingsForm() {
   if (fetching) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00DF9A]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D946EF]"></div>
       </div>
     );
   }
@@ -113,7 +114,7 @@ function SettingsForm() {
         )}
         
         {successMsg && (
-          <div className="bg-[#00DF9A]/10 border border-[#00DF9A]/30 text-[#00DF9A] px-4 py-3 rounded-xl text-sm font-medium">
+          <div className="bg-[#D946EF]/10 border border-[#D946EF]/30 text-[#D946EF] px-4 py-3 rounded-xl text-sm font-medium">
             {successMsg}
           </div>
         )}
@@ -130,7 +131,7 @@ function SettingsForm() {
             value={formData.bio}
             onChange={handleChange}
             rows={4}
-            className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#00DF9A] transition-colors"
+            className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#D946EF] transition-colors"
             placeholder="Ceritakan sedikit tentang dirimu (min 10 karakter)..."
           />
         </div>
@@ -138,42 +139,42 @@ function SettingsForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono flex items-center gap-2">
-              <span className="text-lg">🐙</span> URL GitHub
+              <Code2 size={18} /> URL GitHub
             </label>
             <input
               type="text"
               name="githubUrl"
               value={formData.githubUrl}
               onChange={handleChange}
-              className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#00DF9A] transition-colors"
+              className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#D946EF] transition-colors"
               placeholder="https://github.com/username"
             />
           </div>
 
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono flex items-center gap-2">
-              <span className="text-lg">💼</span> URL LinkedIn
+              <Briefcase size={18} /> URL LinkedIn
             </label>
             <input
               type="text"
               name="linkedinUrl"
               value={formData.linkedinUrl}
               onChange={handleChange}
-              className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#00DF9A] transition-colors"
+              className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#D946EF] transition-colors"
               placeholder="https://linkedin.com/in/username"
             />
           </div>
 
           <div className="space-y-2 md:col-span-2">
             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono flex items-center gap-2">
-              <span className="text-lg">🌍</span> URL Website Pribadi
+              <Globe size={18} /> URL Website Pribadi
             </label>
             <input
               type="text"
               name="portfolioUrl"
               value={formData.portfolioUrl}
               onChange={handleChange}
-              className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#00DF9A] transition-colors"
+              className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#D946EF] transition-colors"
               placeholder="https://mywebsite.com"
             />
           </div>
@@ -183,7 +184,7 @@ function SettingsForm() {
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 px-6 py-3 bg-[#00DF9A] hover:bg-[#00C285] text-slate-900 font-bold rounded-xl shadow-sm transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed hover:-translate-y-0.5"
+            className="flex items-center gap-2 px-6 py-3 bg-[#D946EF] hover:bg-[#C026D3] text-slate-900 font-bold rounded-xl shadow-sm transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed hover:-translate-y-0.5"
           >
             {loading ? (
               <>
@@ -208,13 +209,13 @@ export default function SettingsPage() {
     <AuthProvider>
       <main className="min-h-screen bg-slate-900 text-slate-50 p-6 md:p-12 relative overflow-hidden pb-20">
         <div className="absolute top-[-20%] left-[-10%] w-[40rem] h-[40rem] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[30rem] h-[30rem] bg-[#00DF9A]/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[30rem] h-[30rem] bg-[#D946EF]/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="max-w-4xl mx-auto space-y-8 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-white/10 gap-6 shadow-sm">
             <div>
               <h1 className="text-3xl font-bold flex items-center gap-3 text-white">
-                ⚙️ <span className="text-[#00DF9A]">Pengaturan</span>
+                <Settings size={28} className="text-[#D946EF]" /> <span className="text-[#D946EF]">Pengaturan</span>
               </h1>
               <p className="text-slate-400 mt-2 text-sm font-medium">
                 Sesuaikan profil dan tautan portofolio untuk meningkatkan kredibilitasmu.

@@ -1,7 +1,9 @@
 "use client";
+import toast from "react-hot-toast";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Sparkles, Search } from "lucide-react";
 
 type Skill = { id: string; name: string; category: string };
 type UserSkill = { id: string; skill_id: string; proficiency: string; skill: Skill };
@@ -39,13 +41,13 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
 
       if (!res.ok) {
         const error = await res.json();
-        alert(error.message || "Gagal menambahkan skill");
+        toast.error(error.message || "Gagal menambahkan skill");
       } else {
         setSelectedSkillId("");
         router.refresh();
       }
     } catch (err) {
-      alert("Terjadi kesalahan.");
+      toast.error("Terjadi kesalahan.");
     } finally {
       setLoading(false);
     }
@@ -63,7 +65,7 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
       if (res.ok) {
         router.refresh();
       } else {
-        alert("Gagal menghapus skill");
+        toast.error("Gagal menghapus skill");
       }
     } finally {
       setLoading(false);
@@ -86,7 +88,7 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Tipe</label>
           <select
             value={type} onChange={(e) => setType(e.target.value)}
-            className="w-full h-11 px-4 bg-slate-800 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00DF9A] focus:border-[#00DF9A] transition-all duration-200"
+            className="w-full h-11 px-4 bg-slate-800 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D946EF] focus:border-[#D946EF] transition-all duration-200"
           >
             <option value="OFFERED">Ditawarkan</option>
             <option value="WANTED">Dicari</option>
@@ -98,7 +100,7 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
           <select
             required
             value={selectedSkillId} onChange={(e) => setSelectedSkillId(e.target.value)}
-            className="w-full h-11 px-4 bg-slate-800 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00DF9A] focus:border-[#00DF9A] transition-all duration-200"
+            className="w-full h-11 px-4 bg-slate-800 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D946EF] focus:border-[#D946EF] transition-all duration-200"
           >
             <option value="" disabled>-- Pilih dari Katalog --</option>
             {availableSkills.map((s) => (
@@ -112,7 +114,7 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Kemahiran</label>
             <select
               value={proficiency} onChange={(e) => setProficiency(e.target.value)}
-              className="w-full h-11 px-4 bg-slate-800 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#00DF9A] focus:border-[#00DF9A] transition-all duration-200"
+              className="w-full h-11 px-4 bg-slate-800 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D946EF] focus:border-[#D946EF] transition-all duration-200"
             >
               <option value="BEGINNER">Beginner</option>
               <option value="INTERMEDIATE">Intermediate</option>
@@ -124,7 +126,7 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
         <div className={`md:col-span-1 ${type === "WANTED" ? "md:col-start-3" : ""}`}>
           <button
             type="submit" disabled={loading || !selectedSkillId}
-            className="w-full h-11 px-4 bg-[#00DF9A] hover:bg-[#00C285] text-slate-900 font-bold rounded-xl shadow-sm transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#00DF9A] focus:ring-offset-2 focus:ring-offset-slate-900"
+            className="w-full h-11 px-4 bg-[#D946EF] hover:bg-[#C026D3] text-slate-900 font-bold rounded-xl shadow-sm transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#D946EF] focus:ring-offset-2 focus:ring-offset-slate-900"
           >
             {loading ? "Menambahkan..." : "+ Tambah Skill"}
           </button>
@@ -135,16 +137,16 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
         {/* Offered Skills */}
         <div className="space-y-4">
           <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2 border-b border-emerald-500/30 pb-3">
-            <span>✨</span> Keahlian yang Ditawarkan
+            <Sparkles size={16} /> Keahlian yang Ditawarkan
           </h3>
           <div className="flex flex-wrap gap-3">
             {initialOffered.length === 0 ? (
               <p className="text-slate-500 text-sm">Belum ada skill yang ditawarkan.</p>
             ) : (
               initialOffered.map((o) => (
-                <div key={o.id} className="group relative flex items-center gap-2 bg-[#00DF9A]/10 border border-[#00DF9A]/30 px-4 py-2.5 rounded-full text-sm text-[#00DF9A] pr-10 hover:bg-[#00DF9A]/20 transition-all duration-200 ease-in-out cursor-default shadow-sm">
+                <div key={o.id} className="group relative flex items-center gap-2 bg-[#D946EF]/10 border border-[#D946EF]/30 px-4 py-2.5 rounded-full text-sm text-[#D946EF] pr-10 hover:bg-[#D946EF]/20 transition-all duration-200 ease-in-out cursor-default shadow-sm">
                   <span className="font-semibold">{o.skill.name}</span>
-                  <span className="text-[#00DF9A]/70 text-xs font-medium border-l border-[#00DF9A]/30 pl-2">
+                  <span className="text-[#D946EF]/70 text-xs font-medium border-l border-[#D946EF]/30 pl-2">
                     {o.proficiency.charAt(0) + o.proficiency.slice(1).toLowerCase()}
                   </span>
                   <button
@@ -165,7 +167,7 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
         {/* Wanted Skills */}
         <div className="space-y-4">
           <h3 className="text-sm font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2 border-b border-indigo-500/30 pb-3">
-            <span>🔍</span> Keahlian yang Dicari
+            <Search size={16} /> Keahlian yang Dicari
           </h3>
           <div className="flex flex-wrap gap-3">
             {initialWanted.length === 0 ? (

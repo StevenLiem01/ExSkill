@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function PATCH(
   req: NextRequest,
@@ -40,7 +41,7 @@ export async function PATCH(
 
     const body = await req.json();
     
-    const updateData: any = {};
+    const updateData: Record<string, string | Date | number> = {};
     if (body.title !== undefined) updateData.title = body.title;
     if (body.scheduled_at !== undefined) updateData.scheduled_at = new Date(body.scheduled_at);
     if (body.duration_minutes !== undefined) updateData.duration_minutes = body.duration_minutes;

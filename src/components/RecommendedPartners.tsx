@@ -2,9 +2,20 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Puzzle, Flame, Star } from "lucide-react";
+
+type RecommendedUser = {
+  id: string;
+  name: string;
+  image: string | null;
+  major: string;
+  trust_score: number;
+  matchCount: number;
+  matchedSkills: { id: string; skill: { name: string } }[];
+};
 
 export default function RecommendedPartners() {
-  const [recommendations, setRecommendations] = useState<any[]>([]);
+  const [recommendations, setRecommendations] = useState<RecommendedUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +39,7 @@ export default function RecommendedPartners() {
   if (isLoading) {
     return (
       <div className="w-full bg-slate-800/30 border border-white/10 rounded-2xl p-8 animate-pulse flex flex-col justify-center items-center h-48">
-        <div className="w-8 h-8 border-4 border-[#00DF9A] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <div className="w-8 h-8 border-4 border-[#D946EF] border-t-transparent rounded-full animate-spin mb-4"></div>
         <p className="text-slate-400 font-medium">Mencari kecocokan terbaik untukmu...</p>
       </div>
     );
@@ -37,7 +48,7 @@ export default function RecommendedPartners() {
   if (recommendations.length === 0) {
     return (
       <div className="w-full bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl p-8 flex flex-col justify-center items-center text-center shadow-lg">
-        <span className="text-4xl mb-4 opacity-70">🧩</span>
+        <Puzzle size={40} className="mb-4 opacity-70 text-slate-300" />
         <h3 className="text-lg font-bold text-white mb-2">Belum Ada Rekomendasi</h3>
         <p className="text-slate-400 text-sm font-medium max-w-md">
           Belum ada rekomendasi yang pas. Coba tambahkan atau perbarui "Keahlian yang Dicari" di profilmu agar sistem kami bisa mencarikan partner yang tepat!
@@ -49,7 +60,7 @@ export default function RecommendedPartners() {
   return (
     <div className="w-full">
       <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-        <span>🔥</span> Rekomendasi Spesial Untukmu
+        <Flame size={24} className="text-[#D946EF]" /> Rekomendasi Spesial Untukmu
       </h2>
       
       {/* Horizontal Carousel */}
@@ -57,11 +68,11 @@ export default function RecommendedPartners() {
         {recommendations.map((user) => (
           <div 
             key={user.id} 
-            className="flex-shrink-0 w-80 bg-slate-800/80 backdrop-blur-md border border-white/10 rounded-2xl p-6 snap-start shadow-lg hover:shadow-[0_0_20px_rgba(0,223,154,0.15)] hover:border-[#00DF9A]/30 transition-all duration-300 relative group"
+            className="flex-shrink-0 w-80 bg-slate-800/80 backdrop-blur-md border border-white/10 rounded-2xl p-6 snap-start shadow-lg hover:shadow-[0_0_20px_rgba(0,223,154,0.15)] hover:border-[#D946EF]/30 transition-all duration-300 relative group"
           >
             {/* Lencana Trust Score */}
-            <div className="absolute top-4 right-4 bg-[#00DF9A]/10 text-[#00DF9A] border border-[#00DF9A]/30 px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-              🌟 {user.trust_score}
+            <div className="absolute top-4 right-4 bg-[#D946EF]/10 text-[#D946EF] border border-[#D946EF]/30 px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+              <Star size={14} className="text-[#D946EF]" /> {user.trust_score}
             </div>
 
             <div className="flex items-center gap-4 mb-4">
@@ -83,8 +94,8 @@ export default function RecommendedPartners() {
             <div className="mb-6 h-16">
               <p className="text-[10px] text-slate-500 uppercase tracking-wider font-bold font-mono mb-2">Irisan Keahlian ({user.matchCount}):</p>
               <div className="flex flex-wrap gap-1.5 overflow-hidden max-h-12">
-                {user.matchedSkills.map((ms: any) => (
-                  <span key={ms.id} className="bg-[#00DF9A]/10 border border-[#00DF9A]/30 text-[#00DF9A] text-[10px] px-2 py-1 rounded-md font-medium whitespace-nowrap">
+                {user.matchedSkills.map((ms) => (
+                  <span key={ms.id} className="bg-[#D946EF]/10 border border-[#D946EF]/30 text-[#D946EF] text-[10px] px-2 py-1 rounded-md font-medium whitespace-nowrap">
                     {ms.skill.name}
                   </span>
                 ))}
@@ -93,7 +104,7 @@ export default function RecommendedPartners() {
 
             <Link 
               href={`/users/${user.id}`}
-              className="block w-full py-2.5 bg-white/5 hover:bg-[#00DF9A] text-slate-300 hover:text-slate-900 border border-white/10 hover:border-[#00DF9A] rounded-xl text-center text-sm font-bold transition-all duration-300"
+              className="block w-full py-2.5 bg-white/5 hover:bg-[#D946EF] text-slate-300 hover:text-slate-900 border border-white/10 hover:border-[#D946EF] rounded-xl text-center text-sm font-bold transition-all duration-300"
             >
               Lihat Profil
             </Link>

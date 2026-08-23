@@ -1,9 +1,11 @@
 "use client";
+import toast from "react-hot-toast";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Prisma } from "@prisma/client";
 
-export default function ReviewForm({ exchangeId, existingReview }: { exchangeId: string, existingReview?: any }) {
+export default function ReviewForm({ exchangeId, existingReview }: { exchangeId: string, existingReview?: Prisma.ReviewGetPayload<{}> }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [rating, setRating] = useState("5");
@@ -38,10 +40,10 @@ export default function ReviewForm({ exchangeId, existingReview }: { exchangeId:
         throw new Error(errorData.message || "Gagal mengirim ulasan");
       }
 
-      alert("Ulasan berhasil dikirim! Terima kasih atas tanggapan Anda.");
+      toast.success("Ulasan berhasil dikirim! Terima kasih atas tanggapan Anda.");
       router.refresh();
-    } catch (e: any) {
-      alert("Terjadi kesalahan: " + e.message);
+    } catch (e: unknown) {
+      toast.error("Terjadi kesalahan: " + (e instanceof Error ? e.message : "Unknown error"));
     } finally {
       setLoading(false);
     }

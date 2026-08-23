@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 
 export default function LoginButton({ text }: { text?: string }) {
@@ -17,7 +17,7 @@ export default function LoginButton({ text }: { text?: string }) {
           <p className="font-medium text-white">{session.user.name}</p>
           <p className="text-slate-400 text-[10px]">{session.user.email}</p>
         </div>
-        <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-[#00DF9A] font-bold border border-[#00DF9A]/50">
+        <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-[#D946EF] font-bold border border-[#D946EF]/50">
           {(session.user.name || "U")[0].toUpperCase()}
         </div>
       </div>

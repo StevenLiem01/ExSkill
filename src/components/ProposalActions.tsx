@@ -1,4 +1,5 @@
 "use client";
+import toast from "react-hot-toast";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -20,10 +21,10 @@ export default function ProposalActions({ proposalId }: { proposalId: string }) 
 
       if (!res.ok) throw new Error("Gagal memperbarui status proposal");
 
-      alert(status === "ACCEPTED" ? "Proposal diterima! Exchange berhasil dibuat." : "Proposal berhasil ditolak.");
+      toast.success(status === "ACCEPTED" ? "Proposal diterima! Exchange berhasil dibuat." : "Proposal berhasil ditolak.");
       router.refresh();
-    } catch (e: any) {
-      alert("Terjadi kesalahan: " + e.message);
+    } catch (e: unknown) {
+      toast.error("Terjadi kesalahan: " + (e instanceof Error ? e.message : "Unknown error"));
     } finally {
       setLoading(false);
     }

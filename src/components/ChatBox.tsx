@@ -1,12 +1,27 @@
 "use client";
+import toast from "react-hot-toast";
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { MessageSquare, FileText, Paperclip } from "lucide-react";
+
+interface ChatMessage {
+  id: string;
+  exchange_id: string;
+  sender_id: string;
+  content: string | null;
+  file_url: string | null;
+  file_name: string | null;
+  created_at: string;
+  sender: {
+    name: string;
+  };
+}
 
 export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { exchangeId: string, currentUserId: string, sessionStatus: string }) {
   const router = useRouter();
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -64,7 +79,7 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
           .upload(filePath, file);
 
         if (error) {
-          throw new Error("Gagal mengunggah file ke Supabase: " + error.message);
+          throw new Error("Gagal mengunggah file ke Supabase: " + (error instanceof Error ? error.message : "Unknown error"));
         }
 
         const { data: getUrlData } = supabase.storage
@@ -88,9 +103,9 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
         if (fileInputRef.current) fileInputRef.current.value = "";
         fetchMessages();
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Failed to send message/file", e);
-      alert(e.message || "Gagal mengirim pesan/file.");
+      toast.error((e instanceof Error ? e.message : "Unknown error") || "Gagal mengirim pesan/file.");
     } finally {
       setLoading(false);
     }
@@ -99,7 +114,7 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
   return (
     <div className="bg-white border border-slate-200 rounded-2xl flex flex-col h-[550px] shadow-sm overflow-hidden flex-1">
       <div className="bg-slate-50 p-4 border-b border-slate-200 flex items-center justify-between">
-        <h3 className="font-bold text-slate-800 flex items-center gap-2">💬 Live Chat</h3>
+        <h3 className="font-bold text-slate-800 flex items-center gap-2"><MessageSquare size={16} /> Live Chat</h3>
         <div className="flex items-center gap-2">
           <span className={`w-2.5 h-2.5 rounded-full ${sessionStatus === "IN_PROGRESS" ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`}></span>
           <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -136,7 +151,7 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
                         />
                       ) : (
                         <a href={msg.file_url} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 p-2.5 rounded-xl transition-colors border ${isMe ? 'bg-blue-700/50 hover:bg-blue-700 border-blue-500/50' : 'bg-slate-50 hover:bg-slate-100 border-slate-200'}`}>
-                          <span className="text-lg">📄</span>
+                          <FileText size={18} />
                           <span className="truncate max-w-[180px] font-medium text-xs">{msg.file_name}</span>
                         </a>
                       )}
@@ -161,7 +176,7 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
       <div className="p-4 bg-white border-t border-slate-200 flex flex-col gap-3">
         {file && (
           <div className="flex items-center justify-between bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-xs shadow-sm">
-            <span className="truncate flex-1 font-medium text-slate-700">📎 {file.name}</span>
+            <span className="truncate flex-1 font-medium text-slate-700 flex items-center"><Paperclip size={14} className="mr-1" /> {file.name}</span>
             <button
               onClick={() => { setFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; }}
               className="text-slate-400 hover:text-red-500 ml-3 font-bold p-1 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"

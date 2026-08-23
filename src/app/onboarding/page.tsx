@@ -47,8 +47,8 @@ function OnboardingForm() {
       router.refresh();
       // Redirect ke halaman utama setelah sukses
       router.push("/");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setLoading(false);
     }

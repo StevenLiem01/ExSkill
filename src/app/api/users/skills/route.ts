@@ -48,8 +48,8 @@ export async function POST(req: NextRequest) {
     } else {
       return NextResponse.json({ message: "Invalid type" }, { status: 400 });
     }
-  } catch (error: any) {
-    if (error.code === 'P2002') {
+  } catch (error: unknown) {
+    if ((error as any).code === 'P2002') {
       return NextResponse.json({ message: "Skill already added to your profile" }, { status: 409 });
     }
     console.error("Error adding skill:", error);

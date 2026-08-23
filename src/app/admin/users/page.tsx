@@ -1,11 +1,12 @@
 "use client";
+import toast from "react-hot-toast";
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import AuthProvider from "@/components/AuthProvider";
 import Link from "next/link";
-import Image from "next/image";
+import { Shield } from "lucide-react";
 
 interface User {
   id: string;
@@ -32,8 +33,8 @@ function UsersManagementDashboard() {
       if (!res.ok) throw new Error("Gagal mengambil data pengguna");
       const data = await res.json();
       setUsers(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setLoading(false);
     }
@@ -68,15 +69,15 @@ function UsersManagementDashboard() {
       
       // Refresh list
       fetchUsers();
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      toast.error((err instanceof Error ? err.message : "Unknown error"));
     }
   };
 
   if (status === "loading" || loading) {
     return (
       <main className="min-h-screen bg-slate-900 text-white p-6 md:p-12 flex flex-col items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00DF9A] mb-4"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#D946EF] mb-4"></div>
         <p className="text-slate-400 animate-pulse">Memuat Data Pengguna...</p>
       </main>
     );
@@ -91,7 +92,7 @@ function UsersManagementDashboard() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/50 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-blue-500/20 rounded-xl border border-blue-500/30">
-              <span className="text-2xl">🛡️</span>
+              <Shield size={24} className="text-blue-400" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white tracking-tight">Manajemen Pengguna</h1>
@@ -166,7 +167,7 @@ function UsersManagementDashboard() {
                           <span className="text-xs font-bold text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full border border-blue-400/20">USER</span>
                         )}
                       </td>
-                      <td className="p-4 border border-white/10 text-center font-mono text-[#00DF9A]">
+                      <td className="p-4 border border-white/10 text-center font-mono text-[#D946EF]">
                         {user.trust_score}
                       </td>
                       <td className="p-4 border border-white/10">

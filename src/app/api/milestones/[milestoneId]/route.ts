@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function PATCH(
   req: NextRequest,
@@ -37,7 +38,7 @@ export async function PATCH(
     const body = await req.json();
     
     // We can update title, description, target_date, is_completed
-    const updateData: any = {};
+    const updateData: Record<string, string | Date | boolean | null> = {};
     if (body.title !== undefined) updateData.title = body.title;
     if (body.description !== undefined) updateData.description = body.description;
     if (body.target_date !== undefined) updateData.target_date = body.target_date ? new Date(body.target_date) : null;

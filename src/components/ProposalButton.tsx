@@ -1,4 +1,5 @@
 "use client";
+import toast from "react-hot-toast";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -53,10 +54,10 @@ export default function ProposalButton({ receiverId, receiverName, partnerSkills
       }
 
       setIsOpen(false);
-      alert("Proposal berhasil dikirim!");
+      toast.success("Proposal berhasil dikirim!");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setLoading(false);
     }

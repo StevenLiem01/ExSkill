@@ -1,7 +1,9 @@
 "use client";
+import toast from "react-hot-toast";
 
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { Flag } from "lucide-react";
 
 interface ReportModalProps {
   reportedId: string;
@@ -35,16 +37,16 @@ export default function ReportModal({ reportedId, isOpen, onClose }: ReportModal
 
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.message || "Gagal mengirim laporan");
+        throw new Error((error instanceof Error ? error.message : "Unknown error") || "Gagal mengirim laporan");
       }
 
-      alert("Laporan berhasil dikirim ke tim Admin");
+      toast.success("Laporan berhasil dikirim ke tim Admin");
       onClose();
       setReason("");
       setDetails("");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      alert(err.message);
+      toast.error((err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -56,7 +58,7 @@ export default function ReportModal({ reportedId, isOpen, onClose }: ReportModal
         <div className="p-6">
           <div className="flex justify-between items-center mb-5">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <span className="text-red-500">🚩</span> Laporkan Pengguna
+              <Flag size={20} className="text-red-500" /> Laporkan Pengguna
             </h2>
             <button 
               onClick={onClose}

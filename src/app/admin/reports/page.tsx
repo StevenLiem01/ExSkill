@@ -1,10 +1,12 @@
 "use client";
+import toast from "react-hot-toast";
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import AuthProvider from "@/components/AuthProvider";
 import Link from "next/link";
+import { Scale } from "lucide-react";
 
 interface User {
   id: string;
@@ -40,8 +42,8 @@ function ModerationDashboard() {
       if (!res.ok) throw new Error("Gagal mengambil data laporan");
       const data = await res.json();
       setReports(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setLoading(false);
     }
@@ -78,15 +80,15 @@ function ModerationDashboard() {
       
       // Refresh list
       fetchReports();
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      toast.error((err instanceof Error ? err.message : "Unknown error"));
     }
   };
 
   if (status === "loading" || loading) {
     return (
       <main className="min-h-screen bg-slate-900 text-white p-6 md:p-12 flex flex-col items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00DF9A] mb-4"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#D946EF] mb-4"></div>
         <p className="text-slate-400 animate-pulse">Memuat Data Moderasi...</p>
       </main>
     );
@@ -101,7 +103,7 @@ function ModerationDashboard() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/50 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-red-500/20 rounded-xl border border-red-500/30">
-              <span className="text-2xl">⚖️</span>
+              <Scale size={24} className="text-red-400" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white tracking-tight">Moderasi Laporan</h1>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Search } from "lucide-react";
 
 export default function SearchFilterBar() {
   const router = useRouter();
@@ -53,17 +54,17 @@ export default function SearchFilterBar() {
   }, [minScore, sort]);
 
   return (
-    <div className="bg-slate-800/70 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-lg flex flex-col md:flex-row gap-4 items-center">
-      <div className="relative flex-1 w-full">
-        <span className="absolute inset-y-0 left-4 flex items-center text-slate-400">
-          🔍
+    <div className="bg-white/5 backdrop-blur-xl p-5 rounded-2xl border border-white/10 shadow-[0_0_15px_rgba(139,92,246,0.1)] flex flex-col md:flex-row gap-4 items-center">
+      <div className="relative flex-1 w-full group">
+        <span className="absolute inset-y-0 left-4 flex items-center text-slate-400 group-focus-within:text-purple-400 transition-colors">
+          <Search size={18} />
         </span>
         <input
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Cari nama partner atau keahlian (misal: Python)..."
-          className="w-full bg-slate-900/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#00DF9A] transition-all"
+          className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all shadow-inner"
         />
       </div>
 
@@ -73,7 +74,7 @@ export default function SearchFilterBar() {
           <select
             value={minScore}
             onChange={handleMinScoreChange}
-            className="w-full bg-slate-900/50 border border-white/10 rounded-xl py-2.5 px-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#00DF9A] appearance-none cursor-pointer"
+            className="w-full bg-black/20 border border-white/10 rounded-xl py-2.5 px-3 text-sm text-white focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 appearance-none cursor-pointer shadow-inner transition-all"
           >
             <option value="0">Semua</option>
             <option value="10">&gt; 10 Pts</option>
@@ -87,7 +88,7 @@ export default function SearchFilterBar() {
           <select
             value={sort}
             onChange={handleSortChange}
-            className="w-full bg-slate-900/50 border border-white/10 rounded-xl py-2.5 px-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#00DF9A] appearance-none cursor-pointer"
+            className="w-full bg-black/20 border border-white/10 rounded-xl py-2.5 px-3 text-sm text-white focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 appearance-none cursor-pointer shadow-inner transition-all"
           >
             <option value="newest">Terbaru</option>
             <option value="score_desc">Trust Score (Tertinggi)</option>

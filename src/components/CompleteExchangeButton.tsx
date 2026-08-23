@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Sparkles, Trophy, Star } from "lucide-react";
 
 interface CompleteExchangeButtonProps {
   exchangeId: string;
@@ -20,7 +21,7 @@ export default function CompleteExchangeButton({ exchangeId, isCompleted }: Comp
   if (isCompleted) {
     return (
       <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-        <span>✨</span> Pertukaran Selesai
+        <Sparkles size={16} /> Pertukaran Selesai
       </div>
     );
   }
@@ -54,8 +55,8 @@ export default function CompleteExchangeButton({ exchangeId, isCompleted }: Comp
       setIsModalOpen(false);
       router.refresh(); // Refresh page to update status
 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -65,16 +66,16 @@ export default function CompleteExchangeButton({ exchangeId, isCompleted }: Comp
     <>
       <button 
         onClick={() => setIsModalOpen(true)}
-        className="bg-[#00DF9A] text-slate-900 px-5 py-2.5 rounded-xl text-sm font-bold shadow-[0_0_20px_rgba(0,223,154,0.3)] hover:shadow-[0_0_30px_rgba(0,223,154,0.5)] hover:scale-105 transition-all"
+        className="bg-[#D946EF] text-slate-900 px-5 py-2.5 rounded-xl text-sm font-bold shadow-[0_0_20px_rgba(0,223,154,0.3)] hover:shadow-[0_0_30px_rgba(0,223,154,0.5)] hover:scale-105 transition-all"
       >
-        Selesaikan Pertukaran 🏆
+        Selesaikan Pertukaran <Trophy size={16} className="inline ml-1" />
       </button>
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
           <div className="bg-slate-900 border border-white/10 p-6 rounded-2xl w-full max-w-md shadow-2xl relative overflow-hidden">
             {/* Neon Accent Glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-2 bg-[#00DF9A] blur-xl opacity-50"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-2 bg-[#D946EF] blur-xl opacity-50"></div>
             
             <h2 className="text-xl font-bold text-white mb-2">Selesaikan & Ulas</h2>
             <p className="text-sm text-slate-400 mb-6">
@@ -102,9 +103,7 @@ export default function CompleteExchangeButton({ exchangeId, isCompleted }: Comp
                       onMouseLeave={() => setHoverRating(0)}
                       className="text-3xl focus:outline-none transition-transform hover:scale-110"
                     >
-                      <span className={star <= (hoverRating || rating) ? "text-[#00DF9A] drop-shadow-[0_0_8px_rgba(0,223,154,0.6)]" : "text-slate-700"}>
-                        ★
-                      </span>
+                      <Star size={24} className={star <= (hoverRating || rating) ? "text-[#D946EF] fill-[#D946EF] drop-shadow-[0_0_8px_rgba(0,223,154,0.6)]" : "text-slate-700"} />
                     </button>
                   ))}
                 </div>
@@ -117,7 +116,7 @@ export default function CompleteExchangeButton({ exchangeId, isCompleted }: Comp
                 <textarea 
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00DF9A]/50 focus:ring-1 focus:ring-[#00DF9A]/50 min-h-[100px] resize-none"
+                  className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#D946EF]/50 focus:ring-1 focus:ring-[#D946EF]/50 min-h-[100px] resize-none"
                   placeholder="Bagaimana cara partner menjelaskan materi? Apakah mudah dipahami?"
                 />
               </div>

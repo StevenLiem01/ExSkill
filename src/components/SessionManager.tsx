@@ -1,6 +1,8 @@
 "use client";
+import toast from "react-hot-toast";
 
 import React, { useState, useEffect } from "react";
+import { CalendarDays, Target, Clock, Link as LinkIcon } from "lucide-react";
 
 interface Milestone {
   id: string;
@@ -55,8 +57,8 @@ export default function SessionManager({ exchangeId, milestones }: SessionManage
       if (!res.ok) throw new Error("Gagal mengambil data jadwal pertemuan");
       const data = await res.json();
       setSessions(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setIsLoading(false);
     }
@@ -94,9 +96,9 @@ export default function SessionManager({ exchangeId, milestones }: SessionManage
       setFormDate("");
       setFormLink("");
       setIsFormOpen(false);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      alert(err.message);
+      toast.error((err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -136,9 +138,9 @@ export default function SessionManager({ exchangeId, milestones }: SessionManage
       setSessions(prev => prev.map(s => s.id === id ? updatedSession : s).sort((a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime()));
       
       setEditingSessionId(null);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      alert(err.message);
+      toast.error((err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -152,9 +154,9 @@ export default function SessionManager({ exchangeId, milestones }: SessionManage
       if (!res.ok) throw new Error("Gagal menghapus jadwal");
       
       setSessions(prev => prev.filter(s => s.id !== id));
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      alert(err.message);
+      toast.error((err instanceof Error ? err.message : "Unknown error"));
     }
   };
 
@@ -173,7 +175,7 @@ export default function SessionManager({ exchangeId, milestones }: SessionManage
     <div className="bg-slate-900/50 p-6 rounded-2xl border border-white/10 shadow-lg mt-6 flex flex-col gap-6 relative">
       <div className="flex justify-between items-center border-b border-white/10 pb-4">
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
-          <span>📅</span> Jadwal Pertemuan
+          <CalendarDays size={20} className="text-white" /> Jadwal Pertemuan
         </h2>
         {!isFormOpen && (
           <button 
@@ -271,7 +273,7 @@ export default function SessionManager({ exchangeId, milestones }: SessionManage
         ) : sessions.length === 0 ? (
           !isFormOpen && (
             <div className="flex flex-col items-center justify-center text-center p-6 border border-dashed border-white/10 rounded-xl bg-slate-800/30">
-              <span className="text-3xl mb-2 opacity-50">📆</span>
+              <CalendarDays size={32} className="mb-2 opacity-50 text-slate-300" />
               <p className="text-slate-400 font-medium text-sm">
                 Belum ada jadwal pertemuan.
               </p>
@@ -342,8 +344,8 @@ export default function SessionManager({ exchangeId, milestones }: SessionManage
                   <div className="flex justify-between items-start pr-16">
                     <div>
                       <h3 className="font-bold text-white pr-2">{s.title}</h3>
-                      <p className="text-[10px] text-slate-400 font-mono mt-1 border border-white/10 bg-white/5 inline-block px-2 py-0.5 rounded">
-                        🎯 {s.milestone?.title || "Milestone Dihapus"}
+                      <p className="text-[10px] text-slate-400 font-mono mt-1 border border-white/10 bg-white/5 inline-block px-2 py-0.5 rounded flex items-center">
+                        <Target size={12} className="inline mr-1" /> {s.milestone?.title || "Milestone Dihapus"}
                       </p>
                     </div>
                     <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -358,7 +360,7 @@ export default function SessionManager({ exchangeId, milestones }: SessionManage
                   
                   <div className="text-sm mt-1 flex flex-col gap-1.5">
                     <div className="flex items-center gap-2 text-slate-300">
-                      <span>🕒</span>
+                      <Clock size={16} />
                       <span className="font-medium">
                         {new Date(s.scheduled_at).toLocaleString('id-ID', {
                           dateStyle: 'medium',
@@ -368,7 +370,7 @@ export default function SessionManager({ exchangeId, milestones }: SessionManage
                     </div>
                     {s.meeting_link && (
                       <div className="flex items-start gap-2 text-slate-300">
-                        <span>🔗</span>
+                        <LinkIcon size={16} />
                         <a href={s.meeting_link.startsWith('http') ? s.meeting_link : `https://${s.meeting_link}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-medium truncate max-w-[200px]" title={s.meeting_link}>
                           {s.meeting_link}
                         </a>

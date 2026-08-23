@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function GET(
   req: NextRequest,
@@ -70,7 +71,7 @@ export async function PATCH(
 
     if (status === "COMPLETED" && exchange.status !== "COMPLETED") {
       // Selesaikan exchange dan tambahkan trust_score secara atomik dengan transaction
-      const updatedExchange = await prisma.$transaction(async (tx: any) => {
+      const updatedExchange = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         // 1. Update status exchange
         const ex = await tx.exchange.update({
           where: { id: exchangeId },

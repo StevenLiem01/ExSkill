@@ -1,9 +1,12 @@
 "use client";
+import toast from "react-hot-toast";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Prisma } from "@prisma/client";
+import { CheckCircle2 } from "lucide-react";
 
-export default function SessionControl({ exchange, currentUser }: { exchange: any, currentUser: any }) {
+export default function SessionControl({ exchange, currentUser }: { exchange: Prisma.ExchangeGetPayload<{}>, currentUser: Prisma.UserGetPayload<{}> }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -22,12 +25,12 @@ export default function SessionControl({ exchange, currentUser }: { exchange: an
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.message || "Gagal mengubah status sesi");
+        throw new Error((err instanceof Error ? err.message : "Unknown error") || "Gagal mengubah status sesi");
       }
 
       router.refresh();
-    } catch (e: any) {
-      alert("Terjadi kesalahan: " + e.message);
+    } catch (e: unknown) {
+      toast.error("Terjadi kesalahan: " + (e instanceof Error ? e.message : "Unknown error"));
     } finally {
       setLoading(false);
     }
@@ -37,7 +40,7 @@ export default function SessionControl({ exchange, currentUser }: { exchange: an
     return (
       <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl text-center space-y-3 shadow-sm">
         <h3 className="text-xl font-bold text-emerald-700 flex items-center justify-center gap-2">
-          <span>✅</span> Sesi Selesai
+          <CheckCircle2 size={24} className="text-emerald-600" /> Sesi Selesai
         </h3>
         <p className="text-sm text-emerald-600 font-medium">Sesi belajar telah berakhir dan Trust Score kalian telah ditambahkan.</p>
       </div>

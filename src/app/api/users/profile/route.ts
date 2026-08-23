@@ -53,7 +53,7 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json(updatedUser, { status: 200 });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[PROFILE_UPDATE_ERROR]", error);
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }

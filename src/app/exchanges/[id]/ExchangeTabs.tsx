@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { MessageSquare, Calendar } from "lucide-react";
 import ChatBox from "@/components/ChatBox";
 import MilestoneManager from "@/components/MilestoneManager";
 
@@ -21,11 +22,11 @@ export default function ExchangeTabs({ exchangeId, currentUserId, sessionStatus 
           onClick={() => setActiveTab("CHAT")}
           className={`px-5 py-2.5 text-sm font-bold transition-all rounded-t-xl ${
             activeTab === "CHAT"
-              ? "text-[#00DF9A] border-b-2 border-[#00DF9A] bg-[#00DF9A]/5"
+              ? "text-[#D946EF] border-b-2 border-[#D946EF] bg-[#D946EF]/5"
               : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
           }`}
         >
-          💬 Obrolan
+          <MessageSquare size={16} className="inline mr-1 mb-0.5" /> Obrolan
         </button>
         <button
           onClick={() => setActiveTab("MILESTONE")}
@@ -35,7 +36,7 @@ export default function ExchangeTabs({ exchangeId, currentUserId, sessionStatus 
               : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
           }`}
         >
-          🗓️ Milestone & Jadwal
+          <Calendar size={16} className="inline mr-1 mb-0.5" /> Milestone & Jadwal
         </button>
       </div>
 

@@ -1,10 +1,11 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Settings, Code, Briefcase, Globe } from "lucide-react";
+import { User } from "@prisma/client";
 
-export default function ProfileClient({ user }: { user: any }) {
+export default function ProfileClient({ user }: { user: User }) {
   // Komponen ini sekarang hanya bertugas menampilkan profil dan menangani logout.
   // Logika edit dipindahkan ke /settings
 
@@ -15,9 +16,9 @@ export default function ProfileClient({ user }: { user: any }) {
           <h2 className="font-bold text-white">Profil & Tautan</h2>
           <Link 
             href="/settings"
-            className="text-xs bg-[#00DF9A]/10 text-[#00DF9A] border border-[#00DF9A]/30 px-3 py-1.5 rounded-lg hover:bg-[#00DF9A]/20 transition-colors font-medium flex items-center gap-1"
+            className="text-xs bg-[#D946EF]/10 text-[#D946EF] border border-[#D946EF]/30 px-3 py-1.5 rounded-lg hover:bg-[#D946EF]/20 transition-colors font-medium flex items-center gap-1"
           >
-            ⚙️ Edit Profil
+            <Settings size={14} /> Edit Profil
           </Link>
         </div>
 
@@ -32,7 +33,7 @@ export default function ProfileClient({ user }: { user: any }) {
           <h3 className="text-xs text-slate-500 uppercase tracking-wider font-mono">Portofolio</h3>
           
           <div className="flex items-center gap-3">
-            <span className="text-xl w-6">🐙</span>
+            <span className="w-6 flex justify-center text-slate-400"><Code size={20} /></span>
             {user.githubUrl ? (
               <a href={user.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-400 hover:text-indigo-300 truncate">
                 {user.githubUrl}
@@ -43,7 +44,7 @@ export default function ProfileClient({ user }: { user: any }) {
           </div>
           
           <div className="flex items-center gap-3">
-            <span className="text-xl w-6">💼</span>
+            <span className="w-6 flex justify-center text-slate-400"><Briefcase size={20} /></span>
             {user.linkedinUrl ? (
               <a href={user.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-400 hover:text-indigo-300 truncate">
                 {user.linkedinUrl}
@@ -54,7 +55,7 @@ export default function ProfileClient({ user }: { user: any }) {
           </div>
           
           <div className="flex items-center gap-3">
-            <span className="text-xl w-6">🌍</span>
+            <span className="w-6 flex justify-center text-slate-400"><Globe size={20} /></span>
             {user.portfolioUrl ? (
               <a href={user.portfolioUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-400 hover:text-indigo-300 truncate">
                 {user.portfolioUrl}

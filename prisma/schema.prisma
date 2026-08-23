@@ -118,6 +118,7 @@ model User {
   points        Int      @default(0)
   trust_score   Int      @default(0)
   role          Role     @default(USER)
+  is_banned     Boolean  @default(false) @map("is_banned")
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 

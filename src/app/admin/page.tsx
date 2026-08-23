@@ -114,7 +114,7 @@ function AdminDashboard() {
         <div className="bg-slate-800/50 backdrop-blur-sm p-8 rounded-3xl border border-white/10 mt-10">
           <h2 className="text-lg font-bold text-white mb-6">Menu Moderasi</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <button className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-700/50 transition-all text-left">
+            <Link href="/admin/users" className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-700/50 transition-all text-left">
               <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-xl border border-blue-500/30">
                 🛡️
               </div>
@@ -122,8 +122,8 @@ function AdminDashboard() {
                 <h3 className="font-bold text-white">Manajemen Pengguna</h3>
                 <p className="text-xs text-slate-400 mt-1">Blokir atau pantau aktivitas pengguna</p>
               </div>
-            </button>
-            <button className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-700/50 transition-all text-left">
+            </Link>
+            <Link href="/admin/reports" className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-700/50 transition-all text-left">
               <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-xl border border-red-500/30">
                 ⚖️
               </div>
@@ -131,7 +131,7 @@ function AdminDashboard() {
                 <h3 className="font-bold text-white">Moderasi Laporan</h3>
                 <p className="text-xs text-slate-400 mt-1">Tinjau keluhan dan tindak pelanggaran</p>
               </div>
-            </button>
+            </Link>
           </div>
         </div>
       </div>

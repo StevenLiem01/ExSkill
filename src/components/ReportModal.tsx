@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface ReportModalProps {
   reportedId: string;
@@ -12,8 +13,13 @@ export default function ReportModal({ reportedId, isOpen, onClose }: ReportModal
   const [reason, setReason] = useState("");
   const [details, setDetails] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,8 +50,8 @@ export default function ReportModal({ reportedId, isOpen, onClose }: ReportModal
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative">
         <div className="p-6">
           <div className="flex justify-between items-center mb-5">
@@ -111,6 +117,7 @@ export default function ReportModal({ reportedId, isOpen, onClose }: ReportModal
           </form>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

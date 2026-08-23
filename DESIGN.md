@@ -1,15 +1,16 @@
 ---
 version: alpha
 name: ExSkill Design System
-description: Sistem desain resmi untuk ExSkill, platform pertukaran keahlian mahasiswa.
+description: Sistem desain resmi untuk ExSkill, mengusung tema AI-Driven SaaS bergaya Cyber-Neon.
 colors:
-  primary: "#00DF9A"
-  primary-hover: "#00C285"
-  secondary: "#6366F1"
-  neutral: "#0F172A"
-  surface: "#1E293B"
+  primary: "#8B5CF6"
+  primary-hover: "#A78BFA"
+  secondary: "#D946EF"
+  neutral: "#0B061A"
+  surface: "#1A1528"
+  surface-glass: "rgba(255, 255, 255, 0.03)"
   on-surface: "#F8FAFC"
-  error: "#FF5B4F"
+  error: "#EF4444"
 typography:
   headline-display:
     fontFamily: Geist
@@ -44,51 +45,51 @@ rounded:
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
-    textColor: "{colors.neutral}"
-    rounded: "{rounded.lg}"
+    textColor: "#FFFFFF"
+    rounded: "{rounded.full}"
     padding: 12px
 ---
 
 ## Overview
 
-ExSkill adalah platform *peer-to-peer* pertukaran keahlian yang dirancang khusus untuk mahasiswa yang tech-savvy, bersemangat, dan kolaboratif. Antarmuka utama berfokus pada estetika "Dark Tech" (Mode Gelap) yang dipadukan dengan aksen neon yang mencolok. Desain harus terasa imersif, modern, dan memberikan kesan pertumbuhan *(growth)* serta inovasi.
+ExSkill mengadopsi identitas visual **"AI-Driven SaaS"** atau **"Cyber-Neon"**. Antarmuka ini dirancang untuk memberikan kesan futuristik, canggih, dan premium layaknya platform startup kelas dunia. Penggunaan warna dasar ungu sangat gelap (*Midnight Purple*) yang dipadukan dengan pendaran cahaya neon *(glow)* memberikan pengalaman imersif dan eksklusif bagi mahasiswa IT, desainer, dan *developer*.
 
 ## Colors
 
-Palet warna kita berakar pada latar belakang gelap yang elegan dipadukan dengan aksen neon yang sangat kontras.
+Palet warna bergeser dari nuansa hitam pekat/abu-abu ke arah spektrum ungu yang sangat gelap *(Deep Midnight)* dengan aksen neon bersinar.
 
-- **Primary (Cyber Mint - #00DF9A):** Warna neon hijau/mint yang melambangkan kesepakatan, keberhasilan bertukar keahlian, dan energi positif. Digunakan untuk tombol aksi utama (Call to Action).
-- **Secondary (Indigo - #6366F1):** Warna ungu kebiruan untuk elemen pendukung dan interaksi sekunder.
-- **Neutral (Slate 900 - #0F172A):** Latar belakang utama aplikasi. 
-- **Surface (Slate 800 - #1E293B):** Warna untuk kartu profil dan kontainer *dashboard*.
+- **Primary (Neon Purple - #8B5CF6):** Warna aksi utama yang mencolok. Digunakan untuk tombol utama, sorotan *(highlight)*, dan pendaran *(glow)* di belakang elemen penting.
+- **Secondary (Magenta - #D946EF):** Warna aksen pendukung untuk memberikan gradasi atau dimensi ekstra pada grafik, latar belakang *mesh*, dan ikon.
+- **Neutral (Midnight Dark - #0B061A):** Latar belakang utama aplikasi yang sangat gelap (mendekati hitam namun berbasis ungu/biru gelap), memberikan kontras maksimal untuk efek *glow*.
+- **Surface (Deep Purple Surface - #1A1528):** Warna dasar untuk kartu dan kontainer sebelum diberi efek *glassmorphism*.
+- **Surface Glass:** Warna semi-transparan (`rgba(255, 255, 255, 0.03)`) untuk menciptakan efek kaca UI yang mewah.
 
 ## Typography
 
-Tipografi ExSkill mengandalkan sistem *font* bawaan Next.js untuk performa dan kesan modern.
+Tipografi mempertahankan sistem *font* bawaan Next.js untuk memberikan kesan *tech-savvy*.
 
-- **Headlines & Body:** Menggunakan font **Geist** (sans-serif) untuk keterbacaan tinggi dan tampilan antarmuka yang bersih.
-- **Labels & Data:** Menggunakan **Geist Mono** untuk elemen teknis seperti skor keahlian, tanggal, atau log aktivitas.
+- **Headlines & Body:** Menggunakan font **Geist** (sans-serif) untuk keterbacaan tinggi dan tampilan antarmuka geometris yang bersih.
+- **Labels & Data:** Menggunakan **Geist Mono** untuk elemen teknis, skor *Trust*, grafik analitik, dan log aktivitas.
 
 ## Layout
 
-Tata letak menggunakan ruang bernapas *(whitespace)* yang luas untuk menghindari beban kognitif pada mahasiswa. Kita menggunakan sistem kartu *(card-based)* dengan *padding* internal yang terstandardisasi (menggunakan token `lg` atau 24px).
+Sistem tata letak menggunakan ruang bernapas *(whitespace)* yang tertata rapi. Komponen dikelompokkan ke dalam kartu besar dengan *padding* luas (24px - 32px) agar antarmuka tidak terasa sesak dan informasi dapat dipindai dengan cepat oleh pengguna.
 
 ## Elevation & Depth
 
-Kedalaman visual TIDAK dicapai melalui *drop shadow* tradisional berwarna hitam pekat. 
-Kita menggunakan teknik **Glassmorphism**:
-1. Latar belakang kartu transparan putih (`bg-white/5` atau `bg-slate-800/50`).
-2. Efek *blur* latar belakang (`backdrop-blur-md`).
-3. Batas tepi sangat tipis untuk mempertegas bentuk kaca (`border border-white/10`).
+Kedalaman visual TIDAK menggunakan *drop shadow* bayangan hitam tradisional. Kedalaman dicapai melalui perpaduan **Glassmorphism** dan **Glow Effects**:
+1. **Glassmorphism:** Kartu menggunakan latar belakang transparan tipis (`bg-white/5`), efek *blur* pada latar belakang (`backdrop-blur-xl`), dan batas tepi super tipis (`border border-white/10`).
+2. **Neon Glow (Pendaran):** Elemen interaktif utama dan latar belakang *dashboard* memiliki bayangan berpendar *(drop shadow neon)* atau gradasi memendar untuk menciptakan dimensi futuristik.
 
 ## Shapes
 
-Meskipun ini adalah platform teknis, bentuk melengkung yang ramah digunakan untuk menyeimbangkan antarmuka gelap. 
-Sebagian besar kartu besar dan tombol utama menggunakan **sudut melengkung yang mulus** (`rounded-lg` atau `rounded-2xl` di Tailwind) untuk kesan *modern SaaS*.
+Bentuk elemen mengutamakan kesan mengalir *(fluid)* dan presisi:
+- Kartu data dan panel *dashboard* menggunakan **sudut melengkung yang tegas** (`rounded-2xl` atau `16px`).
+- Tombol aksi utama cenderung berbentuk pil *(pill-shaped)* atau bulatan penuh (`rounded-full`) untuk memberikan kontras geometris terhadap kartu.
 
 ## Do's and Don'ts
 
-- **Do** gunakan warna Primary (Cyber Mint) dengan hemat, HANYA untuk tombol aksi terpenting di sebuah halaman.
-- **Don't** menggunakan *background* putih terang sebagai latar belakang utama halaman.
-- **Do** pastikan efek *glassmorphism* (*backdrop blur*) selalu dipadukan dengan *border* transparan tipis agar kartu tidak menyatu dengan latar belakang.
-- **Don't** menggunakan lebih dari dua jenis *font* dalam satu halaman.
+- **Do** gunakan efek *glow* (pendaran) HANYA pada elemen yang paling penting (seperti grafik utama atau tombol *Submit*) untuk menghindari kelelahan mata *(eye strain)*.
+- **Don't** gunakan warna hitam murni (`#000000`) untuk *background*; selalu gunakan *Midnight Purple* yang sangat gelap.
+- **Do** pertahankan *border* 1px putih transparan (`white/10`) pada setiap kartu *Glassmorphism* untuk mempertegas batas antarmuka.
+- **Don't** menumpuk lapisan kaca lebih dari dua tingkat (misalnya kartu di dalam kartu transparan) agar visibilitas teks tetap optimal.

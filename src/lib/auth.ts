@@ -10,10 +10,12 @@ declare module "next-auth" {
     user: {
       id: string;
       role: string;
+      is_banned?: boolean;
     } & DefaultSession["user"]
   }
   interface User extends DefaultUser {
     role: string;
+    is_banned?: boolean;
   }
 }
 
@@ -36,7 +38,10 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email }
         });
         if (user) {
-          return { id: user.id, name: user.name, email: user.email, role: user.role };
+          if (user.is_banned) {
+            throw new Error("Akun Anda telah diblokir.");
+          }
+          return { id: user.id, name: user.name, email: user.email, role: user.role, is_banned: user.is_banned };
         }
         return null;
       }
@@ -46,9 +51,24 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // Check if user exists and is banned in the database before allowing login
+      // Especially needed for OAuth like Google
+      if (user.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email }
+        });
+        
+        if (dbUser?.is_banned) {
+          throw new Error("Akun Anda telah diblokir dari platform.");
+        }
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
+        token.is_banned = user.is_banned;
       }
       return token;
     },
@@ -56,6 +76,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user && token.sub) {
         session.user.id = token.sub;
         session.user.role = token.role as string;
+        session.user.is_banned = token.is_banned as boolean | undefined;
       }
       return session;
     }

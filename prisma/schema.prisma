@@ -134,13 +134,14 @@ model User {
   participant_a_exchanges Exchange[]            @relation("ParticipantA")
   participant_b_exchanges Exchange[]            @relation("ParticipantB")
   session_confirmations   SessionConfirmation[]
-  reviews_given     Review[]              @relation("ReviewsGiven")
-  reviews_received  Review[]              @relation("ReviewsReceived")
-  notifications     Notification[]        @relation("UserNotifications")
-  messages          Message[]             @relation("SentMessages")
-  reports_filed     Report[]              @relation("ReportsFiled")
+  reviews_given           Review[]              @relation("ReviewsGiven")
+  reviews_received        Review[]              @relation("ReviewsReceived")
+  notifications           Notification[]        @relation("UserNotifications")
+  messages                Message[]             @relation("SentMessages")
+  reports_filed           Report[]              @relation("ReportsFiled")
   reports_received        Report[]              @relation("ReportsReceived")
-  disputes_raised         Dispute[]
+  disputes_opened         Dispute[]             @relation("DisputeOpener")
+  disputes_handled        Dispute[]             @relation("DisputeAdmin")
   blocked_users           Block[]               @relation("Blocker")
   blocked_by              Block[]               @relation("Blocked")
 
@@ -248,21 +249,21 @@ model Milestone {
 }
 
 model MeetingSession {
-  id               String        @id @default(cuid())
-  milestone_id     String
-  title            String        @db.VarChar(100)
-  scheduled_at     DateTime
-  duration_minutes Int
-  meeting_link     String?       @db.VarChar(255)
-  status           MeetingStatus @default(SCHEDULED)
-  created_at       DateTime      @default(now())
-  updated_at       DateTime      @updatedAt
+  id           String   @id @default(cuid())
+  milestone_id String
+  title        String   @db.VarChar(100)
+  scheduled_at DateTime
+  duration     Int
+  meeting_link String?  @db.VarChar(255)
+  status       String   @default("SCHEDULED")
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 
   milestone     Milestone             @relation(fields: [milestone_id], references: [id], onDelete: Cascade)
   confirmations SessionConfirmation[]
 
-  // Catatan: Model ini direname menjadi "MeetingSession" 
-  // karena "Session" digunakan oleh NextAuth
+  // Catatan: Model ini menggunakan nama "MeetingSession" 
+  // karena "Session" sudah digunakan oleh NextAuth
   @@map("meeting_sessions")
 }
 
@@ -270,8 +271,7 @@ model SessionConfirmation {
   id           String   @id @default(cuid())
   session_id   String
   user_id      String
-  is_confirmed Boolean  @default(false)
-  created_at   DateTime @default(now())
+  confirmed_at DateTime @default(now())
 
   session MeetingSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
   user    User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -300,8 +300,8 @@ model Review {
 model Notification {
   id         String   @id @default(cuid())
   user_id    String
-  type       String   @db.VarChar(50) @default("INFO")
-  title      String   @db.VarChar(255) @default("Pemberitahuan")
+  type       String   @default("INFO") @db.VarChar(50)
+  title      String   @default("Pemberitahuan") @db.VarChar(255)
   message    String   @db.Text
   link       String?  @db.VarChar(255)
   is_read    Boolean  @default(false)
@@ -344,17 +344,20 @@ model Report {
 }
 
 model Dispute {
-  id          String        @id @default(cuid())
+  id          String    @id @default(cuid())
   exchange_id String
-  raiser_id   String
-  reason      String        @db.Text
-  status      DisputeStatus @default(OPEN)
-  resolution  String?       @db.Text
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
+  opened_by   String
+  reason      String    @db.Text
+  description String    @db.Text
+  status      String    @default("OPEN")
+  admin_id    String?
+  resolution  String?   @db.Text
+  created_at  DateTime  @default(now())
+  resolved_at DateTime?
 
   exchange Exchange @relation(fields: [exchange_id], references: [id], onDelete: Cascade)
-  raiser   User     @relation(fields: [raiser_id], references: [id], onDelete: Cascade)
+  opener   User     @relation("DisputeOpener", fields: [opened_by], references: [id], onDelete: Cascade)
+  admin    User?    @relation("DisputeAdmin", fields: [admin_id], references: [id], onDelete: SetNull)
 
   @@map("disputes")
 }

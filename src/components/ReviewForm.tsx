@@ -13,11 +13,11 @@ export default function ReviewForm({ exchangeId, existingReview }: { exchangeId:
 
   if (existingReview) {
     return (
-      <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl text-sm shadow-sm transition-all">
-        <h4 className="font-bold text-emerald-800 mb-3 flex items-center gap-2 text-base">
+      <div className="bg-emerald-500/10 border border-emerald-500/30 p-6 rounded-2xl text-sm shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all">
+        <h4 className="font-bold text-emerald-400 mb-3 flex items-center gap-2 text-base">
           <span>⭐</span> Ulasan berhasil dikirim ({existingReview.rating}/5)
         </h4>
-        <p className="text-emerald-700 font-medium italic bg-white p-4 rounded-xl border border-emerald-100 shadow-inner leading-relaxed">
+        <p className="text-emerald-300 font-medium italic bg-black/20 p-4 rounded-xl border border-emerald-500/20 shadow-inner leading-relaxed">
           "{existingReview.comment}"
         </p>
       </div>
@@ -50,18 +50,19 @@ export default function ReviewForm({ exchangeId, existingReview }: { exchangeId:
   };
 
   return (
-    <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm transition-all">
-      <h3 className="text-xl font-bold text-slate-900 mb-6 border-b border-slate-100 pb-3">Berikan Ulasan untuk Partner Anda</h3>
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="bg-[#1A1528]/80 backdrop-blur-xl p-6 md:p-8 rounded-2xl border border-white/10 shadow-[0_0_20px_rgba(168,85,247,0.1)] transition-all relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-[40px] pointer-events-none"></div>
+      <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-3 relative z-10">Berikan Ulasan untuk Partner Anda</h3>
+      <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
         <div>
-          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
+          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
             Rating (1-5)
           </label>
           <div className="flex flex-wrap gap-4">
             {[1, 2, 3, 4, 5].map((num) => (
               <label
                 key={num}
-                className={`flex items-center gap-2 cursor-pointer border px-4 py-2.5 rounded-xl transition-all shadow-sm ${rating === num.toString() ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                className={`flex items-center gap-2 cursor-pointer border px-4 py-2.5 rounded-xl transition-all shadow-sm ${rating === num.toString() ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.2)]' : 'bg-black/40 border-white/10 text-slate-400 hover:bg-white/5'}`}
               >
                 <input
                   type="radio"
@@ -69,7 +70,7 @@ export default function ReviewForm({ exchangeId, existingReview }: { exchangeId:
                   value={num}
                   checked={rating === num.toString()}
                   onChange={(e) => setRating(e.target.value)}
-                  className="accent-amber-500 w-4 h-4 focus:ring-2 focus:ring-amber-500 focus:ring-offset-1"
+                  className="accent-amber-500 w-4 h-4 focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-black/20"
                 />
                 <span className="text-sm font-bold">{num} ⭐</span>
               </label>
@@ -78,14 +79,14 @@ export default function ReviewForm({ exchangeId, existingReview }: { exchangeId:
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
+          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
             Komentar & Kesan
           </label>
           <textarea
             required
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm min-h-[120px] resize-y"
+            className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white font-medium focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all shadow-inner min-h-[120px] resize-y placeholder:text-slate-500"
             placeholder="Tuliskan pengalaman belajar bersama partner Anda..."
           />
         </div>
@@ -93,7 +94,7 @@ export default function ReviewForm({ exchangeId, existingReview }: { exchangeId:
         <button
           type="submit"
           disabled={loading}
-          className="min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-8 rounded-xl font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="min-h-[44px] bg-purple-600 hover:bg-purple-500 text-white py-2.5 px-8 rounded-xl font-bold shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] hover:-translate-y-0.5 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-purple-500/50"
         >
           {loading ? "Mengirim..." : "Kirim Ulasan"}
         </button>

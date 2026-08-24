@@ -10,6 +10,7 @@ import SessionControl from "@/components/SessionControl";
 import ExchangeTabs from "./ExchangeTabs";
 import CompleteExchangeButton from "@/components/CompleteExchangeButton";
 import ReportUserButton from "@/components/ReportUserButton";
+import DisputeButton from "@/components/DisputeButton";
 
 export default async function ExchangeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: exchangeId } = await params;
@@ -71,7 +72,8 @@ export default async function ExchangeDetailPage({ params }: { params: Promise<{
               <h1 className="text-3xl font-extrabold text-white tracking-tight">
                 Workspace: <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-400">{partner.name}</span>
               </h1>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
+                <DisputeButton exchangeId={exchange.id} />
                 <ReportUserButton reportedId={partner.id} />
                 <CompleteExchangeButton 
                   exchangeId={exchange.id} 

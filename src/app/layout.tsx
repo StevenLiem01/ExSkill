@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ExSkill | AI-Driven Student Skill Exchange",
+  title: "ExSkill | Platform Pertukaran Keahlian Mahasiswa",
   description: "Platform pertukaran keahlian peer-to-peer bernuansa Cyber-Neon. Temukan partner belajar, berkolaborasi, dan tingkatkan Trust Score kamu.",
 };
 

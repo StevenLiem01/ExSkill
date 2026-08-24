@@ -11,6 +11,7 @@ type RecommendedUser = {
   major: string;
   trust_score: number;
   matchCount: number;
+  matchScore: number;
   matchedSkills: { id: string; skill: { name: string } }[];
 };
 
@@ -21,7 +22,7 @@ export default function RecommendedPartners() {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const res = await fetch("/api/recommendations");
+        const res = await fetch("/api/recommendations", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           setRecommendations(data);
@@ -87,7 +88,18 @@ export default function RecommendedPartners() {
               </div>
               <div className="overflow-hidden pr-8">
                 <h3 className="font-bold text-white text-lg truncate" title={user.name}>{user.name}</h3>
-                <p className="text-xs text-slate-400 truncate">{user.major}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                    user.matchScore >= 80 
+                      ? "shadow-[0_0_15px_rgba(16,185,129,0.25)] bg-emerald-500/15 border-emerald-500/40 text-emerald-300"
+                      : user.matchScore >= 50
+                      ? "shadow-[0_0_15px_rgba(234,179,8,0.25)] bg-yellow-500/15 border-yellow-500/40 text-yellow-300"
+                      : "shadow-[0_0_10px_rgba(148,163,184,0.2)] bg-slate-500/10 border-slate-500/30 text-slate-300"
+                  }`}>
+                    {user.matchScore}% Match
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 truncate mt-1">{user.major}</p>
               </div>
             </div>
 

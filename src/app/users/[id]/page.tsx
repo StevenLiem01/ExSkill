@@ -6,6 +6,7 @@ import AuthProvider from "@/components/AuthProvider";
 import ProposalButton from "@/components/ProposalButton";
 import Link from "next/link";
 import ReportUserButton from "@/components/ReportUserButton";
+import BlockUserButton from "@/components/BlockUserButton";
 import { Prisma } from "@prisma/client";
 import { User, Star, Link as LinkIcon, Wrench, Trophy, FileText } from "lucide-react";
 
@@ -48,6 +49,11 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   // but let's hide the proposal button in that case.
   const isSelf = currentUser.id === user.id;
 
+  const blockData = !isSelf ? await prisma.block.findFirst({
+    where: { blocker_id: currentUser.id, blocked_id: user.id }
+  }) : null;
+  const isBlocked = !!blockData;
+
   const mySkills = currentUser.owned_skills.map((os: Prisma.UserSkillGetPayload<{ include: { skill: true } }>) => os.skill);
   const partnerSkills = user.owned_skills.map((os: Prisma.UserSkillGetPayload<{ include: { skill: true } }>) => os.skill);
 
@@ -64,7 +70,12 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
               <h1 className="text-3xl font-bold flex items-center gap-3 text-white">
                 <User size={28} className="text-purple-400" /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Profil Pengguna</span>
               </h1>
-              {!isSelf && <ReportUserButton reportedId={user.id} />}
+              {!isSelf && (
+                <div className="flex items-center gap-2">
+                  <BlockUserButton targetUserId={user.id} initialIsBlocked={isBlocked} />
+                  <ReportUserButton reportedId={user.id} />
+                </div>
+              )}
             </div>
             <Link href="/explore" className="bg-white/5 hover:bg-white/10 text-slate-300 font-semibold px-5 py-2.5 rounded-xl shadow-sm transition-all duration-200 border border-white/10 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-purple-500/50">
               &larr; Eksplorasi

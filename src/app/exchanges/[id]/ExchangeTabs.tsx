@@ -51,7 +51,7 @@ export default function ExchangeTabs({ exchangeId, currentUserId, sessionStatus 
         )}
         
         {activeTab === "MILESTONE" && (
-          <MilestoneManager exchangeId={exchangeId} />
+          <MilestoneManager exchangeId={exchangeId} currentUserId={currentUserId} />
         )}
       </div>
     </div>

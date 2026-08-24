@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { calculateMatchScore } from "@/lib/matching";
 
 export async function GET(req: NextRequest) {
   try {
@@ -14,7 +15,8 @@ export async function GET(req: NextRequest) {
     const currentUser = await prisma.user.findUnique({
       where: { email: sessionAuth.user.email },
       include: {
-        wanted_skills: true
+        owned_skills: { include: { skill: true } },
+        wanted_skills: { include: { skill: true } }
       }
     });
 
@@ -40,29 +42,30 @@ export async function GET(req: NextRequest) {
         }
       },
       include: {
-        owned_skills: {
-          include: { skill: true }
-        }
+        owned_skills: { include: { skill: true } },
+        wanted_skills: { include: { skill: true } }
       }
     });
 
     // Score and sort matches
     const scoredMatches = potentialMatches.map(user => {
-      // Calculate intersection count
+      // Calculate intersection count (kept for UI if needed)
       const matchedSkills = user.owned_skills.filter(os => wantedSkillIds.includes(os.skill_id));
       const matchCount = matchedSkills.length;
+      const matchScore = calculateMatchScore(currentUser, user);
 
       return {
         ...user,
         matchCount,
-        matchedSkills
+        matchedSkills,
+        matchScore
       };
     });
 
-    // Sort by matchCount (desc), then by trust_score (desc)
+    // Sort by matchScore (desc), then by trust_score (desc)
     scoredMatches.sort((a, b) => {
-      if (b.matchCount !== a.matchCount) {
-        return b.matchCount - a.matchCount;
+      if (b.matchScore !== a.matchScore) {
+        return b.matchScore - a.matchScore;
       }
       return b.trust_score - a.trust_score;
     });

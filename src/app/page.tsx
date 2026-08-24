@@ -86,7 +86,7 @@ export default async function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Pencocokan Cerdas</h3>
+                <h3 className="text-xl font-bold text-white mb-3">Koneksi Tepat</h3>
                 <p className="text-slate-400 leading-relaxed text-sm flex-1">
                   Sistem pencarian kami mempertemukan keahlian yang Anda butuhkan dengan pengguna yang siap berkolaborasi secara akurat.
                 </p>

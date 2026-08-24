@@ -26,12 +26,17 @@ export async function GET(
 
     const milestones = await prisma.milestone.findMany({
       where: { exchange_id: exchangeId },
+      include: {
+        sessions: {
+          include: { confirmations: true }
+        }
+      },
       orderBy: { created_at: 'asc' }
     });
 
     return NextResponse.json(milestones, { status: 200 });
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching milestones:", error);
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
@@ -74,7 +79,7 @@ export async function POST(
 
     return NextResponse.json(newMilestone, { status: 201 });
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error creating milestone:", error);
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }

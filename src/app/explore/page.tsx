@@ -9,6 +9,7 @@ import RecommendedPartners from "@/components/RecommendedPartners";
 import { Prisma } from "@prisma/client";
 import SearchFilterBar from "@/components/SearchFilterBar";
 import { Search, Globe, Star, MessageSquare } from "lucide-react";
+import { calculateMatchScore } from "@/lib/matching";
 
 export default async function ExplorePage(props: { searchParams?: Promise<{ [key: string]: string | undefined }> }) {
   const searchParams = await props.searchParams;
@@ -21,7 +22,7 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
   const currentUser = await prisma.user.findUnique({
     where: { email: session.user.email },
     include: {
-      wanted_skills: true,
+      wanted_skills: { include: { skill: true } },
       owned_skills: { include: { skill: true } }
     },
   });
@@ -30,11 +31,19 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
 
   const wantedSkillIds = currentUser.wanted_skills.map((w) => w.skill_id);
 
+  const blockedByMe = await prisma.block.findMany({ where: { blocker_id: currentUser.id } });
+  const blockingMe = await prisma.block.findMany({ where: { blocked_id: currentUser.id } });
+  const excludedUserIds = [
+    currentUser.id,
+    ...blockedByMe.map(b => b.blocked_id),
+    ...blockingMe.map(b => b.blocker_id)
+  ];
+
   const q = searchParams?.q || "";
   const minScore = parseInt(searchParams?.min_score || "0");
   const sortParam = searchParams?.sort || "newest";
 
-  let queryWhere: Prisma.UserWhereInput = { id: { not: currentUser.id } };
+  let queryWhere: Prisma.UserWhereInput = { id: { notIn: excludedUserIds } };
 
   if (q) {
     queryWhere = {
@@ -79,6 +88,16 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
     }
   });
 
+  const usersWithScore = universalSearchUsers.map(u => ({
+    ...u,
+    matchScore: calculateMatchScore(currentUser, u)
+  }));
+
+  // Urutkan berdasarkan matchScore, kecuali jika eksplisit diminta sort trust score
+  if (sortParam !== 'score_desc') {
+    usersWithScore.sort((a, b) => b.matchScore - a.matchScore);
+  }
+
   // Data keahlian saya yang bisa saya tawarkan (Owned Skills)
   const mySkills = currentUser.owned_skills.map((os) => os.skill);
 
@@ -92,7 +111,7 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
       },
       reviews_received: true
     }
-  }>;
+  }> & { matchScore: number };
 
   return (
     <AuthProvider>
@@ -137,8 +156,16 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-              {universalSearchUsers.map((user: ExploreUser) => {
+              {usersWithScore.map((user: ExploreUser) => {
                 const partnerSkills = user.owned_skills.map((os) => os.skill);
+
+                // Tentukan warna glow berdasarkan score
+                let matchGlow = "shadow-[0_0_10px_rgba(148,163,184,0.2)] bg-slate-500/10 border-slate-500/30 text-slate-300";
+                if (user.matchScore >= 80) {
+                  matchGlow = "shadow-[0_0_15px_rgba(16,185,129,0.25)] bg-emerald-500/15 border-emerald-500/40 text-emerald-300";
+                } else if (user.matchScore >= 50) {
+                  matchGlow = "shadow-[0_0_15px_rgba(234,179,8,0.25)] bg-yellow-500/15 border-yellow-500/40 text-yellow-300";
+                }
 
                 return (
                   <div key={user.id} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-all duration-300 ease-in-out hover:-translate-y-1 flex flex-col justify-between group">
@@ -156,7 +183,12 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
                           </div>
                           <div className="overflow-hidden">
                             <h3 className="text-lg font-bold text-white truncate group-hover:text-purple-400 transition-colors" title={user.name || undefined}>{user.name}</h3>
-                            <p className="text-xs text-slate-400 font-medium truncate mt-0.5" title={`${user.major} di ${user.university}`}>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${matchGlow}`}>
+                                {user.matchScore}% Match
+                              </span>
+                            </div>
+                            <p className="text-xs text-slate-400 font-medium truncate mt-1" title={`${user.major} di ${user.university}`}>
                               {user.major} <span className="opacity-50">&bull;</span> {user.university}
                             </p>
                           </div>

@@ -11,16 +11,18 @@ export async function GET() {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    const [totalUsers, totalExchanges, pendingReports] = await Promise.all([
+    const [totalUsers, totalExchanges, pendingReports, openDisputes] = await Promise.all([
       prisma.user.count(),
       prisma.exchange.count(),
-      prisma.report.count({ where: { status: "PENDING" } })
+      prisma.report.count({ where: { status: "PENDING" } }),
+      prisma.dispute.count({ where: { status: "OPEN" } })
     ]);
 
     return NextResponse.json({
       totalUsers,
       totalExchanges,
-      pendingReports
+      pendingReports,
+      openDisputes
     });
   } catch (error) {
     console.error("[ADMIN_STATS_ERROR]", error);

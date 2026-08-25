@@ -11,6 +11,7 @@ interface AdminStats {
   totalUsers: number;
   totalExchanges: number;
   pendingReports: number;
+  openDisputes: number;
 }
 
 function AdminDashboard() {
@@ -100,12 +101,12 @@ function AdminDashboard() {
 
           <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:border-red-500/50 transition-colors group">
             <div className="flex justify-between items-start mb-4">
-              <p className="text-sm font-bold text-slate-400 uppercase tracking-wider font-mono">Laporan Menunggu</p>
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-wider font-mono">Laporan & Sengketa</p>
               <Flag size={24} className="opacity-50 group-hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex items-end gap-3">
-              <p className="text-4xl font-black text-white">{stats?.pendingReports || 0}</p>
-              {stats?.pendingReports && stats.pendingReports > 0 ? (
+              <p className="text-4xl font-black text-white">{stats ? stats.pendingReports + stats.openDisputes : 0}</p>
+              {stats && (stats.pendingReports > 0 || stats.openDisputes > 0) ? (
                 <span className="text-xs font-bold text-red-400 bg-red-400/10 px-2 py-1 rounded-md mb-1">Perlu Aksi</span>
               ) : null}
             </div>
@@ -114,23 +115,44 @@ function AdminDashboard() {
 
         <div className="bg-slate-800/50 backdrop-blur-sm p-8 rounded-3xl border border-white/10 mt-10">
           <h2 className="text-lg font-bold text-white mb-6">Menu Moderasi</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Link href="/admin/users" className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-700/50 transition-all text-left">
-              <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+              <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30 flex-shrink-0">
                 <Shield size={24} className="text-blue-400" />
               </div>
               <div>
-                <h3 className="font-bold text-white">Manajemen Pengguna</h3>
-                <p className="text-xs text-slate-400 mt-1">Blokir atau pantau aktivitas pengguna</p>
+                <h3 className="font-bold text-white leading-tight">Pengguna</h3>
+                <p className="text-xs text-slate-400 mt-1 line-clamp-2">Blokir atau pantau aktivitas pengguna</p>
               </div>
             </Link>
+            
             <Link href="/admin/reports" className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-700/50 transition-all text-left">
-              <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/30">
+              <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/30 flex-shrink-0">
                 <Scale size={24} className="text-red-400" />
               </div>
               <div>
-                <h3 className="font-bold text-white">Moderasi Laporan</h3>
-                <p className="text-xs text-slate-400 mt-1">Tinjau keluhan dan tindak pelanggaran</p>
+                <h3 className="font-bold text-white leading-tight">Laporan</h3>
+                <p className="text-xs text-slate-400 mt-1 line-clamp-2">Tinjau keluhan dan tindak pelanggaran</p>
+              </div>
+            </Link>
+
+            <Link href="/admin/disputes" className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-700/50 transition-all text-left">
+              <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center border border-orange-500/30 flex-shrink-0">
+                <Flag size={24} className="text-orange-400" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white leading-tight">Sengketa</h3>
+                <p className="text-xs text-slate-400 mt-1 line-clamp-2">Mediasi konflik antar partisipan</p>
+              </div>
+            </Link>
+
+            <Link href="/admin/skills" className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-700/50 transition-all text-left">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 flex-shrink-0">
+                <Crown size={24} className="text-emerald-400" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white leading-tight">Master Keahlian</h3>
+                <p className="text-xs text-slate-400 mt-1 line-clamp-2">Kelola referensi nama keahlian</p>
               </div>
             </Link>
           </div>

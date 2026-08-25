@@ -80,8 +80,8 @@ function AdminSkills() {
 
       // Update local state directly for faster UI response
       setSkills(prev => prev.map(s => s.id === skill.id ? { ...s, is_active: newStatus } : s));
-    } catch (err: any) {
-      alert("Error: " + err.message);
+    } catch (err: unknown) {
+      alert("Error: " + (err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setProcessingId(null);
     }
@@ -107,8 +107,8 @@ function AdminSkills() {
       setNewName("");
       setShowAddForm(false);
       fetchSkills();
-    } catch (err: any) {
-      alert("Error: " + err.message);
+    } catch (err: unknown) {
+      alert("Error: " + (err instanceof Error ? err.message : "Unknown error"));
     }
   };
 

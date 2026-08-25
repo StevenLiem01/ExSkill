@@ -18,6 +18,7 @@ export default function ReportModal({ reportedId, isOpen, onClose }: ReportModal
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

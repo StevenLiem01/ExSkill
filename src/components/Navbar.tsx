@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LoginButton from "./LoginButton";
 import NotificationBell from "./NotificationBell";
+import FloatingDock from "./FloatingDock";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -13,6 +14,12 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   if (pathname === "/onboarding") return null;
+
+  // Jika role = USER, sembunyikan Navbar Atas dan tampilkan Floating Dock Bawah
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((session?.user as any)?.role === "USER") {
+    return <FloatingDock session={session} />;
+  }
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-[#0B061A]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-all duration-300">

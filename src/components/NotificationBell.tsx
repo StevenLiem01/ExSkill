@@ -13,7 +13,7 @@ interface Notification {
   created_at: string;
 }
 
-export default function NotificationBell() {
+export default function NotificationBell({ direction = "down" }: { direction?: "up" | "down" | "right" }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -93,7 +93,11 @@ export default function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50">
+        <div className={`absolute ${
+          direction === "up" ? "bottom-full mb-4 left-1/2 -translate-x-1/2" : 
+          direction === "right" ? "left-full ml-4 top-0" : 
+          "right-0 mt-2"
+        } w-80 sm:w-96 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50`}>
           <div className="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
             <h3 className="font-bold text-white">Notifikasi</h3>
             {unreadCount > 0 && (

@@ -97,8 +97,8 @@ function AdminDisputes() {
 
       alert(`Sengketa berhasil ditutup dengan status ${action}.`);
       fetchDisputes(); // Refresh data
-    } catch (err: any) {
-      alert("Error: " + err.message);
+    } catch (err: unknown) {
+      alert("Error: " + (err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setProcessingId(null);
     }

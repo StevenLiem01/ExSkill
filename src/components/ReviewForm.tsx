@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Prisma } from "@prisma/client";
 
-export default function ReviewForm({ exchangeId, existingReview }: { exchangeId: string, existingReview?: Prisma.ReviewGetPayload<{}> }) {
+export default function ReviewForm({ exchangeId, existingReview }: { exchangeId: string, existingReview?: Prisma.ReviewGetPayload<Prisma.ReviewDefaultArgs> }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [rating, setRating] = useState("5");
@@ -18,7 +18,7 @@ export default function ReviewForm({ exchangeId, existingReview }: { exchangeId:
           <span>⭐</span> Ulasan berhasil dikirim ({existingReview.rating}/5)
         </h4>
         <p className="text-emerald-300 font-medium italic bg-black/20 p-4 rounded-xl border border-emerald-500/20 shadow-inner leading-relaxed">
-          "{existingReview.comment}"
+          &quot;{existingReview.comment}&quot;
         </p>
       </div>
     );

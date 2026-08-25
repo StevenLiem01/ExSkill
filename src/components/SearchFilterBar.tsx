@@ -23,9 +23,10 @@ export default function SearchFilterBar() {
       applyFilters();
     }, 500);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q]);
 
-  const applyFilters = () => {
+  function applyFilters() {
     const params = new URLSearchParams();
     if (q) params.set("q", q);
     if (minScore !== "0") params.set("min_score", minScore);
@@ -38,7 +39,7 @@ export default function SearchFilterBar() {
     if (searchParams.toString() !== queryString) {
       router.push(url, { scroll: false });
     }
-  };
+  }
 
   const handleMinScoreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setMinScore(e.target.value);
@@ -51,6 +52,7 @@ export default function SearchFilterBar() {
   // Trigger applyFilters when dropdowns change
   useEffect(() => {
     applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minScore, sort]);
 
   return (

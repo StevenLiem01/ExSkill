@@ -45,6 +45,10 @@ export async function POST(req: NextRequest) {
     const user = await prisma.user.findUnique({ where: { email: session.user.email } });
     if (!user) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
+    if (user.trust_score < 40) {
+      return NextResponse.json({ message: "Trust Score terlalu rendah. Akses pembuatan proposal dibatasi." }, { status: 403 });
+    }
+
     const { receiver_id, offered_skill_id, requested_skill_id, message } = await req.json();
 
     if (!receiver_id || !offered_skill_id || !requested_skill_id) {

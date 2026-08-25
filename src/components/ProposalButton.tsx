@@ -15,9 +15,10 @@ interface Props {
   receiverName: string;
   partnerSkills: Skill[]; // Skill yang ditawarkan partner (kita minta ini)
   mySkills: Skill[];      // Skill yang kita tawarkan (partner minta ini)
+  senderTrustScore: number;
 }
 
-export default function ProposalButton({ receiverId, receiverName, partnerSkills, mySkills }: Props) {
+export default function ProposalButton({ receiverId, receiverName, partnerSkills, mySkills, senderTrustScore }: Props) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -73,9 +74,15 @@ export default function ProposalButton({ receiverId, receiverName, partnerSkills
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full h-11 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mt-6"
+        disabled={senderTrustScore < 40}
+        title={senderTrustScore < 40 ? "Trust Score terlalu rendah (<40)" : ""}
+        className={`w-full h-11 px-4 font-semibold rounded-xl shadow-sm transition-all duration-200 ease-in-out mt-6 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+          senderTrustScore < 40 
+            ? "bg-slate-800 text-slate-500 cursor-not-allowed border border-white/5" 
+            : "bg-blue-600 hover:bg-blue-700 text-white hover:shadow-md hover:-translate-y-0.5 focus:ring-blue-500"
+        }`}
       >
-        Ajukan Pertukaran
+        {senderTrustScore < 40 ? "Akses Dibatasi (Trust Score < 40)" : "Ajukan Pertukaran"}
       </button>
 
       {isOpen && mounted && createPortal(

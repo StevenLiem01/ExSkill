@@ -113,6 +113,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                       receiverName={user.name || "Pengguna"}
                       partnerSkills={partnerSkills}
                       mySkills={mySkills}
+                      senderTrustScore={currentUser.trust_score}
                     />
                   </div>
                 )}

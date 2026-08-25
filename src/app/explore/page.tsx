@@ -245,6 +245,7 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
                         receiverName={user.name || "User"}
                         partnerSkills={partnerSkills}
                         mySkills={mySkills}
+                        senderTrustScore={currentUser.trust_score}
                       />
                     </div>
                   </div>

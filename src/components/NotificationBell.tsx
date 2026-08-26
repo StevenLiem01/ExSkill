@@ -102,7 +102,7 @@ export default function NotificationBell({ direction = "down" }: { direction?: "
       {isOpen && (
         <div className={`absolute ${
           direction === "up" ? "bottom-full mb-4 left-1/2 -translate-x-1/2" : 
-          direction === "right" ? "left-full ml-4 top-0" : 
+          direction === "right" ? "left-full ml-4 bottom-0" : 
           "right-0 mt-2"
         } w-80 sm:w-96 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50`}>
           <div className="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">

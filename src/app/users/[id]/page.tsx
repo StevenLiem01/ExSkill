@@ -199,6 +199,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                   </div>
                 </div>
               </div>
+            </div>
               
               {/* Ulasan & Reputasi Section */}
               <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-8 shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">

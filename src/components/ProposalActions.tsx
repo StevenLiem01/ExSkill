@@ -31,20 +31,20 @@ export default function ProposalActions({ proposalId }: { proposalId: string }) 
   };
 
   return (
-    <div className="flex gap-3 mt-2 pt-2 border-t border-slate-100">
+    <div className="flex gap-3 mt-2 pt-4 border-t border-white/10 relative z-20">
       <button
         onClick={() => handleAction("ACCEPTED")}
         disabled={loading}
-        className="flex-1 h-11 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+        className="flex-1 h-12 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-bold tracking-widest uppercase text-sm border-2 border-emerald-500/50 hover:border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group relative overflow-hidden"
       >
-        Terima
+        <span className="relative z-10 group-hover:animate-pulse">Terima</span>
       </button>
       <button
         onClick={() => handleAction("REJECTED")}
         disabled={loading}
-        className="flex-1 h-11 bg-white hover:bg-red-50 text-red-600 font-semibold border border-red-200 hover:border-red-300 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+        className="flex-1 h-12 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold tracking-widest uppercase text-sm border-2 border-red-500/50 hover:border-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)] hover:shadow-[0_0_25px_rgba(239,68,68,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group relative overflow-hidden"
       >
-        Tolak
+        <span className="relative z-10 group-hover:animate-pulse">Tolak</span>
       </button>
     </div>
   );

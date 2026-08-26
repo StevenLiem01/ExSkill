@@ -50,6 +50,9 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: '/auth/signin',
+  },
   callbacks: {
     async signIn({ user, account, profile }) {
       // Check if user exists and is banned in the database before allowing login

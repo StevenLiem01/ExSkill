@@ -245,23 +245,25 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
   };
 
   return (
-    <div className="w-full bg-[#1A1528]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 flex flex-col gap-4 relative overflow-hidden">
+    <div className="w-full bg-black border-2 border-cyan-500/50 rounded-none p-6 flex flex-col gap-4 relative overflow-hidden font-mono shadow-[4px_4px_0_rgba(6,182,212,0.3)]">
       {/* Background Glow Effect (Subtle) */}
-      <div className="absolute -top-10 -right-10 w-32 h-32 bg-purple-500/20 rounded-full blur-[50px] pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-full h-1 bg-cyan-500/30"></div>
       
       {/* Header */}
-      <div className="flex justify-between items-start mb-2 relative z-10">
+      <div className="flex justify-between items-start mb-2 relative z-10 border-b-2 border-cyan-500/30 pb-4">
         <div>
-          <span className="font-mono text-[12px] leading-4 tracking-widest font-medium text-purple-400 uppercase block mb-1">Target Pertukaran</span>
-          <h2 className="text-2xl font-bold tracking-tight text-white">
-            {exchangeInfo ? `${exchangeInfo.proposal.offered_skill.name} & ${exchangeInfo.proposal.requested_skill.name}` : "Memuat..."}
+          <span className="font-mono text-[12px] leading-4 tracking-widest font-bold text-cyan-400 uppercase block mb-1">
+            <span className="text-cyan-500">[{">"}]</span> SYS_TARGETS
+          </span>
+          <h2 className="text-2xl font-bold tracking-tight text-white uppercase">
+            {exchangeInfo ? `${exchangeInfo.proposal.offered_skill.name} & ${exchangeInfo.proposal.requested_skill.name}` : "LOADING_DATA..."}
           </h2>
         </div>
         {/* Status Indicator */}
-        <div className="flex items-center gap-2 bg-purple-500/10 px-3 py-1.5 rounded-full border border-purple-500/30 shadow-[0_0_15px_rgba(139,92,246,0.5)]">
-          <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></div>
-          <span className="font-mono text-xs font-medium text-purple-400">
-            {exchangeInfo?.status === "COMPLETED" ? "Selesai" : "In Progress"}
+        <div className="flex items-center gap-2 bg-black px-3 py-1.5 rounded-none border-2 border-cyan-500/50 shadow-[2px_2px_0_rgba(6,182,212,0.3)]">
+          <div className="w-2 h-2 rounded-none bg-cyan-400 animate-pulse"></div>
+          <span className="font-mono text-xs font-bold text-cyan-400 uppercase tracking-widest">
+            {exchangeInfo?.status === "COMPLETED" ? "CLOSED" : "ACTIVE"}
           </span>
         </div>
       </div>
@@ -273,25 +275,25 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
       )}
 
       {isFormOpen && (
-        <form onSubmit={handleAddMilestone} className="bg-white/5 backdrop-blur-md p-5 rounded-xl border border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.1)] space-y-4 relative z-10">
+        <form onSubmit={handleAddMilestone} className="bg-cyan-900/10 p-5 rounded-none border-2 border-cyan-500/50 shadow-inner space-y-4 relative z-10">
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Judul Milestone</label>
+            <label className="block text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono mb-1">MILESTONE_TITLE</label>
             <input 
               type="text" 
               value={formTitle}
               onChange={(e) => setFormTitle(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 shadow-inner"
-              placeholder="Contoh: Menguasai Dasar React"
+              className="w-full bg-black border-2 border-cyan-500/50 rounded-none px-4 py-2.5 text-sm text-cyan-100 focus:outline-none focus:border-cyan-400 shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]"
+              placeholder="INPUT_TITLE..."
               required
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Deskripsi</label>
+            <label className="block text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono mb-1">DESCRIPTION</label>
             <textarea 
               value={formDescription}
               onChange={(e) => setFormDescription(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 min-h-[80px] shadow-inner"
-              placeholder="Jelaskan secara singkat apa yang akan dicapai..."
+              className="w-full bg-black border-2 border-cyan-500/50 rounded-none px-4 py-2.5 text-sm text-cyan-100 focus:outline-none focus:border-cyan-400 min-h-[80px] shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]"
+              placeholder="INPUT_DESCRIPTION..."
               required
             />
           </div>
@@ -299,16 +301,16 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
             <button 
               type="button" 
               onClick={() => setIsFormOpen(false)}
-              className="px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-colors focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="px-4 py-2 rounded-none text-sm font-bold tracking-widest uppercase text-slate-400 hover:text-white hover:bg-slate-800 border-2 border-transparent hover:border-slate-600 transition-colors focus:outline-none"
             >
-              Batal
+              ABORT
             </button>
             <button 
               type="submit" 
               disabled={isSubmitting}
-              className="bg-purple-600 text-white px-5 py-2 rounded-lg text-sm font-bold shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:bg-purple-500 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              className="bg-cyan-500/20 text-cyan-300 border-2 border-cyan-500 px-5 py-2 rounded-none text-sm font-bold uppercase tracking-widest hover:bg-cyan-500/40 hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-colors disabled:opacity-50 focus:outline-none"
             >
-              {isSubmitting ? "Menyimpan..." : "Simpan Milestone"}
+              {isSubmitting ? "PROCESSING..." : "SAVE_MILESTONE"}
             </button>
           </div>
         </form>
@@ -338,23 +340,23 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
             const bothConfirmed = session?.status === "COMPLETED";
 
             return editingMilestoneId === m.id ? (
-              <form key={m.id} onSubmit={(e) => handleEditMilestone(e, m.id)} className="bg-white/5 p-5 rounded-xl border border-amber-500/30 shadow-inner space-y-4 relative z-10">
+              <form key={m.id} onSubmit={(e) => handleEditMilestone(e, m.id)} className="bg-amber-900/10 p-5 rounded-none border-2 border-amber-500/50 shadow-inner space-y-4 relative z-10">
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Judul Milestone</label>
+                  <label className="block text-xs font-bold text-amber-400 uppercase tracking-wider font-mono mb-1">MILESTONE_TITLE</label>
                   <input 
                     type="text" 
                     value={editFormTitle}
                     onChange={(e) => setEditFormTitle(e.target.value)}
-                    className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50"
+                    className="w-full bg-black border-2 border-amber-500/50 rounded-none px-4 py-2.5 text-sm text-amber-100 focus:outline-none focus:border-amber-400"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Deskripsi</label>
+                  <label className="block text-xs font-bold text-amber-400 uppercase tracking-wider font-mono mb-1">DESCRIPTION</label>
                   <textarea 
                     value={editFormDescription}
                     onChange={(e) => setEditFormDescription(e.target.value)}
-                    className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 min-h-[80px]"
+                    className="w-full bg-black border-2 border-amber-500/50 rounded-none px-4 py-2.5 text-sm text-amber-100 focus:outline-none focus:border-amber-400 min-h-[80px]"
                     required
                   />
                 </div>
@@ -362,26 +364,26 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
                   <button 
                     type="button" 
                     onClick={() => setEditingMilestoneId(null)}
-                    className="px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+                    className="px-4 py-2 rounded-none text-sm font-bold tracking-widest uppercase text-slate-400 hover:text-white hover:bg-slate-800 border-2 border-transparent hover:border-slate-600 transition-colors focus:outline-none"
                   >
-                    Batal
+                    ABORT
                   </button>
                   <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="bg-amber-500 text-slate-900 px-5 py-2 rounded-lg text-sm font-bold shadow-[0_0_10px_rgba(245,158,11,0.3)] hover:bg-amber-400 transition-colors disabled:opacity-50"
+                    className="bg-amber-500/20 text-amber-300 border-2 border-amber-500 px-5 py-2 rounded-none text-sm font-bold uppercase tracking-widest hover:bg-amber-500/40 hover:shadow-[0_0_15px_rgba(245,158,11,0.5)] transition-colors disabled:opacity-50 focus:outline-none"
                   >
-                    {isSubmitting ? "Menyimpan..." : "Simpan Perubahan"}
+                    {isSubmitting ? "PROCESSING..." : "UPDATE_RECORD"}
                   </button>
                 </div>
               </form>
             ) : (
               <div 
                 key={m.id} 
-                className={`flex flex-col gap-3 p-4 rounded-xl border transition-all group ${
+                className={`flex flex-col gap-3 p-4 rounded-none border-2 transition-all group ${
                   m.is_completed || bothConfirmed
-                    ? 'bg-emerald-900/10 border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
-                    : 'bg-white/5 border-white/10 hover:border-purple-500/30'
+                    ? 'bg-emerald-900/10 border-emerald-500/50 shadow-[2px_2px_0_rgba(16,185,129,0.3)]' 
+                    : 'bg-black border-cyan-500/30 hover:border-cyan-400 hover:shadow-[2px_2px_0_rgba(6,182,212,0.3)]'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -505,22 +507,22 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
       </div>
 
       {/* Footer: Assignees & Action */}
-      <div className="mt-4 pt-4 border-t border-white/10 flex justify-between items-center relative z-10">
+      <div className="mt-4 pt-4 border-t-2 border-cyan-500/30 flex justify-between items-center relative z-10">
         <div className="flex items-center gap-1">
-          <span className="font-mono text-xs font-medium text-slate-400 mr-2">Assignees:</span>
+          <span className="font-mono text-xs font-bold tracking-widest text-cyan-400 mr-2 uppercase">Assignees:</span>
           <div className="flex -space-x-2">
             {exchangeInfo?.participant_a && (
               <img 
                 alt={exchangeInfo.participant_a.name || "Participant A"} 
-                className="w-8 h-8 rounded-full border-2 border-[#1A1528] object-cover" 
-                src={exchangeInfo.participant_a.image || `https://ui-avatars.com/api/?name=${exchangeInfo.participant_a.name}&background=1A1528&color=fff`} 
+                className="w-8 h-8 rounded-none border-2 border-cyan-500 object-cover" 
+                src={exchangeInfo.participant_a.image || `https://ui-avatars.com/api/?name=${exchangeInfo.participant_a.name}&background=000&color=06b6d4`} 
               />
             )}
             {exchangeInfo?.participant_b && (
               <img 
                 alt={exchangeInfo.participant_b.name || "Participant B"} 
-                className="w-8 h-8 rounded-full border-2 border-[#1A1528] object-cover" 
-                src={exchangeInfo.participant_b.image || `https://ui-avatars.com/api/?name=${exchangeInfo.participant_b.name}&background=1A1528&color=fff`} 
+                className="w-8 h-8 rounded-none border-2 border-cyan-500 object-cover" 
+                src={exchangeInfo.participant_b.image || `https://ui-avatars.com/api/?name=${exchangeInfo.participant_b.name}&background=000&color=06b6d4`} 
               />
             )}
           </div>
@@ -528,10 +530,10 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
         {!isFormOpen && (
           <button 
             onClick={() => setIsFormOpen(true)} 
-            className="bg-purple-600 hover:bg-purple-500 text-white font-medium text-sm px-4 py-2 rounded-full transition-all shadow-[0_0_15px_rgba(139,92,246,0.5)] flex items-center gap-2"
+            className="bg-cyan-500/20 hover:bg-cyan-500/40 border-2 border-cyan-500 text-cyan-300 font-bold uppercase tracking-widest text-sm px-4 py-2 rounded-none transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] flex items-center gap-2 focus:outline-none"
           >
-            <span>Tambah Milestone</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+            <span>ADD_MILESTONE</span>
+            <span className="text-cyan-400 font-bold text-lg leading-none">+</span>
           </button>
         )}
       </div>

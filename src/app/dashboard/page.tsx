@@ -104,9 +104,10 @@ export default async function DashboardPage() {
 
           {/* BENTO GRID STATS */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-min md:auto-rows-[180px] mb-8">
-            {/* Card 1: Total Pertukaran Aktif (8 cols) */}
-            <div className="relative overflow-hidden transition-all duration-300 group rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 md:p-8 flex flex-col justify-between hover:-translate-y-1 hover:border-purple-500/50 shadow-sm hover:shadow-[0_0_30px_rgba(139,92,246,0.15)] md:col-span-8 row-span-1">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0"></div>
+            {/* Card 1: HOLOGRAPHIC GLASS (Total Pertukaran Aktif) */}
+            <div className="relative overflow-hidden transition-all duration-300 group rounded-3xl bg-transparent backdrop-blur-3xl border-t border-l border-purple-500/30 border-b-0 border-r-0 p-6 md:p-8 flex flex-col justify-between hover:bg-white/[0.02] hover:border-purple-400/60 shadow-[0_0_30px_rgba(168,85,247,0.05)] md:col-span-8 row-span-1">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-bl-full blur-2xl pointer-events-none"></div>
+              <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
               <div className="relative z-10 h-full flex flex-col justify-between">
                 <div className="flex justify-between items-start w-full">
                   <div className="flex items-center gap-4">
@@ -125,45 +126,41 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            {/* Card 2: Proposal Menunggu (4 cols) */}
-            <div className="relative overflow-hidden transition-all duration-300 group rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 md:p-8 flex flex-col justify-between hover:-translate-y-1 hover:border-fuchsia-500/50 shadow-sm hover:shadow-[0_0_30px_rgba(217,70,239,0.15)] md:col-span-4 row-span-1">
-              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0"></div>
-              <div className="relative z-10 h-full flex flex-col justify-between">
-                <div className="flex justify-between items-start w-full">
-                  <div className="flex flex-col gap-2">
-                    <div className="w-10 h-10 rounded-full bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center group-hover:bg-fuchsia-500/20 transition-colors text-fuchsia-400">
-                      <Inbox size={20} />
-                    </div>
-                    <span className="font-mono text-xs text-slate-400 uppercase tracking-wider font-bold mt-2">Proposal Masuk</span>
-                  </div>
+            {/* Card 2: NEON CORE / FLOATING SHADOWS (Proposal Menunggu) */}
+            <div className="relative overflow-hidden transition-all duration-500 group rounded-3xl bg-[#090212] border-0 p-6 md:p-8 flex flex-col justify-between hover:-translate-y-2 shadow-[0_0_40px_rgba(217,70,239,0.15)] hover:shadow-[0_0_60px_rgba(217,70,239,0.5)] md:col-span-4 row-span-1">
+              {/* Core Glow */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-fuchsia-500/30 rounded-full blur-[80px] group-hover:bg-fuchsia-500/50 transition-all duration-500 pointer-events-none z-0"></div>
+              
+              <div className="relative z-10 h-full flex flex-col justify-center items-center text-center gap-1">
+                <div className="w-12 h-12 rounded-full bg-fuchsia-500 text-white flex items-center justify-center shadow-[0_0_20px_rgba(217,70,239,0.8)] group-hover:shadow-[0_0_30px_rgba(217,70,239,1)] group-hover:scale-110 transition-all duration-300">
+                  <Inbox size={24} />
                 </div>
-                <div className="mt-4 md:mt-0">
-                  <div className="text-4xl md:text-5xl font-black text-white mb-2">{pendingProposalsCount}</div>
+                <span className="font-sans text-sm text-fuchsia-200 uppercase tracking-widest font-black mt-3 drop-shadow-[0_0_8px_rgba(217,70,239,0.8)]">Proposal Masuk</span>
+                <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-fuchsia-300 mt-2 drop-shadow-lg">
+                  {pendingProposalsCount}
                 </div>
               </div>
             </div>
 
-            {/* Card 3: Trust Score (4 cols) */}
-            <div className="relative overflow-hidden transition-all duration-300 group rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 md:p-8 flex flex-col justify-between hover:-translate-y-1 hover:border-amber-500/50 shadow-sm hover:shadow-[0_0_30px_rgba(245,158,11,0.15)] md:col-span-4 row-span-1">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0"></div>
-              <div className="relative z-10 h-full flex flex-col justify-between">
-                <div className="flex justify-between items-start w-full">
-                  <div className="flex flex-col gap-2">
-                    <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center group-hover:bg-amber-500/20 transition-colors text-amber-400">
-                      <Star size={20} />
-                    </div>
-                    <span className="font-mono text-xs text-slate-400 uppercase tracking-wider font-bold mt-2">Trust Score Anda</span>
-                  </div>
+            {/* Card 3: NEON CORE (Trust Score) */}
+            <div className="relative overflow-hidden transition-all duration-500 group rounded-3xl bg-[#090212] border-0 p-6 md:p-8 flex flex-col justify-between hover:-translate-y-2 shadow-[0_0_40px_rgba(245,158,11,0.15)] hover:shadow-[0_0_60px_rgba(245,158,11,0.5)] md:col-span-4 row-span-1">
+              {/* Core Glow */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-amber-500/30 rounded-full blur-[80px] group-hover:bg-amber-500/50 transition-all duration-500 pointer-events-none z-0"></div>
+              
+              <div className="relative z-10 h-full flex flex-col justify-center items-center text-center gap-1">
+                <div className="w-12 h-12 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.8)] group-hover:shadow-[0_0_30px_rgba(245,158,11,1)] group-hover:scale-110 transition-all duration-300">
+                  <Star size={24} />
                 </div>
-                <div className="mt-4 md:mt-0">
-                  <div className="text-4xl md:text-5xl font-black text-white mb-2">{dbUser.trust_score} <span className="text-lg text-amber-400 font-medium ml-1">pts</span></div>
+                <span className="font-sans text-sm text-amber-200 uppercase tracking-widest font-black mt-3 drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]">Trust Score Anda</span>
+                <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-amber-300 mt-2 drop-shadow-lg flex items-baseline">
+                  {dbUser.trust_score} <span className="text-xl text-amber-400 font-medium ml-2">pts</span>
                 </div>
               </div>
             </div>
 
-            {/* Card 4: Selesai / Filler (8 cols) */}
-            <div className="relative overflow-hidden transition-all duration-300 group rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 border-dashed hover:border-solid p-6 md:p-8 flex flex-col justify-center items-center hover:-translate-y-1 hover:border-[#D946EF]/50 shadow-sm hover:shadow-[0_0_30px_rgba(0,223,154,0.15)] md:col-span-8 row-span-1 text-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#D946EF]/10 to-fuchsia-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0"></div>
+            {/* Card 4: Selesai / Filler (8 cols) - HOLOGRAPHIC GLASS */}
+            <div className="relative overflow-hidden transition-all duration-300 group rounded-3xl bg-transparent backdrop-blur-3xl border-t border-l border-[#D946EF]/30 border-b-0 border-r-0 border-dashed hover:border-solid hover:bg-white/[0.02] hover:border-[#D946EF]/60 shadow-[0_0_30px_rgba(217,70,239,0.05)] p-6 md:p-8 flex flex-col justify-center items-center md:col-span-8 row-span-1 text-center">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D946EF]/10 rounded-bl-full blur-2xl pointer-events-none"></div>
               <div className="relative z-10 flex flex-col items-center">
                   <Handshake size={32} className="mb-3 opacity-80 text-[#D946EF] transition-colors" />
                   <span className="font-mono text-sm text-slate-400 uppercase tracking-wider font-bold mb-1">Pertukaran Selesai</span>
@@ -177,7 +174,8 @@ export default async function DashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Widget 2: Pertukaran Aktif Saat Ini */}
-            <div className="lg:col-span-2 bg-white/5 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 shadow-[0_0_15px_rgba(139,92,246,0.1)]">
+            <div className="lg:col-span-2 bg-transparent backdrop-blur-3xl p-6 md:p-8 rounded-3xl border-t border-l border-white/10 border-b-0 border-r-0 shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">
+              <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <Zap size={20} className="text-purple-400" /> Pertukaran Aktif Saat Ini
@@ -253,7 +251,8 @@ export default async function DashboardPage() {
             </div>
 
             {/* Widget 3: Jadwal Pertemuan Terdekat */}
-            <div className="bg-white/5 backdrop-blur-xl p-6 rounded-3xl border border-white/10 shadow-[0_0_15px_rgba(139,92,246,0.1)]">
+            <div className="bg-transparent backdrop-blur-3xl p-6 rounded-3xl border-t border-l border-white/10 border-b-0 border-r-0 shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">
+              <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
                   <Calendar size={20} className="text-fuchsia-400" /> Jadwal Terdekat

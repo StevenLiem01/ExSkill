@@ -76,7 +76,7 @@ function UsersManagementDashboard() {
 
   if (status === "loading" || loading) {
     return (
-      <main className="min-h-screen bg-slate-900 text-white p-6 md:p-12 flex flex-col items-center justify-center">
+      <main className="min-h-screen bg-[#0B061A] text-white p-6 md:p-12 flex flex-col items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#D946EF] mb-4"></div>
         <p className="text-slate-400 animate-pulse">Memuat Data Pengguna...</p>
       </main>
@@ -84,12 +84,14 @@ function UsersManagementDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-900 text-white p-6 md:p-12 relative overflow-hidden">
+    <main className="min-h-screen bg-[#0B061A] text-white p-6 md:p-12 relative overflow-hidden selection:bg-blue-500/30">
       {/* Dekorasi */}
-      <div className="absolute top-0 left-0 w-[40rem] h-[40rem] bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-0 left-0 w-[40rem] h-[40rem] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-6xl mx-auto space-y-8 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/50 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 p-6 rounded-3xl shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">
+          <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div className="relative z-10 w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-blue-500/20 rounded-xl border border-blue-500/30">
               <Shield size={24} className="text-blue-400" />
@@ -99,9 +101,10 @@ function UsersManagementDashboard() {
               <p className="text-sm text-slate-400">Pantau populasi dan kontrol akses anggota ExSkill.</p>
             </div>
           </div>
-          <Link href="/admin" className="px-5 py-2.5 rounded-xl bg-slate-700/50 hover:bg-slate-700 text-sm font-semibold transition-colors border border-white/10">
+          <Link href="/admin" className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-sm font-semibold transition-colors border border-white/10">
             Kembali ke Dasbor Admin
           </Link>
+          </div>
         </div>
 
         {error && (
@@ -110,8 +113,9 @@ function UsersManagementDashboard() {
           </div>
         )}
 
-        <div className="bg-slate-800/50 backdrop-blur-md rounded-3xl border border-white/10 overflow-hidden">
-          <div className="overflow-x-auto">
+        <div className="bg-transparent backdrop-blur-3xl rounded-3xl border-t border-l border-white/10 border-b-0 border-r-0 shadow-[0_0_30px_rgba(255,255,255,0.02)] overflow-hidden relative">
+          <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div className="overflow-x-auto relative z-10">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-900/50 text-slate-400 text-sm border-b border-white/10">

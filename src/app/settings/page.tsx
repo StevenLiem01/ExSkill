@@ -103,7 +103,8 @@ function SettingsForm() {
   }
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md p-8 rounded-3xl border border-white/10 shadow-xl relative z-10">
+    <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-8 shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden z-10">
+      <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
       <h2 className="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">Pengaturan Profil</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -207,12 +208,14 @@ function SettingsForm() {
 export default function SettingsPage() {
   return (
     <AuthProvider>
-      <main className="min-h-screen bg-slate-900 text-slate-50 p-6 md:p-12 relative overflow-hidden pb-20">
-        <div className="absolute top-[-20%] left-[-10%] w-[40rem] h-[40rem] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[30rem] h-[30rem] bg-[#D946EF]/10 rounded-full blur-3xl pointer-events-none"></div>
+      <main className="min-h-screen bg-[#0B061A] text-slate-50 p-6 md:p-12 relative overflow-hidden pb-20 selection:bg-[#D946EF]/30">
+        <div className="absolute top-[-20%] left-[-10%] w-[40rem] h-[40rem] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[30rem] h-[30rem] bg-[#D946EF]/15 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div className="max-w-4xl mx-auto space-y-8 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-white/10 gap-6 shadow-sm">
+          <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+            <div className="relative z-10 w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
               <h1 className="text-3xl font-bold flex items-center gap-3 text-white">
                 <Settings size={28} className="text-[#D946EF]" /> <span className="text-[#D946EF]">Pengaturan</span>
@@ -225,6 +228,7 @@ export default function SettingsPage() {
             <Link href="/dashboard" className="bg-slate-700 hover:bg-slate-600 text-white font-semibold px-5 py-2.5 rounded-xl shadow-sm transition-all duration-200 ease-in-out border border-white/10 flex items-center">
               &larr; Kembali
             </Link>
+            </div>
           </div>
 
           <SettingsForm />

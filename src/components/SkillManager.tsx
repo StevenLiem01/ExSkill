@@ -77,11 +77,14 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
   );
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 mt-8 space-y-8 shadow-sm transition-all duration-200 ease-in-out">
-      <div className="border-b border-white/10 pb-4">
-        <h2 className="text-2xl font-bold text-white">Manajemen Keahlian</h2>
-        <p className="text-slate-400 mt-1 text-sm font-medium">Tambahkan apa yang kamu kuasai (Offered) dan apa yang ingin kamu pelajari (Wanted).</p>
-      </div>
+    <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-6 md:p-8 mt-8 shadow-[0_0_30px_rgba(255,255,255,0.02)] transition-all duration-200 ease-in-out relative overflow-hidden">
+      <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      
+      <div className="relative z-10 space-y-8">
+        <div className="border-b border-white/10 pb-4">
+          <h2 className="text-2xl font-bold text-white">Manajemen Keahlian</h2>
+          <p className="text-slate-400 mt-1 text-sm font-medium">Tambahkan apa yang kamu kuasai (Offered) dan apa yang ingin kamu pelajari (Wanted).</p>
+        </div>
 
       <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end bg-slate-900/50 p-6 rounded-2xl border border-white/5 shadow-inner">
         <div className="md:col-span-1 space-y-2">
@@ -192,5 +195,6 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
         </div>
       </div>
     </div>
+  </div>
   );
 }

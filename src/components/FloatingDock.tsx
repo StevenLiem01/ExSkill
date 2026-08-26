@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Compass, Inbox, ArrowRightLeft, User, Settings } from "lucide-react";
+import { LayoutDashboard, Compass, Inbox, ArrowRightLeft, User, Settings, Home } from "lucide-react";
 import NotificationBell from "./NotificationBell";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,6 +13,7 @@ export default function FloatingDock({ session }: { session: any }) {
   if (pathname === "/onboarding") return null;
 
   const navItems = [
+    { name: 'Beranda', path: '/', icon: Home },
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Cari Partner', path: '/explore', icon: Compass },
     { name: 'Kotak Masuk', path: '/proposals', icon: Inbox },
@@ -25,7 +26,9 @@ export default function FloatingDock({ session }: { session: any }) {
     <div className="fixed left-6 top-1/2 -translate-y-1/2 z-50 pointer-events-none">
       <div className="pointer-events-auto bg-[#0B061A]/80 backdrop-blur-xl border border-white/10 p-2 rounded-full shadow-[0_0_30px_rgba(168,85,247,0.2)] flex flex-col items-center gap-1 sm:gap-2 group/dock transition-all hover:shadow-[0_0_40px_rgba(168,85,247,0.4)]">
         {navItems.map((item) => {
-          const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
+          const isActive = item.path === '/' 
+            ? pathname === '/' 
+            : pathname === item.path || pathname.startsWith(item.path + '/');
           const Icon = item.icon;
           return (
             <Link 

@@ -122,19 +122,19 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
   };
 
   return (
-    <div className="bg-[#1A1528]/80 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col h-[550px] shadow-[0_0_20px_rgba(168,85,247,0.1)] overflow-hidden flex-1 relative">
+    <div className="bg-black border-2 border-purple-500/50 rounded-none flex flex-col h-[550px] shadow-[4px_4px_0_rgba(168,85,247,0.3)] overflow-hidden flex-1 relative font-mono">
       {/* Background Decor */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-full h-1 bg-purple-500/30"></div>
 
       {/* Header */}
-      <div className="bg-black/20 p-4 border-b border-white/10 flex items-center justify-between relative z-10">
-        <h3 className="font-bold text-white flex items-center gap-2">
-          <MessageSquare size={18} className="text-purple-400" /> Live Chat
+      <div className="bg-purple-900/20 p-4 border-b-2 border-purple-500/50 flex items-center justify-between relative z-10">
+        <h3 className="font-bold text-purple-400 flex items-center gap-2 uppercase tracking-widest">
+          <span className="text-purple-500">[{">"}]</span> SYS_COMM_LINK
         </h3>
-        <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full shadow-inner">
-          <span className={`w-2 h-2 rounded-full ${sessionStatus === "IN_PROGRESS" ? "bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" : "bg-slate-500"}`}></span>
+        <div className="flex items-center gap-2 bg-black border-2 border-purple-500/30 px-3 py-1 rounded-none">
+          <span className={`w-2 h-2 rounded-none ${sessionStatus === "IN_PROGRESS" ? "bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" : "bg-slate-500"}`}></span>
           <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">
-            {sessionStatus === "IN_PROGRESS" ? "Aktif" : sessionStatus === "COMPLETED" ? "Selesai" : "Menunggu"}
+            {sessionStatus === "IN_PROGRESS" ? "ONLINE" : sessionStatus === "COMPLETED" ? "CLOSED" : "STANDBY"}
           </span>
         </div>
       </div>
@@ -152,24 +152,24 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
 
             return (
               <div key={idx} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                <span className="text-[10px] font-bold text-slate-500 mb-1 px-1 uppercase tracking-wider">{isMe ? "Anda" : msg.sender.name}</span>
-                <div className={`max-w-[85%] p-3.5 text-sm shadow-sm border backdrop-blur-sm ${isMe
-                  ? 'bg-purple-600/30 text-white border-purple-500/30 rounded-2xl rounded-tr-sm shadow-[0_0_15px_rgba(168,85,247,0.15)]'
-                  : 'bg-white/5 text-slate-200 border-white/10 rounded-2xl rounded-tl-sm'
+                <span className="text-[10px] font-bold text-slate-500 mb-1 px-1 uppercase tracking-wider">{isMe ? "USER_LOCAL" : `USER_${msg.sender.name.substring(0,4).toUpperCase()}`}</span>
+                <div className={`max-w-[85%] p-3.5 text-sm border-2 ${isMe
+                  ? 'bg-purple-900/30 text-purple-100 border-purple-500/50 rounded-none shadow-[2px_2px_0_rgba(168,85,247,0.3)]'
+                  : 'bg-black text-slate-300 border-slate-700 rounded-none shadow-[2px_2px_0_rgba(51,65,85,0.8)]'
                   }`}>
                   {msg.file_url && (
                     <div className="mb-2">
                       {isImage ? (
-                        <img
+                          <img
                           src={msg.file_url}
                           alt="Attachment"
-                          className="max-w-full rounded-xl max-h-56 object-cover cursor-zoom-in hover:opacity-90 transition-opacity border border-white/10"
+                          className="max-w-full rounded-none max-h-56 object-cover cursor-zoom-in hover:opacity-90 transition-opacity border-2 border-purple-500/30"
                           onClick={() => setZoomedImage(msg.file_url)}
                         />
                       ) : (
-                        <a href={msg.file_url} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 p-2.5 rounded-xl transition-colors border ${isMe ? 'bg-purple-500/20 hover:bg-purple-500/40 border-purple-500/30' : 'bg-white/5 hover:bg-white/10 border-white/10'}`}>
-                          <FileText size={18} className={isMe ? "text-purple-300" : "text-slate-400"} />
-                          <span className="truncate max-w-[180px] font-medium text-xs">{msg.file_name}</span>
+                        <a href={msg.file_url} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 p-2.5 rounded-none transition-colors border-2 ${isMe ? 'bg-purple-900/40 hover:bg-purple-900/60 border-purple-500/50' : 'bg-black hover:bg-slate-900 border-slate-700'}`}>
+                          <FileText size={18} className={isMe ? "text-purple-400" : "text-slate-400"} />
+                          <span className="truncate max-w-[180px] font-bold text-xs">{msg.file_name}</span>
                         </a>
                       )}
                     </div>
@@ -190,15 +190,15 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
       </div>
 
       {/* Input Area */}
-      <div className="p-4 bg-black/20 border-t border-white/10 flex flex-col gap-3 relative z-10">
+      <div className="p-4 bg-purple-900/10 border-t-2 border-purple-500/50 flex flex-col gap-3 relative z-10">
         {file && (
-          <div className="flex items-center justify-between bg-black/40 border border-white/10 p-2.5 rounded-xl text-xs shadow-inner">
-            <span className="truncate flex-1 font-medium text-slate-300 flex items-center">
-              <Paperclip size={14} className="mr-2 text-purple-400" /> {file.name}
+          <div className="flex items-center justify-between bg-black border-2 border-purple-500/30 p-2 text-xs shadow-inner rounded-none">
+            <span className="truncate flex-1 font-bold text-purple-300 flex items-center uppercase">
+              <span className="mr-2 text-purple-500">[{">"}]</span> {file.name}
             </span>
             <button
               onClick={() => { setFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; }}
-              className="text-slate-400 hover:text-red-400 ml-3 font-bold p-1 rounded-full hover:bg-white/10 transition-colors focus:outline-none"
+              className="text-purple-400 hover:text-red-400 ml-3 font-bold p-1 rounded-none hover:bg-purple-500/20 transition-colors focus:outline-none"
               disabled={loading}
               aria-label="Hapus lampiran"
             >
@@ -218,7 +218,7 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={loading || sessionStatus !== "IN_PROGRESS"}
-            className="h-11 w-11 bg-white/5 border border-white/10 hover:bg-white/10 text-slate-400 hover:text-purple-300 rounded-xl flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            className="h-11 w-11 bg-black border-2 border-purple-500/50 hover:bg-purple-900/40 text-purple-400 rounded-none flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
             aria-label="Tambah Lampiran"
           >
             <Paperclip size={18} />
@@ -227,16 +227,16 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
             type="text"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder={sessionStatus === "NOT_STARTED" ? 'Menunggu sesi dimulai...' : sessionStatus === "COMPLETED" ? 'Sesi telah berakhir.' : 'Ketik pesan Anda di sini...'}
-            className="flex-1 h-11 bg-black/40 border border-white/10 rounded-xl px-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed shadow-inner transition-all placeholder:text-slate-500"
+            placeholder={sessionStatus === "NOT_STARTED" ? 'SYS_STANDBY...' : sessionStatus === "COMPLETED" ? 'SYS_CLOSED.' : 'INPUT_DATA...'}
+            className="flex-1 h-11 bg-black border-2 border-purple-500/50 rounded-none px-4 text-sm text-purple-100 focus:outline-none focus:border-purple-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all placeholder:text-purple-500/50 font-mono tracking-wider"
             disabled={loading || sessionStatus !== "IN_PROGRESS"}
           />
           <button
             type="submit"
             disabled={loading || (!content.trim() && !file) || sessionStatus !== "IN_PROGRESS"}
-            className="h-11 px-5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            className="h-11 px-5 bg-purple-500/20 border-2 border-purple-500 hover:bg-purple-500/40 text-purple-300 font-bold tracking-widest uppercase rounded-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
           >
-            Kirim
+            EXEC
           </button>
         </form>
       </div>

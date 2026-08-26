@@ -40,8 +40,9 @@ export default async function ProfilePage() {
           <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Identity & Reputation Card (Hacker ID Card) */}
             <div className="w-full md:w-1/3 space-y-6">
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-[0_0_15px_rgba(139,92,246,0.15)] flex flex-col items-center text-center relative overflow-hidden group">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-fuchsia-500"></div>
+              <div className="bg-transparent backdrop-blur-3xl border-t border-l border-purple-500/30 border-b-0 border-r-0 rounded-3xl p-8 shadow-[0_0_30px_rgba(168,85,247,0.05)] flex flex-col items-center text-center relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-bl-full blur-2xl pointer-events-none"></div>
+                <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
                 <div className="absolute top-4 right-4 bg-purple-500/10 text-purple-400 border border-purple-500/30 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
                   <Star size={14} /> <span className="font-mono">{user.trust_score}</span> Trust Score
                 </div>
@@ -74,10 +75,12 @@ export default async function ProfilePage() {
               />
 
               {/* Ulasan & Reputasi Section */}
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-[0_0_15px_rgba(139,92,246,0.1)]">
-                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                  <Trophy size={24} className="text-purple-400" /> Ulasan & Reputasi
-                </h2>
+              <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-8 shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">
+                <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                <div className="relative z-10">
+                  <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <Trophy size={24} className="text-purple-400" /> Ulasan & Reputasi
+                  </h2>
 
                 {user.reviews_received.length === 0 ? (
                   <div className="flex flex-col items-center justify-center text-center p-8 border border-dashed border-white/10 rounded-xl bg-black/20">
@@ -122,6 +125,7 @@ export default async function ProfilePage() {
                     ))}
                   </div>
                 )}
+                </div>
               </div>
             </div>
           </div>

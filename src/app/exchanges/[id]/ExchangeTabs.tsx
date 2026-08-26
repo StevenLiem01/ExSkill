@@ -17,26 +17,26 @@ export default function ExchangeTabs({ exchangeId, currentUserId, sessionStatus 
   return (
     <div className="flex flex-col gap-4 h-full">
       {/* Navigation Tabs */}
-      <div className="flex gap-2 border-b border-white/10 pb-1">
+      <div className="flex gap-2 border-b-2 border-purple-500/30 pb-1 font-mono uppercase tracking-widest">
         <button
           onClick={() => setActiveTab("CHAT")}
-          className={`px-5 py-2.5 text-sm font-bold transition-all rounded-t-xl ${
+          className={`px-5 py-2.5 text-sm font-bold transition-all rounded-none border-2 border-b-0 ${
             activeTab === "CHAT"
-              ? "text-[#D946EF] border-b-2 border-[#D946EF] bg-[#D946EF]/5"
-              : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+              ? "text-[#D946EF] border-[#D946EF] bg-[#D946EF]/10 shadow-[0_0_15px_rgba(217,70,239,0.2)]"
+              : "text-slate-500 border-transparent hover:text-[#D946EF]/70 hover:bg-[#D946EF]/5"
           }`}
         >
-          <MessageSquare size={16} className="inline mr-1 mb-0.5" /> Obrolan
+          <span className={activeTab === "CHAT" ? "animate-pulse" : ""}>_</span>CHAT_LOG
         </button>
         <button
           onClick={() => setActiveTab("MILESTONE")}
-          className={`px-5 py-2.5 text-sm font-bold transition-all rounded-t-xl ${
+          className={`px-5 py-2.5 text-sm font-bold transition-all rounded-none border-2 border-b-0 ${
             activeTab === "MILESTONE"
-              ? "text-indigo-400 border-b-2 border-indigo-400 bg-indigo-400/5"
-              : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+              ? "text-cyan-400 border-cyan-400 bg-cyan-400/10 shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+              : "text-slate-500 border-transparent hover:text-cyan-400/70 hover:bg-cyan-400/5"
           }`}
         >
-          <Calendar size={16} className="inline mr-1 mb-0.5" /> Milestone & Jadwal
+          <span className={activeTab === "MILESTONE" ? "animate-pulse" : ""}>_</span>MILESTONES
         </button>
       </div>
 

@@ -39,21 +39,27 @@ export default function RecommendedPartners() {
 
   if (isLoading) {
     return (
-      <div className="w-full bg-slate-800/30 border border-white/10 rounded-2xl p-8 animate-pulse flex flex-col justify-center items-center h-48">
-        <div className="w-8 h-8 border-4 border-[#D946EF] border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-slate-400 font-medium">Mencari kecocokan terbaik untukmu...</p>
+      <div className="w-full bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-8 animate-pulse flex flex-col justify-center items-center h-48 relative overflow-hidden">
+        <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="w-8 h-8 border-4 border-[#D946EF] border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-slate-400 font-medium">Mencari kecocokan terbaik untukmu...</p>
+        </div>
       </div>
     );
   }
 
   if (recommendations.length === 0) {
     return (
-      <div className="w-full bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl p-8 flex flex-col justify-center items-center text-center shadow-lg">
-        <Puzzle size={40} className="mb-4 opacity-70 text-slate-300" />
-        <h3 className="text-lg font-bold text-white mb-2">Belum Ada Rekomendasi</h3>
-        <p className="text-slate-400 text-sm font-medium max-w-md">
-          Belum ada rekomendasi yang pas. Coba tambahkan atau perbarui "Keahlian yang Dicari" di profilmu agar sistem kami bisa mencarikan partner yang tepat!
-        </p>
+      <div className="w-full bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-8 flex flex-col justify-center items-center text-center shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">
+        <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <Puzzle size={40} className="mb-4 opacity-70 text-slate-300" />
+          <h3 className="text-lg font-bold text-white mb-2">Belum Ada Rekomendasi</h3>
+          <p className="text-slate-400 text-sm font-medium max-w-md">
+            Belum ada rekomendasi yang pas. Coba tambahkan atau perbarui "Keahlian yang Dicari" di profilmu agar sistem kami bisa mencarikan partner yang tepat!
+          </p>
+        </div>
       </div>
     );
   }
@@ -69,9 +75,14 @@ export default function RecommendedPartners() {
         {recommendations.map((user) => (
           <div 
             key={user.id} 
-            className="flex-shrink-0 w-80 bg-slate-800/80 backdrop-blur-md border border-white/10 rounded-2xl p-6 snap-start shadow-lg hover:shadow-[0_0_20px_rgba(0,223,154,0.15)] hover:border-[#D946EF]/30 transition-all duration-300 relative group"
+            className="flex-shrink-0 w-80 bg-transparent backdrop-blur-3xl border-t border-l border-[#D946EF]/30 border-b-0 border-r-0 rounded-3xl p-6 snap-start shadow-[0_0_30px_rgba(217,70,239,0.05)] hover:shadow-[0_0_20px_rgba(217,70,239,0.15)] hover:border-[#D946EF]/60 hover:bg-white/[0.02] transition-all duration-300 relative overflow-hidden group flex flex-col justify-between"
           >
-            {/* Lencana Trust Score */}
+            <div className="absolute top-0 right-0 w-24 h-24 bg-[#D946EF]/10 rounded-bl-full blur-2xl pointer-events-none"></div>
+            <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-[#D946EF]/50 to-transparent"></div>
+            
+            <div className="relative z-10 flex flex-col justify-between h-full">
+              <div>
+                {/* Lencana Trust Score */}
             <div className="absolute top-4 right-4 bg-[#D946EF]/10 text-[#D946EF] border border-[#D946EF]/30 px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1">
               <Star size={14} className="text-[#D946EF]" /> {user.trust_score}
             </div>
@@ -120,7 +131,9 @@ export default function RecommendedPartners() {
             >
               Lihat Profil
             </Link>
+            </div>
           </div>
+        </div>
         ))}
       </div>
 

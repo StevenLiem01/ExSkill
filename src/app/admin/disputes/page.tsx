@@ -106,7 +106,7 @@ function AdminDisputes() {
 
   if (status === "loading" || loading) {
     return (
-      <main className="min-h-screen bg-slate-900 text-white p-6 flex flex-col items-center justify-center">
+      <main className="min-h-screen bg-[#0B061A] text-white p-6 flex flex-col items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500 mb-4"></div>
         <p className="text-slate-400">Memuat Sengketa...</p>
       </main>
@@ -114,11 +114,13 @@ function AdminDisputes() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-900 text-white p-6 md:p-12 relative overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-orange-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <main className="min-h-screen bg-[#0B061A] text-white p-6 md:p-12 relative overflow-hidden selection:bg-orange-500/30">
+      <div className="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-orange-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-6xl mx-auto space-y-8 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/50 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 p-6 rounded-3xl shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">
+          <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div className="relative z-10 w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center gap-4">
             <Link href="/admin" className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/10">
               <ArrowLeft size={20} className="text-slate-300" />
@@ -140,10 +142,13 @@ function AdminDisputes() {
 
         <div className="space-y-4">
           {disputes.length === 0 ? (
-            <div className="bg-slate-800/30 border border-white/10 rounded-3xl p-12 text-center flex flex-col items-center">
-              <Flag size={48} className="opacity-20 text-slate-300 mb-4" />
-              <p className="text-slate-300 font-bold text-lg">Tidak ada sengketa</p>
-              <p className="text-slate-500 text-sm">Saat ini tidak ada sengketa yang perlu dimediasi.</p>
+            <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-12 text-center flex flex-col items-center shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">
+              <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              <div className="relative z-10 flex flex-col items-center">
+                <Flag size={48} className="opacity-20 text-slate-300 mb-4" />
+                <p className="text-slate-300 font-bold text-lg">Tidak ada sengketa</p>
+                <p className="text-slate-500 text-sm">Saat ini tidak ada sengketa yang perlu dimediasi.</p>
+              </div>
             </div>
           ) : (
             disputes.map(dispute => {
@@ -151,8 +156,10 @@ function AdminDisputes() {
               const reportedUser = isA ? dispute.exchange.participant_b : dispute.exchange.participant_a;
 
               return (
-                <div key={dispute.id} className="bg-slate-800/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 transition-all hover:border-orange-500/30">
-                  <div className="flex flex-col md:flex-row justify-between gap-6">
+                <div key={dispute.id} className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-6 transition-all shadow-[0_0_30px_rgba(255,255,255,0.02)] hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:border-orange-500/30 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-orange-500/10 rounded-bl-full blur-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:via-orange-500/50 transition-colors"></div>
+                  <div className="relative z-10 flex flex-col md:flex-row justify-between gap-6">
                     <div className="flex-1 space-y-4">
                       <div className="flex items-center gap-3">
                         <span className={`text-xs font-bold px-3 py-1 rounded-full border ${

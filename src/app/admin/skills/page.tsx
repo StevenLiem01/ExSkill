@@ -119,7 +119,7 @@ function AdminSkills() {
 
   if (status === "loading" || loading) {
     return (
-      <main className="min-h-screen bg-slate-900 text-white p-6 flex flex-col items-center justify-center">
+      <main className="min-h-screen bg-[#0B061A] text-white p-6 flex flex-col items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500 mb-4"></div>
         <p className="text-slate-400">Memuat Master Keahlian...</p>
       </main>
@@ -127,11 +127,13 @@ function AdminSkills() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-900 text-white p-6 md:p-12 relative overflow-hidden">
-      <div className="absolute top-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <main className="min-h-screen bg-[#0B061A] text-white p-6 md:p-12 relative overflow-hidden selection:bg-emerald-500/30">
+      <div className="absolute top-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-emerald-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-6xl mx-auto space-y-8 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/50 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 p-6 rounded-3xl shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">
+          <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div className="relative z-10 w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center gap-4">
             <Link href="/admin" className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/10">
               <ArrowLeft size={20} className="text-slate-300" />
@@ -149,6 +151,7 @@ function AdminSkills() {
           >
             <Plus size={18} /> Tambah Keahlian
           </button>
+          </div>
         </div>
 
         {error && (
@@ -158,7 +161,9 @@ function AdminSkills() {
         )}
 
         {showAddForm && (
-          <div className="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-emerald-500/30 animate-fade-in-down">
+          <div className="bg-transparent backdrop-blur-3xl p-6 rounded-3xl border-t border-l border-emerald-500/30 border-b-0 border-r-0 shadow-[0_0_30px_rgba(16,185,129,0.05)] animate-fade-in-down relative overflow-hidden">
+            <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
+            <div className="relative z-10">
             <h2 className="text-lg font-bold text-white mb-4">Tambah Keahlian Baru</h2>
             <form onSubmit={handleAddSkill} className="flex flex-col md:flex-row gap-4 items-end">
               <div className="w-full md:flex-1">
@@ -191,10 +196,13 @@ function AdminSkills() {
                 Simpan
               </button>
             </form>
+            </div>
           </div>
         )}
 
-        <div className="bg-slate-800/50 backdrop-blur-md p-6 rounded-3xl border border-white/10">
+        <div className="bg-transparent backdrop-blur-3xl p-6 rounded-3xl border-t border-l border-white/10 border-b-0 border-r-0 shadow-[0_0_30px_rgba(255,255,255,0.02)] relative overflow-hidden">
+          <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div className="relative z-10">
           <div className="relative mb-6">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
             <input 
@@ -261,6 +269,7 @@ function AdminSkills() {
                 )}
               </tbody>
             </table>
+          </div>
           </div>
         </div>
       </div>

@@ -120,7 +120,8 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
         <div className="absolute bottom-[-20%] left-[-10%] w-[30rem] h-[30rem] bg-fuchsia-600/15 rounded-full blur-[120px] pointer-events-none transition-all"></div>
 
         <div className="max-w-6xl mx-auto space-y-8 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white/5 backdrop-blur-xl p-6 rounded-2xl border border-white/10 gap-6 shadow-[0_0_15px_rgba(139,92,246,0.15)] transition-all duration-200 ease-in-out relative z-50">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 p-6 rounded-3xl gap-6 shadow-[0_0_30px_rgba(255,255,255,0.02)] transition-all duration-200 ease-in-out relative z-50 overflow-hidden">
+            <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
             <div>
               <h1 className="text-3xl font-bold flex items-center gap-3 text-white">
                 <Search size={28} className="text-purple-400" /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Eksplorasi Partner</span>
@@ -149,7 +150,8 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
           </div>
 
           {universalSearchUsers.length === 0 ? (
-            <div className="text-center p-12 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-[0_0_15px_rgba(139,92,246,0.1)] mt-8 flex flex-col items-center">
+            <div className="text-center p-12 bg-transparent backdrop-blur-3xl rounded-3xl border-t border-l border-white/10 border-b-0 border-r-0 shadow-[0_0_30px_rgba(255,255,255,0.02)] mt-8 flex flex-col items-center relative overflow-hidden">
+              <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
               <Search size={48} className="opacity-50 mb-4 text-slate-300" />
               <p className="text-slate-300 font-medium">Partner dengan kriteria tersebut belum ditemukan di ExSkill.</p>
               <p className="text-slate-400 text-sm mt-2">Coba ubah kata kunci atau kurangi batas filter reputasi.</p>
@@ -168,8 +170,10 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
                 }
 
                 return (
-                  <div key={user.id} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-all duration-300 ease-in-out hover:-translate-y-1 flex flex-col justify-between group">
-                    <div className="space-y-5">
+                  <div key={user.id} className="bg-transparent backdrop-blur-3xl border-t border-l border-purple-500/30 border-b-0 border-r-0 rounded-3xl p-6 hover:bg-white/[0.02] hover:border-purple-400/60 transition-all duration-300 ease-in-out hover:-translate-y-1 flex flex-col justify-between group shadow-[0_0_30px_rgba(168,85,247,0.05)] relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-bl-full blur-2xl pointer-events-none"></div>
+                    <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
+                    <div className="space-y-5 relative z-10">
                       <div className="flex justify-between items-start gap-4">
                         <div className="flex gap-3">
                           <div className="w-12 h-12 rounded-full bg-purple-900/50 border border-purple-500/30 overflow-hidden flex-shrink-0">

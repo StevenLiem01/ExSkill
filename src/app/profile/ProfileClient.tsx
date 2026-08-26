@@ -11,8 +11,9 @@ export default function ProfileClient({ user }: { user: User }) {
 
   return (
     <>
-      <div className="bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl space-y-6">
-        <div className="flex justify-between items-center border-b border-white/10 pb-3">
+      <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.02)] space-y-6 relative overflow-hidden">
+        <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        <div className="relative z-10 flex justify-between items-center border-b border-white/10 pb-3">
           <h2 className="font-bold text-white">Profil & Tautan</h2>
           <Link 
             href="/settings"

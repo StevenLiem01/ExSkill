@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useId } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Check } from "lucide-react";
 
@@ -44,10 +44,31 @@ export default function CustomSelect({
   required = false,
 }: CustomSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
+  const instanceId = useId();
 
   const selectedOption = options.find((opt) => opt.value === value);
   const displayLabel = selectedOption ? selectedOption.label : placeholder;
+
+  useEffect(() => {
+    if (isOpen) {
+      const idx = options.findIndex((opt) => opt.value === value);
+      setHighlightedIndex(idx >= 0 ? idx : 0);
+    } else {
+      setHighlightedIndex(-1);
+    }
+  }, [isOpen, options, value]);
+
+  // Auto-scroll to highlighted item
+  useEffect(() => {
+    if (isOpen && highlightedIndex >= 0) {
+      const element = document.getElementById(`select-${instanceId}-option-${highlightedIndex}`);
+      if (element) {
+        element.scrollIntoView({ block: "nearest" });
+      }
+    }
+  }, [highlightedIndex, isOpen, instanceId]);
 
   // Handle click outside to close
   useEffect(() => {
@@ -60,12 +81,46 @@ export default function CustomSelect({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isOpen) {
+      if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+        e.preventDefault();
+        setIsOpen(true);
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case "Escape":
+        setIsOpen(false);
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        if (highlightedIndex >= 0 && highlightedIndex < options.length) {
+          onChange(options[highlightedIndex].value);
+          setIsOpen(false);
+        }
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : options.length - 1));
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        setHighlightedIndex((prev) => (prev < options.length - 1 ? prev + 1 : 0));
+        break;
+    }
+  };
+
   return (
     <div className={`relative font-sans ${className}`} ref={containerRef}>
       {/* TRIGGER BUTTON AREA */}
       <div 
-        className="relative group cursor-pointer w-full h-full" 
+        className="relative group cursor-pointer w-full h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-2xl" 
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
       >
         {/* Animated Glow Shadow (Behind the button) */}
         <div 
@@ -118,11 +173,13 @@ export default function CustomSelect({
                   return (
                     <div 
                       key={opt.value}
+                      id={`select-${instanceId}-option-${index}`}
                       onClick={() => { 
                         onChange(opt.value); 
                         setIsOpen(false); 
                       }}
-                      className="flex items-center justify-between p-3 hover:bg-white/10 rounded-2xl cursor-pointer transition-colors border-b border-white/5 last:border-0 group/item"
+                      onMouseEnter={() => setHighlightedIndex(index)}
+                      className={`flex items-center justify-between p-3 rounded-2xl cursor-pointer transition-colors border-b border-white/5 last:border-0 group/item ${highlightedIndex === index ? 'bg-white/10' : 'hover:bg-white/10'}`}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-5 h-5 rounded-md flex items-center justify-center shadow-sm flex-shrink-0 transition-colors ${isSelected ? colorClass : 'bg-white/10 border border-white/20 group-hover/item:border-white/40'}`}>

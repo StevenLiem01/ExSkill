@@ -259,7 +259,7 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
   };
 
   return (
-    <div className="w-full bg-black border-2 border-cyan-500/50 rounded-none p-6 flex flex-col gap-4 relative overflow-hidden font-mono shadow-[4px_4px_0_rgba(6,182,212,0.3)]">
+    <div className="w-full bg-black border-2 border-cyan-500/50 rounded-none p-6 flex flex-col gap-4 relative font-mono shadow-[4px_4px_0_rgba(6,182,212,0.3)]">
       {/* Background Glow Effect (Subtle) */}
       <div className="absolute top-0 right-0 w-full h-1 bg-cyan-500/30"></div>
       
@@ -475,7 +475,15 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
                           type="datetime-local" 
                           value={sessionFormDate}
                           onChange={(e) => setSessionFormDate(e.target.value)}
-                          className="bg-black/40 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500/50"
+                          onClick={(e) => {
+                            try {
+                              if ('showPicker' in e.currentTarget) {
+                                (e.currentTarget as HTMLInputElement).showPicker();
+                              }
+                            } catch (err) {}
+                          }}
+                          className="bg-black/40 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500/50 cursor-pointer [&::-webkit-calendar-picker-indicator]:hidden"
+                          style={{ colorScheme: "dark" }}
                           required
                         />
                         <div className="relative z-30 w-32">

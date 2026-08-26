@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { MessageSquare, FileText, Paperclip, X } from "lucide-react";
+import { useSFX } from "@/hooks/useSFX";
 
 interface ChatMessage {
   id: string;
@@ -23,6 +24,7 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [content, setContent] = useState("");
+  const { playType, playClick } = useSFX();
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
@@ -77,6 +79,7 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
     e.preventDefault();
     if (!content.trim() && !file) return;
 
+    playClick();
     setLoading(true);
     try {
       let file_url = null;
@@ -227,6 +230,9 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
             type="text"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key !== 'Enter') playType();
+            }}
             placeholder={sessionStatus === "NOT_STARTED" ? 'SYS_STANDBY...' : sessionStatus === "COMPLETED" ? 'SYS_CLOSED.' : 'INPUT_DATA...'}
             className="flex-1 h-11 bg-black border-2 border-purple-500/50 rounded-none px-4 text-sm text-purple-100 focus:outline-none focus:border-purple-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all placeholder:text-purple-500/50 font-mono tracking-wider"
             disabled={loading || sessionStatus !== "IN_PROGRESS"}

@@ -6,6 +6,7 @@ import Link from "next/link";
 import AuthProvider from "@/components/AuthProvider";
 import { Prisma } from "@prisma/client";
 import { Zap, Inbox, Star, Handshake, Calendar, Sprout, Link as LinkIcon } from "lucide-react";
+import { StaggerContainer, StaggerItem } from "@/components/animations/Stagger";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -103,9 +104,9 @@ export default async function DashboardPage() {
           </header>
 
           {/* BENTO GRID STATS */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-min md:auto-rows-[180px] mb-8">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-min md:auto-rows-[180px] mb-8">
             {/* Card 1: HOLOGRAPHIC GLASS (Total Pertukaran Aktif) */}
-            <div className="relative overflow-hidden transition-all duration-300 group rounded-3xl bg-transparent backdrop-blur-3xl border-t border-l border-purple-500/30 border-b-0 border-r-0 p-6 md:p-8 flex flex-col justify-between hover:bg-white/[0.02] hover:border-purple-400/60 shadow-[0_0_30px_rgba(168,85,247,0.05)] md:col-span-8 row-span-1">
+            <StaggerItem className="relative overflow-hidden transition-all duration-300 group rounded-3xl bg-transparent backdrop-blur-3xl border-t border-l border-purple-500/30 border-b-0 border-r-0 p-6 md:p-8 flex flex-col justify-between hover:bg-white/[0.02] hover:border-purple-400/60 shadow-[0_0_30px_rgba(168,85,247,0.05)] md:col-span-8 row-span-1">
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-bl-full blur-2xl pointer-events-none"></div>
               <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
               <div className="relative z-10 h-full flex flex-col justify-between">
@@ -124,10 +125,10 @@ export default async function DashboardPage() {
                   <div className="text-5xl md:text-6xl font-black text-white">{activeExchanges.length}</div>
                 </div>
               </div>
-            </div>
+            </StaggerItem>
 
             {/* Card 2: NEON CORE / FLOATING SHADOWS (Proposal Menunggu) */}
-            <div className="relative overflow-hidden transition-all duration-500 group rounded-3xl bg-[#090212] border-0 p-6 md:p-8 flex flex-col justify-between hover:-translate-y-2 shadow-[0_0_40px_rgba(217,70,239,0.15)] hover:shadow-[0_0_60px_rgba(217,70,239,0.5)] md:col-span-4 row-span-1">
+            <StaggerItem className="relative overflow-hidden transition-all duration-500 group rounded-3xl bg-[#090212] border-0 p-6 md:p-8 flex flex-col justify-between hover:-translate-y-2 shadow-[0_0_40px_rgba(217,70,239,0.15)] hover:shadow-[0_0_60px_rgba(217,70,239,0.5)] md:col-span-4 row-span-1">
               {/* Core Glow */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-fuchsia-500/30 rounded-full blur-[80px] group-hover:bg-fuchsia-500/50 transition-all duration-500 pointer-events-none z-0"></div>
               
@@ -140,10 +141,10 @@ export default async function DashboardPage() {
                   {pendingProposalsCount}
                 </div>
               </div>
-            </div>
+            </StaggerItem>
 
             {/* Card 3: NEON CORE (Trust Score) */}
-            <div className="relative overflow-hidden transition-all duration-500 group rounded-3xl bg-[#090212] border-0 p-6 md:p-8 flex flex-col justify-between hover:-translate-y-2 shadow-[0_0_40px_rgba(245,158,11,0.15)] hover:shadow-[0_0_60px_rgba(245,158,11,0.5)] md:col-span-4 row-span-1">
+            <StaggerItem className="relative overflow-hidden transition-all duration-500 group rounded-3xl bg-[#090212] border-0 p-6 md:p-8 flex flex-col justify-between hover:-translate-y-2 shadow-[0_0_40px_rgba(245,158,11,0.15)] hover:shadow-[0_0_60px_rgba(245,158,11,0.5)] md:col-span-4 row-span-1">
               {/* Core Glow */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-amber-500/30 rounded-full blur-[80px] group-hover:bg-amber-500/50 transition-all duration-500 pointer-events-none z-0"></div>
               
@@ -156,10 +157,10 @@ export default async function DashboardPage() {
                   {dbUser.trust_score} <span className="text-xl text-amber-400 font-medium ml-2">pts</span>
                 </div>
               </div>
-            </div>
+            </StaggerItem>
 
             {/* Card 4: Selesai / Filler (8 cols) - HOLOGRAPHIC GLASS */}
-            <div className="relative overflow-hidden transition-all duration-300 group rounded-3xl bg-transparent backdrop-blur-3xl border-t border-l border-[#D946EF]/30 border-b-0 border-r-0 border-dashed hover:border-solid hover:bg-white/[0.02] hover:border-[#D946EF]/60 shadow-[0_0_30px_rgba(217,70,239,0.05)] p-6 md:p-8 flex flex-col justify-center items-center md:col-span-8 row-span-1 text-center">
+            <StaggerItem className="relative overflow-hidden transition-all duration-300 group rounded-3xl bg-transparent backdrop-blur-3xl border-t border-l border-[#D946EF]/30 border-b-0 border-r-0 border-dashed hover:border-solid hover:bg-white/[0.02] hover:border-[#D946EF]/60 shadow-[0_0_30px_rgba(217,70,239,0.05)] p-6 md:p-8 flex flex-col justify-center items-center md:col-span-8 row-span-1 text-center">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#D946EF]/10 rounded-bl-full blur-2xl pointer-events-none"></div>
               <div className="relative z-10 flex flex-col items-center">
                   <Handshake size={32} className="mb-3 opacity-80 text-[#D946EF] transition-colors" />
@@ -167,8 +168,8 @@ export default async function DashboardPage() {
                   <div className="text-4xl font-black text-white">{completedExchangesCount}</div>
                   <p className="text-xs text-[#D946EF] mt-2 font-medium">Terus tingkatkan kolaborasi Anda!</p>
               </div>
-            </div>
-          </div>
+            </StaggerItem>
+          </StaggerContainer>
 
           {/* Bottom Section: Active Exchanges (Left 60%) & Upcoming Meetings (Right 40%) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -194,7 +195,7 @@ export default async function DashboardPage() {
                   </Link>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <StaggerContainer className="space-y-4">
                   {activeExchanges.map((ex: DashboardExchange) => {
                     const isParticipantA = ex.participant_a_id === dbUser.id;
                     const partner = isParticipantA ? ex.participant_b : ex.participant_a;
@@ -203,8 +204,9 @@ export default async function DashboardPage() {
                     const progressPercent = totalMilestones > 0 ? Math.round((completedMilestones / totalMilestones) * 100) : 0;
 
                     return (
-                      <Link href={`/exchanges/${ex.id}`} key={ex.id} className="block">
-                        <div className="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 rounded-2xl p-5 transition-all duration-300 group shadow-sm hover:shadow-[0_0_15px_rgba(139,92,246,0.2)] hover:-translate-y-1">
+                      <StaggerItem key={ex.id}>
+                        <Link href={`/exchanges/${ex.id}`} className="block">
+                          <div className="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 rounded-2xl p-5 transition-all duration-300 group shadow-sm hover:shadow-[0_0_15px_rgba(139,92,246,0.2)] hover:-translate-y-1">
                           <div className="flex justify-between items-center mb-4">
                             <div className="flex items-center gap-3">
                               <div className="w-10 h-10 rounded-full bg-purple-900/50 border border-purple-500/30 overflow-hidden flex-shrink-0">
@@ -244,9 +246,10 @@ export default async function DashboardPage() {
                           </div>
                         </div>
                       </Link>
-                    );
-                  })}
-                </div>
+                    </StaggerItem>
+                  );
+                })}
+              </StaggerContainer>
               )}
             </div>
 
@@ -264,7 +267,7 @@ export default async function DashboardPage() {
                   <p className="text-slate-400 text-sm italic">Tidak ada jadwal pertemuan terdekat.</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <StaggerContainer className="space-y-3">
                   {upcomingMeetings.map((meeting) => {
                     const isParticipantA = meeting.exchange.participant_a_id === dbUser.id;
                     const partner = isParticipantA ? meeting.exchange.participant_b : meeting.exchange.participant_a;
@@ -273,8 +276,9 @@ export default async function DashboardPage() {
                     const timeStr = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
                     return (
-                      <Link href={`/exchanges/${meeting.exchange.id}`} key={meeting.id} className="block">
-                        <div className="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 rounded-xl p-4 transition-all duration-200 group relative overflow-hidden">
+                      <StaggerItem key={meeting.id}>
+                        <Link href={`/exchanges/${meeting.exchange.id}`} className="block">
+                          <div className="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 rounded-xl p-4 transition-all duration-200 group relative overflow-hidden">
                           <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500/50 group-hover:bg-purple-400 transition-colors"></div>
                           
                           <div className="flex items-start justify-between">
@@ -294,9 +298,10 @@ export default async function DashboardPage() {
                           </div>
                         </div>
                       </Link>
-                    );
-                  })}
-                </div>
+                    </StaggerItem>
+                  );
+                })}
+              </StaggerContainer>
               )}
             </div>
 

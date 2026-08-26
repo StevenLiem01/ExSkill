@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Flag } from "lucide-react";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 interface ReportModalProps {
   reportedId: string;
@@ -74,19 +75,20 @@ export default function ReportModal({ reportedId, isOpen, onClose }: ReportModal
               <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-2">
                 Alasan Laporan <span className="text-red-400">*</span>
               </label>
-              <select 
+              <CustomSelect
                 value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50"
-                required
-              >
-                <option value="" disabled>Pilih Alasan...</option>
-                <option value="Spam">Spam / Promosi Ilegal</option>
-                <option value="Profil Palsu">Profil Palsu / Penyamaran</option>
-                <option value="Pelecehan">Pelecehan / Kata Kasar</option>
-                <option value="Penipuan">Penipuan / Scam</option>
-                <option value="Lainnya">Lainnya</option>
-              </select>
+                onChange={(val) => setReason(val)}
+                options={[
+                  { value: "Spam", label: "Spam / Promosi Ilegal" },
+                  { value: "Profil Palsu", label: "Profil Palsu / Penyamaran" },
+                  { value: "Pelecehan", label: "Pelecehan / Kata Kasar" },
+                  { value: "Penipuan", label: "Penipuan / Scam" },
+                  { value: "Lainnya", label: "Lainnya" }
+                ]}
+                placeholder="Pilih Alasan..."
+                glowVariant="accent"
+                required={true}
+              />
             </div>
 
             <div>

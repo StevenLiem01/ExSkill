@@ -3,6 +3,8 @@ import toast from "react-hot-toast";
 import React, { useState, useEffect } from "react";
 import { Prisma } from "@prisma/client";
 import { Construction, CheckCircle, Clock, Calendar } from "lucide-react";
+import { useSFX } from "@/hooks/useSFX";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 interface SessionConfirmation {
   id: string;
@@ -33,6 +35,7 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { playClick, playSuccess, playError } = useSFX();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [formTitle, setFormTitle] = useState("");
@@ -93,8 +96,12 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
         body: JSON.stringify({ title: formTitle, description: formDescription }),
       });
       
-      if (!res.ok) throw new Error("Gagal menambahkan milestone");
+      if (!res.ok) {
+        playError();
+        throw new Error("Gagal menambahkan milestone");
+      }
       
+      playSuccess();
       const newMilestone = await res.json();
       setMilestones((prev) => [...prev, newMilestone]);
       
@@ -128,8 +135,12 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
         body: JSON.stringify({ title: editFormTitle, description: editFormDescription }),
       });
       
-      if (!res.ok) throw new Error("Gagal menyimpan perubahan");
+      if (!res.ok) {
+        playError();
+        throw new Error("Gagal menyimpan perubahan");
+      }
       
+      playSuccess();
       const updatedMilestone = await res.json();
       setMilestones(prev => prev.map(m => m.id === id ? { ...updatedMilestone, sessions: m.sessions } : m));
       
@@ -157,6 +168,7 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
   };
 
   const handleToggleStatus = async (milestoneId: string, currentStatus: boolean) => {
+    playClick();
     // Optimistic update
     setMilestones(prev => prev.map(m => 
       m.id === milestoneId ? { ...m, is_completed: !currentStatus } : m
@@ -172,6 +184,8 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
       if (!res.ok) {
         throw new Error("Gagal memperbarui status");
       }
+      
+      if (!currentStatus) playSuccess();
     } catch (err: unknown) {
       console.error(err);
       // Revert if failed
@@ -300,7 +314,7 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
           <div className="flex justify-end gap-3 pt-2">
             <button 
               type="button" 
-              onClick={() => setIsFormOpen(false)}
+              onClick={() => { playClick(); setIsFormOpen(false); }}
               className="px-4 py-2 rounded-none text-sm font-bold tracking-widest uppercase text-slate-400 hover:text-white hover:bg-slate-800 border-2 border-transparent hover:border-slate-600 transition-colors focus:outline-none"
             >
               ABORT
@@ -308,6 +322,7 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
             <button 
               type="submit" 
               disabled={isSubmitting}
+              onClick={() => playClick()}
               className="bg-cyan-500/20 text-cyan-300 border-2 border-cyan-500 px-5 py-2 rounded-none text-sm font-bold uppercase tracking-widest hover:bg-cyan-500/40 hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-colors disabled:opacity-50 focus:outline-none"
             >
               {isSubmitting ? "PROCESSING..." : "SAVE_MILESTONE"}
@@ -463,16 +478,20 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
                           className="bg-black/40 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500/50"
                           required
                         />
-                        <select 
-                          value={sessionFormDuration}
-                          onChange={(e) => setSessionFormDuration(e.target.value)}
-                          className="bg-black/40 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500/50"
-                        >
-                          <option value="30">30 Menit</option>
-                          <option value="60">1 Jam</option>
-                          <option value="90">1.5 Jam</option>
-                          <option value="120">2 Jam</option>
-                        </select>
+                        <div className="relative z-30 w-32">
+                          <CustomSelect 
+                            value={sessionFormDuration}
+                            onChange={(val) => setSessionFormDuration(val)}
+                            options={[
+                              { value: "30", label: "30 Menit" },
+                              { value: "60", label: "1 Jam" },
+                              { value: "90", label: "1.5 Jam" },
+                              { value: "120", label: "2 Jam" }
+                            ]}
+                            glowVariant="primary"
+                            className="w-full text-xs"
+                          />
+                        </div>
                         <div className="flex gap-2">
                           <button 
                             type="button"
@@ -529,7 +548,7 @@ export default function MilestoneManager({ exchangeId, currentUserId }: { exchan
         </div>
         {!isFormOpen && (
           <button 
-            onClick={() => setIsFormOpen(true)} 
+            onClick={() => { playClick(); setIsFormOpen(true); }} 
             className="bg-cyan-500/20 hover:bg-cyan-500/40 border-2 border-cyan-500 text-cyan-300 font-bold uppercase tracking-widest text-sm px-4 py-2 rounded-none transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] flex items-center gap-2 focus:outline-none"
           >
             <span>ADD_MILESTONE</span>

@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 interface Skill {
   id: string;
@@ -108,29 +109,28 @@ export default function ProposalButton({ receiverId, receiverName, partnerSkills
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5 text-left">
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 relative z-30">
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Saya ingin belajar dari {receiverName}:</label>
-                <select
-                  required
-                  value={requestedSkillId} onChange={(e) => setRequestedSkillId(e.target.value)}
-                  className="w-full h-11 px-4 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all shadow-inner"
-                >
-                  <option value="" disabled className="text-slate-500">Pilih keahlian partner</option>
-                  {partnerSkills.map(s => <option key={s.id} value={s.id} className="text-slate-900">{s.name}</option>)}
-                </select>
+                <CustomSelect
+                  value={requestedSkillId}
+                  onChange={(val) => setRequestedSkillId(val)}
+                  options={partnerSkills.map(s => ({ value: s.id, label: s.name }))}
+                  placeholder="Pilih keahlian partner"
+                  glowVariant="primary"
+                  required={true}
+                />
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 relative z-20">
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Sebagai gantinya, saya mengajarkan:</label>
-                <select
-                  required
-                  value={offeredSkillId} onChange={(e) => setOfferedSkillId(e.target.value)}
-                  className="w-full h-11 px-4 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all shadow-inner"
-                >
-                  <option value="" disabled className="text-slate-500">Pilih keahlianmu</option>
-                  {mySkills.length === 0 && <option value="" disabled>Kamu belum menambahkan Offered Skills!</option>}
-                  {mySkills.map(s => <option key={s.id} value={s.id} className="text-slate-900">{s.name}</option>)}
-                </select>
+                <CustomSelect
+                  value={offeredSkillId}
+                  onChange={(val) => setOfferedSkillId(val)}
+                  options={mySkills.map(s => ({ value: s.id, label: s.name }))}
+                  placeholder={mySkills.length === 0 ? "Kamu belum menambahkan Offered Skills!" : "Pilih keahlianmu"}
+                  glowVariant="secondary"
+                  required={true}
+                />
               </div>
 
               <div className="space-y-1.5">

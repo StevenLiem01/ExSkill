@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 export default function SearchFilterBar() {
   const router = useRouter();
@@ -56,7 +57,7 @@ export default function SearchFilterBar() {
   }, [minScore, sort]);
 
   return (
-    <div className="bg-white/5 backdrop-blur-xl p-5 rounded-2xl border border-white/10 shadow-[0_0_15px_rgba(139,92,246,0.1)] flex flex-col md:flex-row gap-4 items-center">
+    <div className="relative z-50 bg-white/5 backdrop-blur-xl p-5 rounded-2xl border border-white/10 shadow-[0_0_15px_rgba(139,92,246,0.1)] flex flex-col md:flex-row gap-4 items-center">
       <div className="relative flex-1 w-full group">
         <span className="absolute inset-y-0 left-4 flex items-center text-slate-400 group-focus-within:text-purple-400 transition-colors">
           <Search size={18} />
@@ -70,31 +71,33 @@ export default function SearchFilterBar() {
         />
       </div>
 
-      <div className="flex gap-4 w-full md:w-auto">
-        <div className="flex flex-col gap-1 w-full md:w-40">
+      <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+        <div className="flex flex-col gap-1 w-full md:w-48 relative z-30">
           <label className="text-[10px] text-slate-400 font-mono uppercase tracking-wider font-bold">Min. Reputasi</label>
-          <select
+          <CustomSelect
             value={minScore}
-            onChange={handleMinScoreChange}
-            className="w-full bg-black/20 border border-white/10 rounded-xl py-2.5 px-3 text-sm text-white focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 appearance-none cursor-pointer shadow-inner transition-all"
-          >
-            <option value="0">Semua</option>
-            <option value="10">&gt; 10 Pts</option>
-            <option value="50">&gt; 50 Pts</option>
-            <option value="100">&gt; 100 Pts</option>
-          </select>
+            onChange={(val) => setMinScore(val)}
+            options={[
+              { value: "0", label: "Semua" },
+              { value: "10", label: "> 10 Pts" },
+              { value: "50", label: "> 50 Pts" },
+              { value: "100", label: "> 100 Pts" }
+            ]}
+            glowVariant="primary"
+          />
         </div>
 
-        <div className="flex flex-col gap-1 w-full md:w-48">
+        <div className="flex flex-col gap-1 w-full md:w-56 relative z-20">
           <label className="text-[10px] text-slate-400 font-mono uppercase tracking-wider font-bold">Urutkan Berdasarkan</label>
-          <select
+          <CustomSelect
             value={sort}
-            onChange={handleSortChange}
-            className="w-full bg-black/20 border border-white/10 rounded-xl py-2.5 px-3 text-sm text-white focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 appearance-none cursor-pointer shadow-inner transition-all"
-          >
-            <option value="newest">Terbaru</option>
-            <option value="score_desc">Trust Score (Tertinggi)</option>
-          </select>
+            onChange={(val) => setSort(val)}
+            options={[
+              { value: "newest", label: "Terbaru" },
+              { value: "score_desc", label: "Trust Score (Tertinggi)" }
+            ]}
+            glowVariant="secondary"
+          />
         </div>
       </div>
     </div>

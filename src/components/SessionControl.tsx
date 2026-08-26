@@ -5,10 +5,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Prisma } from "@prisma/client";
 import { CheckCircle2 } from "lucide-react";
+import { useSFX } from "@/hooks/useSFX";
 
 export default function SessionControl({ exchange, currentUser }: { exchange: Prisma.ExchangeGetPayload<{}>, currentUser: Prisma.UserGetPayload<{}> }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { playClick, playSuccess, playError } = useSFX();
 
   const status = exchange.session_status;
   const agreedToStart = exchange.agreed_to_start || [];
@@ -24,10 +26,12 @@ export default function SessionControl({ exchange, currentUser }: { exchange: Pr
       });
 
       if (!res.ok) {
+        playError();
         const err = await res.json();
         throw new Error((err instanceof Error ? err.message : "Unknown error") || "Gagal mengubah status sesi");
       }
 
+      playSuccess();
       router.refresh();
     } catch (e: unknown) {
       toast.error("Terjadi kesalahan: " + (e instanceof Error ? e.message : "Unknown error"));
@@ -64,7 +68,7 @@ export default function SessionControl({ exchange, currentUser }: { exchange: Pr
             TERMS_END: <span className="bg-cyan-900/50 border border-cyan-500/40 text-cyan-300 px-2 py-0.5 rounded-none ml-1">{agreedToEnd.length}/2</span>
           </p>
           <button
-            onClick={() => handleSessionAction('END')}
+            onClick={() => { playClick(); handleSessionAction('END'); }}
             disabled={loading || hasAgreedEnd}
             className={`w-full min-h-[44px] py-2.5 rounded-none font-bold tracking-widest uppercase transition-all duration-200 ease-in-out focus:outline-none ${hasAgreedEnd
               ? 'bg-transparent text-slate-500 border-2 border-slate-700 cursor-not-allowed'
@@ -94,7 +98,7 @@ export default function SessionControl({ exchange, currentUser }: { exchange: Pr
           TERMS_START: <span className={`ml-1 px-2 py-0.5 rounded-none border-2 transition-colors ${agreedToStart.length > 0 ? "bg-emerald-900/50 border-emerald-500/80 text-emerald-400" : "bg-transparent border-purple-500/40 text-purple-300"}`}>{agreedToStart.length}/2</span>
         </p>
         <button
-          onClick={() => handleSessionAction('START')}
+          onClick={() => { playClick(); handleSessionAction('START'); }}
           disabled={loading || hasAgreedStart}
           className={`w-full min-h-[44px] py-2.5 rounded-none font-bold tracking-widest uppercase transition-all duration-200 ease-in-out focus:outline-none ${hasAgreedStart
             ? 'bg-transparent text-emerald-500 border-2 border-emerald-500/50 cursor-not-allowed shadow-[0_0_10px_rgba(16,185,129,0.1)]'

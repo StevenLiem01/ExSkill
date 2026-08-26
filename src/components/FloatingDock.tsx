@@ -4,10 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Compass, Inbox, ArrowRightLeft, User, Settings, Home } from "lucide-react";
 import NotificationBell from "./NotificationBell";
+import { useSFX } from "@/hooks/useSFX";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function FloatingDock({ session }: { session: any }) {
   const pathname = usePathname();
+  const { playHover, playClick } = useSFX();
 
   // Hide on onboarding
   if (pathname === "/onboarding") return null;
@@ -34,6 +36,8 @@ export default function FloatingDock({ session }: { session: any }) {
             <Link 
               key={item.path}
               href={item.path} 
+              onMouseEnter={playHover}
+              onClick={playClick}
               className={`relative group flex items-center justify-center p-3 rounded-full transition-all duration-300 ${isActive ? 'bg-purple-600/20 text-purple-400' : 'text-slate-400 hover:bg-white/10 hover:text-white hover:translate-x-1'}`}
             >
               <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />

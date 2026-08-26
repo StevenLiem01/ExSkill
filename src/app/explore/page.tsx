@@ -10,6 +10,7 @@ import { Prisma } from "@prisma/client";
 import SearchFilterBar from "@/components/SearchFilterBar";
 import { Search, Globe, Star, MessageSquare } from "lucide-react";
 import { calculateMatchScore } from "@/lib/matching";
+import { StaggerContainer, StaggerItem } from "@/components/animations/Stagger";
 
 export default async function ExplorePage(props: { searchParams?: Promise<{ [key: string]: string | undefined }> }) {
   const searchParams = await props.searchParams;
@@ -157,7 +158,7 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
               <p className="text-slate-400 text-sm mt-2">Coba ubah kata kunci atau kurangi batas filter reputasi.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
               {usersWithScore.map((user: ExploreUser) => {
                 const partnerSkills = user.owned_skills.map((os) => os.skill);
 
@@ -170,7 +171,8 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
                 }
 
                 return (
-                  <div key={user.id} className="bg-transparent backdrop-blur-3xl border-t border-l border-purple-500/30 border-b-0 border-r-0 rounded-3xl p-6 hover:bg-white/[0.02] hover:border-purple-400/60 transition-all duration-300 ease-in-out hover:-translate-y-1 flex flex-col justify-between group shadow-[0_0_30px_rgba(168,85,247,0.05)] relative overflow-hidden">
+                  <StaggerItem key={user.id} className="h-full">
+                    <div className="bg-transparent backdrop-blur-3xl border-t border-l border-purple-500/30 border-b-0 border-r-0 rounded-3xl p-6 hover:bg-white/[0.02] hover:border-purple-400/60 transition-all duration-300 ease-in-out hover:-translate-y-1 flex flex-col justify-between group shadow-[0_0_30px_rgba(168,85,247,0.05)] relative overflow-hidden h-full">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-bl-full blur-2xl pointer-events-none"></div>
                     <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
                     <div className="space-y-5 relative z-10">
@@ -253,9 +255,10 @@ export default async function ExplorePage(props: { searchParams?: Promise<{ [key
                       />
                     </div>
                   </div>
+                  </StaggerItem>
                 );
               })}
-            </div>
+            </StaggerContainer>
           )}
         </div>
       </main>

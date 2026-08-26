@@ -7,6 +7,7 @@ import AuthProvider from "@/components/AuthProvider";
 import ProposalActions from "@/components/ProposalActions";
 import { Prisma } from "@prisma/client";
 import { Inbox, Send, Calendar } from "lucide-react";
+import { StaggerContainer, StaggerItem } from "@/components/animations/Stagger";
 
 export default async function ProposalsPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const session = await getServerSession(authOptions);
@@ -88,7 +89,7 @@ export default async function ProposalsPage({ searchParams }: { searchParams: Pr
           <div>
             {/* INCOMING PROPOSALS */}
             {activeTab === 'incoming' && (
-              <div className="space-y-6">
+              <StaggerContainer className="space-y-6">
                 {incoming.length === 0 ? (
                   <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-12 text-center text-slate-400 font-medium shadow-[0_0_30px_rgba(255,255,255,0.02)] flex flex-col items-center justify-center gap-4 relative overflow-hidden">
                     <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
@@ -96,7 +97,8 @@ export default async function ProposalsPage({ searchParams }: { searchParams: Pr
                     <p className="relative z-10">Belum ada proposal pertukaran yang masuk.</p>
                   </div>
                 ) : incoming.map((p: Prisma.ExchangeProposalGetPayload<{ include: { sender: true, offered_skill: true, requested_skill: true } }>) => (
-                  <div key={p.id} className="bg-transparent backdrop-blur-3xl border-t border-l border-[#D946EF]/20 border-b-0 border-r-0 rounded-3xl p-6 md:p-8 shadow-[0_0_30px_rgba(217,70,239,0.02)] hover:shadow-[0_0_20px_rgba(217,70,239,0.1)] hover:border-[#D946EF]/50 transition-all duration-300 flex flex-col gap-6 relative overflow-hidden group">
+                  <StaggerItem key={p.id}>
+                    <div className="bg-transparent backdrop-blur-3xl border-t border-l border-[#D946EF]/20 border-b-0 border-r-0 rounded-3xl p-6 md:p-8 shadow-[0_0_30px_rgba(217,70,239,0.02)] hover:shadow-[0_0_20px_rgba(217,70,239,0.1)] hover:border-[#D946EF]/50 transition-all duration-300 flex flex-col gap-6 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#D946EF]/5 rounded-bl-full blur-2xl pointer-events-none group-hover:bg-[#D946EF]/10 transition-colors"></div>
                     <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-[#D946EF]/30 to-transparent"></div>
                     
@@ -150,13 +152,14 @@ export default async function ProposalsPage({ searchParams }: { searchParams: Pr
                       </div>
                     )}
                   </div>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             )}
 
             {/* OUTGOING PROPOSALS */}
             {activeTab === 'outgoing' && (
-              <div className="space-y-6">
+              <StaggerContainer className="space-y-6">
                 {outgoing.length === 0 ? (
                   <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-12 text-center text-slate-400 font-medium shadow-[0_0_30px_rgba(255,255,255,0.02)] flex flex-col items-center justify-center gap-4 relative overflow-hidden">
                     <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
@@ -164,7 +167,8 @@ export default async function ProposalsPage({ searchParams }: { searchParams: Pr
                     <p className="relative z-10">Kamu belum pernah mengajukan proposal pertukaran ke siapa pun.</p>
                   </div>
                 ) : outgoing.map((p: Prisma.ExchangeProposalGetPayload<{ include: { receiver: true, offered_skill: true, requested_skill: true } }>) => (
-                  <div key={p.id} className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-6 md:p-8 shadow-[0_0_30px_rgba(255,255,255,0.02)] hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:border-white/30 transition-all duration-300 flex flex-col gap-6 relative overflow-hidden group">
+                  <StaggerItem key={p.id}>
+                    <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-6 md:p-8 shadow-[0_0_30px_rgba(255,255,255,0.02)] hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:border-white/30 transition-all duration-300 flex flex-col gap-6 relative overflow-hidden group">
                     <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                     
                     <div className="absolute top-6 right-6 z-10">
@@ -205,8 +209,9 @@ export default async function ProposalsPage({ searchParams }: { searchParams: Pr
                       <Calendar size={12} className="mr-1" /> Dikirim pada: {new Date(p.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             )}
           </div>
         </div>

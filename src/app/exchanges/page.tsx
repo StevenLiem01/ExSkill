@@ -6,6 +6,7 @@ import Link from "next/link";
 import AuthProvider from "@/components/AuthProvider";
 import { Prisma } from "@prisma/client";
 import { Handshake, Flame, CheckCircle } from "lucide-react";
+import { StaggerContainer, StaggerItem } from "@/components/animations/Stagger";
 
 type ExchangePayload = Prisma.ExchangeGetPayload<{
   include: {
@@ -64,8 +65,9 @@ export default async function ExchangesPage() {
     const weTeach = isParticipantA ? exchange.proposal.offered_skill : exchange.proposal.requested_skill;
 
     return (
-      <Link href={`/exchanges/${exchange.id}`} className="block h-full">
-        <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.02)] hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:border-[#D946EF]/30 hover:bg-white/[0.02] transition-all duration-300 flex flex-col gap-4 relative h-full overflow-hidden group">
+      <StaggerItem className="h-full">
+        <Link href={`/exchanges/${exchange.id}`} className="block h-full">
+          <div className="bg-transparent backdrop-blur-3xl border-t border-l border-white/10 border-b-0 border-r-0 rounded-3xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.02)] hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:border-[#D946EF]/30 hover:bg-white/[0.02] transition-all duration-300 flex flex-col gap-4 relative h-full overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-bl-full blur-2xl pointer-events-none group-hover:bg-[#D946EF]/5 transition-colors"></div>
           <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:via-[#D946EF]/30 transition-colors"></div>
           
@@ -104,8 +106,9 @@ export default async function ExchangesPage() {
             <span>Dibuat: {new Date(exchange.created_at).toLocaleDateString('id-ID')}</span>
             <span className="font-semibold text-indigo-300">{exchange.milestones?.length || 0} Milestone</span>
           </div>
-        </div>
-      </Link>
+          </div>
+        </Link>
+      </StaggerItem>
     );
   };
 
@@ -141,9 +144,9 @@ export default async function ExchangesPage() {
                   <span className="relative z-10">Tidak ada pertukaran yang sedang aktif saat ini.</span>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {activeExchanges.map((ex: ExchangePayload) => <ExchangeCard key={ex.id} exchange={ex} />)}
-                </div>
+                </StaggerContainer>
               )}
             </section>
 
@@ -158,9 +161,9 @@ export default async function ExchangesPage() {
                   <span className="relative z-10">Belum ada riwayat pertukaran yang diselesaikan.</span>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-80">
+                <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-80">
                   {completedExchanges.map((ex: ExchangePayload) => <ExchangeCard key={ex.id} exchange={ex} />)}
-                </div>
+                </StaggerContainer>
               )}
             </section>
           </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, MailOpen } from "lucide-react";
+import { useSFX } from "@/hooks/useSFX";
 
 interface Notification {
   id: string;
@@ -19,6 +20,7 @@ export default function NotificationBell({ direction = "down" }: { direction?: "
   const [isLoading, setIsLoading] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { playClick, playSuccess } = useSFX();
 
   const fetchNotifications = async () => {
     try {
@@ -56,6 +58,7 @@ export default function NotificationBell({ direction = "down" }: { direction?: "
 
   const handleMarkAsRead = async (id: string, link: string | null) => {
     try {
+      playClick();
       await fetch(`/api/notifications/${id}/read`, { method: "PATCH" });
       setNotifications(notifications.map(n => n.id === id ? { ...n, is_read: true } : n));
       
@@ -70,6 +73,7 @@ export default function NotificationBell({ direction = "down" }: { direction?: "
 
   const handleMarkAllAsRead = async () => {
     try {
+      playSuccess();
       await fetch("/api/notifications", { method: "PATCH" });
       setNotifications(notifications.map(n => ({ ...n, is_read: true })));
     } catch (error) {
@@ -80,7 +84,10 @@ export default function NotificationBell({ direction = "down" }: { direction?: "
   return (
     <div className="relative" ref={dropdownRef}>
       <button 
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          playClick();
+          setIsOpen(!isOpen);
+        }}
         className="relative p-2 text-slate-300 hover:text-[#D946EF] transition-colors focus:outline-none"
       >
         <Bell size={24} />

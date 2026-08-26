@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import AuthProvider from "@/components/AuthProvider";
 import Link from "next/link";
 import { Crown, ArrowLeft, Search, Plus, Power, PowerOff } from "lucide-react";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 interface Skill {
   id: string;
@@ -177,20 +178,21 @@ function AdminSkills() {
                   required
                 />
               </div>
-              <div className="w-full md:flex-1">
+              <div className="w-full md:flex-1 relative z-30">
                 <label className="block text-xs font-bold text-slate-400 mb-1">Kategori</label>
-                <select 
+                <CustomSelect
                   value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
-                >
-                  <option value="Programming">Programming</option>
-                  <option value="Design">Design</option>
-                  <option value="Language">Language</option>
-                  <option value="Business">Business</option>
-                  <option value="Music">Music</option>
-                  <option value="Other">Other</option>
-                </select>
+                  onChange={(val) => setNewCategory(val)}
+                  options={[
+                    { value: "Programming", label: "Programming" },
+                    { value: "Design", label: "Design" },
+                    { value: "Language", label: "Language" },
+                    { value: "Business", label: "Business" },
+                    { value: "Music", label: "Music" },
+                    { value: "Other", label: "Other" }
+                  ]}
+                  glowVariant="primary"
+                />
               </div>
               <button type="submit" className="w-full md:w-auto bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-emerald-400 transition-colors">
                 Simpan

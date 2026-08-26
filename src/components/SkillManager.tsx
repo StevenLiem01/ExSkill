@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles, Search } from "lucide-react";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 type Skill = { id: string; name: string; category: string };
 type UserSkill = { id: string; skill_id: string; proficiency: string; skill: Skill };
@@ -87,42 +88,44 @@ export default function SkillManager({ catalog, initialOffered, initialWanted }:
         </div>
 
       <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end bg-slate-900/50 p-6 rounded-2xl border border-white/5 shadow-inner">
-        <div className="md:col-span-1 space-y-2">
+        <div className="md:col-span-1 space-y-2 relative z-30">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Tipe</label>
-          <select
-            value={type} onChange={(e) => setType(e.target.value)}
-            className="w-full h-11 px-4 bg-slate-800 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D946EF] focus:border-[#D946EF] transition-all duration-200"
-          >
-            <option value="OFFERED">Ditawarkan</option>
-            <option value="WANTED">Dicari</option>
-          </select>
+          <CustomSelect
+            value={type}
+            onChange={(val) => setType(val)}
+            options={[
+              { value: "OFFERED", label: "Ditawarkan" },
+              { value: "WANTED", label: "Dicari" }
+            ]}
+            glowVariant="secondary"
+          />
         </div>
 
-        <div className="md:col-span-1 space-y-2">
+        <div className="md:col-span-1 space-y-2 relative z-20">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Pilih Skill</label>
-          <select
-            required
-            value={selectedSkillId} onChange={(e) => setSelectedSkillId(e.target.value)}
-            className="w-full h-11 px-4 bg-slate-800 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D946EF] focus:border-[#D946EF] transition-all duration-200"
-          >
-            <option value="" disabled>-- Pilih dari Katalog --</option>
-            {availableSkills.map((s) => (
-              <option key={s.id} value={s.id}>{s.name} ({s.category})</option>
-            ))}
-          </select>
+          <CustomSelect
+            value={selectedSkillId}
+            onChange={(val) => setSelectedSkillId(val)}
+            options={availableSkills.map((s) => ({ value: s.id, label: `${s.name} (${s.category})` }))}
+            placeholder="-- Pilih dari Katalog --"
+            glowVariant="primary"
+            required={true}
+          />
         </div>
 
         {type === "OFFERED" && (
-          <div className="md:col-span-1 space-y-2">
+          <div className="md:col-span-1 space-y-2 relative z-10">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Kemahiran</label>
-            <select
-              value={proficiency} onChange={(e) => setProficiency(e.target.value)}
-              className="w-full h-11 px-4 bg-slate-800 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#D946EF] focus:border-[#D946EF] transition-all duration-200"
-            >
-              <option value="BEGINNER">Beginner</option>
-              <option value="INTERMEDIATE">Intermediate</option>
-              <option value="ADVANCED">Advanced</option>
-            </select>
+            <CustomSelect
+              value={proficiency}
+              onChange={(val) => setProficiency(val)}
+              options={[
+                { value: "BEGINNER", label: "Beginner" },
+                { value: "INTERMEDIATE", label: "Intermediate" },
+                { value: "ADVANCED", label: "Advanced" }
+              ]}
+              glowVariant="primary"
+            />
           </div>
         )}
 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { AlertTriangle, X } from "lucide-react";
 import { createPortal } from "react-dom";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 export default function DisputeButton({ exchangeId }: { exchangeId: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,20 +72,21 @@ export default function DisputeButton({ exchangeId }: { exchangeId: string }) {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5 text-left">
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 relative z-30">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Alasan Sengketa</label>
-              <select
-                required
-                value={reason} 
-                onChange={(e) => setReason(e.target.value)}
-                className="w-full h-11 px-4 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all shadow-inner"
-              >
-                <option value="" disabled className="text-slate-500">Pilih alasan...</option>
-                <option value="UNRESPONSIVE" className="text-slate-900">Partner tidak responsif</option>
-                <option value="INAPPROPRIATE" className="text-slate-900">Perilaku tidak pantas</option>
-                <option value="SCAM" className="text-slate-900">Indikasi penipuan / spam</option>
-                <option value="OTHER" className="text-slate-900">Lainnya</option>
-              </select>
+              <CustomSelect
+                value={reason}
+                onChange={(val) => setReason(val)}
+                options={[
+                  { value: "UNRESPONSIVE", label: "Partner tidak responsif" },
+                  { value: "INAPPROPRIATE", label: "Perilaku tidak pantas" },
+                  { value: "SCAM", label: "Indikasi penipuan / spam" },
+                  { value: "OTHER", label: "Lainnya" }
+                ]}
+                placeholder="Pilih alasan..."
+                glowVariant="accent"
+                required={true}
+              />
             </div>
 
             <div className="space-y-1.5">

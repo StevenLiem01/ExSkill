@@ -132,6 +132,7 @@ function AdminDisputes() {
               <p className="text-sm text-slate-400 mt-1">Tinjau dan mediasi konflik yang terjadi saat pertukaran skill.</p>
             </div>
           </div>
+          </div>
         </div>
 
         {error && (

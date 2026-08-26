@@ -150,6 +150,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                   )}
                   {!user.githubUrl && !user.linkedinUrl && !user.portfolioUrl && (
                     <p className="text-xs text-slate-500 italic">Tidak ada tautan sosial.</p>
+                  )}
                   </div>
                 </div>
               </div>

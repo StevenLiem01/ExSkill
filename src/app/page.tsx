@@ -24,10 +24,20 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-[#0B061A] text-slate-50 relative overflow-hidden font-sans selection:bg-purple-500/30">
       
-      {/* Dekorasi Latar Belakang (Neon Glow & Glassmorphism) */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50rem] h-[50rem] bg-purple-700/20 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute top-[10%] right-[-10%] w-[40rem] h-[40rem] bg-[#D946EF]/10 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] left-[20%] w-[50rem] h-[50rem] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none"></div>
+      {/* Latar Belakang Video (Blackhole) */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden flex items-center justify-center bg-[#0B061A]">
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="min-w-full min-h-full object-cover opacity-60 mix-blend-screen"
+        >
+          <source src="/blackhole2.mp4" type="video/mp4" />
+        </video>
+        {/* Gradient overlay agar video menyatu mulus ke bawah (Features Section) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B061A] via-transparent to-transparent"></div>
+      </div>
       
       {/* Grid Pattern Ornamen */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none mix-blend-overlay"></div>

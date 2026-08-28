@@ -25,8 +25,8 @@ export default function FloatingDock({ session }: { session: any }) {
   ];
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 md:left-6 md:top-1/2 md:-translate-y-1/2 md:-translate-x-0 z-50 pointer-events-none w-[90vw] md:w-auto">
-      <div className="pointer-events-auto bg-[#0B061A]/80 backdrop-blur-xl border border-white/10 p-2 rounded-full shadow-[0_0_30px_rgba(168,85,247,0.2)] flex flex-row md:flex-col items-center justify-between md:justify-center gap-1 sm:gap-2 group/dock transition-all hover:shadow-[0_0_40px_rgba(168,85,247,0.4)] overflow-x-auto no-scrollbar">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 md:left-6 md:top-[45%] md:-translate-y-1/2 md:translate-x-0 z-50 pointer-events-none w-[90vw] md:w-auto">
+      <div className="pointer-events-auto bg-[#0B061A]/80 backdrop-blur-xl border border-white/10 p-2 rounded-full shadow-[0_0_30px_rgba(168,85,247,0.2)] flex flex-row md:flex-col items-center justify-between md:justify-center gap-1 sm:gap-2 group/dock transition-all hover:shadow-[0_0_40px_rgba(168,85,247,0.4)] overflow-x-auto md:overflow-visible no-scrollbar">
         {navItems.map((item) => {
           const isActive = item.path === '/' 
             ? pathname === '/' 
@@ -49,7 +49,7 @@ export default function FloatingDock({ session }: { session: any }) {
               
               {/* Active Dot */}
               {isActive && (
-                <span className="absolute -bottom-1 md:-bottom-auto md:-left-1 w-1 h-1 md:w-1 md:h-4 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,1)]"></span>
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:-left-1 md:translate-x-0 w-1 h-1 md:w-1 md:h-4 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,1)]"></span>
               )}
             </Link>
           );

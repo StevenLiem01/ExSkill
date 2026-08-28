@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, MailOpen } from "lucide-react";
 import { useSFX } from "@/hooks/useSFX";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 interface Notification {
   id: string;
@@ -119,7 +120,18 @@ export default function NotificationBell({ direction = "down" }: { direction?: "
           
           <div className="max-h-96 overflow-y-auto">
             {isLoading ? (
-              <div className="p-8 text-center text-slate-400 text-sm">Memuat...</div>
+              <div className="p-4 space-y-3">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex gap-3 items-start">
+                    <Skeleton className="w-2 h-2 mt-1.5 rounded-full flex-shrink-0" />
+                    <div className="space-y-2 flex-1">
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-full" />
+                      <Skeleton className="h-2 w-1/4 mt-2" />
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : notifications.length === 0 ? (
               <div className="p-8 text-center text-slate-400 flex flex-col items-center">
                 <MailOpen size={32} className="mb-2 opacity-50 text-slate-300" />

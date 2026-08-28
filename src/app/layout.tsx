@@ -36,21 +36,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Toaster 
             position="bottom-right"
             toastOptions={{
-              className: 'bg-white/5 backdrop-blur-xl border border-white/10 text-white shadow-xl',
+              className: 'backdrop-blur-xl text-white shadow-2xl',
               style: {
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'rgba(11, 6, 26, 0.8)', // Very dark background matching app theme
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 color: '#fff',
+                borderRadius: '16px',
               },
               success: {
+                style: {
+                  border: '1px solid rgba(16, 185, 129, 0.5)',
+                  boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)',
+                },
                 iconTheme: {
-                  primary: '#D946EF',
+                  primary: '#10B981',
                   secondary: '#0B061A',
                 },
               },
               error: {
+                style: {
+                  border: '1px solid rgba(239, 68, 68, 0.5)',
+                  boxShadow: '0 0 20px rgba(239, 68, 68, 0.2)',
+                },
                 iconTheme: {
                   primary: '#EF4444',
                   secondary: '#0B061A',

@@ -5,6 +5,10 @@ import { redirect } from "next/navigation";
 import HeroSection from "@/components/landing/HeroSection";
 import LiveStats from "@/components/landing/LiveStats";
 import FeaturesSection from "@/components/landing/FeaturesSection";
+import HowItWorksSection from "@/components/landing/HowItWorksSection";
+import TestimonialsSection from "@/components/landing/TestimonialsSection";
+import FaqSection from "@/components/landing/FaqSection";
+import CtaSection from "@/components/landing/CtaSection";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -52,6 +56,18 @@ export default async function Home() {
 
         {/* FEATURES SECTION (Bento Grid with Scroll Animations) */}
         <FeaturesSection />
+
+        {/* HOW IT WORKS SECTION */}
+        <HowItWorksSection />
+
+        {/* TESTIMONIALS SECTION */}
+        <TestimonialsSection />
+
+        {/* FAQ SECTION */}
+        <FaqSection />
+
+        {/* FINAL CTA SECTION */}
+        <CtaSection />
 
         {/* FOOTER */}
         <footer className="mt-auto border-t border-white/10 bg-[#0B061A]/80 backdrop-blur-lg py-10 px-6 relative z-20">

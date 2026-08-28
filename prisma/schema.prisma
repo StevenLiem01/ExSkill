@@ -144,6 +144,7 @@ model User {
   disputes_handled        Dispute[]             @relation("DisputeAdmin")
   blocked_users           Block[]               @relation("Blocker")
   blocked_by              Block[]               @relation("Blocked")
+  logs                    SystemLog[]           @relation("UserLogs")
 
   @@map("users")
 }
@@ -374,4 +375,38 @@ model Block {
 
   @@unique([blocker_id, blocked_id])
   @@map("blocks")
+}
+
+// ====================================================================
+// LOGGING MODELS
+// ====================================================================
+
+enum LogLevel {
+  INFO
+  WARN
+  ERROR
+}
+
+enum LogCategory {
+  SYSTEM
+  AUTH
+  USER_ACTION
+  ADMIN_ACTION
+}
+
+model SystemLog {
+  id         String      @id @default(cuid())
+  level      LogLevel    @default(INFO)
+  category   LogCategory @default(SYSTEM)
+  action     String      @db.VarChar(255)
+  details    String?     @db.Text
+  user_id    String?
+  ip_address String?     @db.VarChar(45)
+  created_at DateTime    @default(now())
+
+  user       User?       @relation("UserLogs", fields: [user_id], references: [id], onDelete: SetNull)
+
+  @@index([category])
+  @@index([user_id])
+  @@map("system_logs")
 }

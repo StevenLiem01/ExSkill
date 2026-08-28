@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import AuthProvider from "@/components/AuthProvider";
 import Link from "next/link";
-import { Crown, Users, RefreshCw, Flag, Shield, Scale } from "lucide-react";
+import { Crown, Users, RefreshCw, Flag, Shield, Scale, FileText } from "lucide-react";
 
 interface AdminStats {
   totalUsers: number;
@@ -170,6 +170,16 @@ function AdminDashboard() {
               <div>
                 <h3 className="font-bold text-white leading-tight">Master Keahlian</h3>
                 <p className="text-xs text-slate-400 mt-1 line-clamp-2">Kelola referensi nama keahlian</p>
+              </div>
+            </Link>
+
+            <Link href="/admin/logs" className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-700/50 transition-all text-left">
+              <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30 flex-shrink-0">
+                <FileText size={24} className="text-indigo-400" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white leading-tight">System Logs</h3>
+                <p className="text-xs text-slate-400 mt-1 line-clamp-2">Pantau rekaman aktivitas & error</p>
               </div>
             </Link>
           </div>

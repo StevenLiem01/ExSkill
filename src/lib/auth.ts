@@ -4,6 +4,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import prisma from "@/lib/prisma"
 import type { Adapter } from "next-auth/adapters"
+import { logActivity } from "@/lib/logger"
+import { LogCategory, LogLevel } from "@prisma/client"
 
 declare module "next-auth" {
   interface Session {
@@ -63,8 +65,24 @@ export const authOptions: NextAuthOptions = {
         });
         
         if (dbUser?.is_banned) {
+          logActivity({
+            level: LogLevel.WARN,
+            category: LogCategory.AUTH,
+            action: "Login ditolak (Akun Diblokir)",
+            details: `Provider: ${account?.provider}. Email: ${user.email}`,
+            userId: dbUser.id
+          });
           throw new Error("Akun Anda telah diblokir dari platform.");
         }
+
+        // Jika berhasil (meski mungkin user baru terdaftar via OAuth)
+        logActivity({
+          level: LogLevel.INFO,
+          category: LogCategory.AUTH,
+          action: "Login berhasil",
+          details: `Provider: ${account?.provider}. Email: ${user.email}`,
+          userId: dbUser?.id || user.id
+        });
       }
       return true;
     },

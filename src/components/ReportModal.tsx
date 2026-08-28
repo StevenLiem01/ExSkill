@@ -23,6 +23,16 @@ export default function ReportModal({ reportedId, isOpen, onClose }: ReportModal
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !mounted) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {

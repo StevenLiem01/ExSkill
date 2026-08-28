@@ -69,6 +69,16 @@ export default function ChatBox({ exchangeId, currentUserId, sessionStatus }: { 
     }
   }, [messages, isFirstLoad]);
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && zoomedImage) {
+        setZoomedImage(null);
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [zoomedImage]);
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);

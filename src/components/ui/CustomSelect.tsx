@@ -155,7 +155,7 @@ export default function CustomSelect({
             animate={{ opacity: 1, y: 8, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95, filter: "blur(4px)" }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="absolute left-0 min-w-full w-max z-[100] mt-1"
+            className="absolute left-0 min-w-full md:w-max max-w-[85vw] sm:max-w-md z-[100] mt-1"
           >
             {/* Glow di balik menu kaca */}
             <div className={`absolute -inset-2 bg-gradient-to-br ${GLOW_MAP[glowVariant]} rounded-3xl blur-xl opacity-10 z-0`}></div>
@@ -185,7 +185,7 @@ export default function CustomSelect({
                         <div className={`w-5 h-5 rounded-md flex items-center justify-center shadow-sm flex-shrink-0 transition-colors ${isSelected ? colorClass : 'bg-white/10 border border-white/20 group-hover/item:border-white/40'}`}>
                           {isSelected && <Check size={14} strokeWidth={4} className="text-white" />}
                         </div>
-                        <span className={`font-semibold text-sm whitespace-nowrap pr-4 ${isSelected ? 'text-white' : 'text-slate-300'}`}>
+                        <span className={`font-semibold text-sm whitespace-normal sm:whitespace-nowrap break-words pr-4 ${isSelected ? 'text-white' : 'text-slate-300'}`}>
                           {opt.label}
                         </span>
                       </div>

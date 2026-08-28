@@ -1,12 +1,39 @@
 "use client";
 
-import { useCallback, useRef, useEffect } from "react";
+import { useCallback, useRef, useEffect, useState } from "react";
 
 // Tipe untuk osilator
 type WaveType = "sine" | "square" | "sawtooth" | "triangle";
 
+// Global state for SFX mute to avoid Context Provider overhead
+let globalIsMuted = false;
+const listeners = new Set<() => void>();
+
+if (typeof window !== "undefined") {
+  globalIsMuted = localStorage.getItem("exskill_sfx_muted") === "true";
+}
+
+function setGlobalMuted(muted: boolean) {
+  globalIsMuted = muted;
+  if (typeof window !== "undefined") {
+    localStorage.setItem("exskill_sfx_muted", muted.toString());
+  }
+  listeners.forEach(l => l());
+}
+
 export function useSFX() {
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const [isMuted, setIsMuted] = useState(globalIsMuted);
+
+  useEffect(() => {
+    const listener = () => setIsMuted(globalIsMuted);
+    listeners.add(listener);
+    return () => { listeners.delete(listener); };
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    setGlobalMuted(!globalIsMuted);
+  }, []);
 
   // Inisialisasi AudioContext secara lazy (hanya saat dibutuhkan/dipanggil)
   // Ini menghindari error autoplay policy di browser
@@ -44,6 +71,7 @@ export function useSFX() {
     duration: number = 0.1,
     volume: number = 0.1
   ) => {
+    if (globalIsMuted) return;
     const ctx = getAudioContext();
     if (!ctx) return;
 
@@ -75,6 +103,7 @@ export function useSFX() {
 
   // Bunyi perkusif yang lebih modern dan membulat ("pop" futuristik)
   const playClick = useCallback(() => {
+    if (globalIsMuted) return;
     const ctx = getAudioContext();
     if (!ctx) return;
     
@@ -105,6 +134,7 @@ export function useSFX() {
 
   // Bunyi chime atau nada naik (ascending)
   const playSuccess = useCallback(() => {
+    if (globalIsMuted) return;
     const ctx = getAudioContext();
     if (!ctx) return;
     
@@ -140,6 +170,7 @@ export function useSFX() {
 
   // Bunyi nada turun (descending) bergelombang sawtooth
   const playError = useCallback(() => {
+    if (globalIsMuted) return;
     const ctx = getAudioContext();
     if (!ctx) return;
     
@@ -173,6 +204,8 @@ export function useSFX() {
   }, [playTone]);
 
   return {
+    isMuted,
+    toggleMute,
     playHover,
     playClick,
     playSuccess,

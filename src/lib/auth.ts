@@ -13,6 +13,7 @@ declare module "next-auth" {
       id: string;
       role: string;
       is_banned?: boolean;
+      is_onboarded?: boolean;
     } & DefaultSession["user"]
   }
   interface User extends DefaultUser {
@@ -86,11 +87,24 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.role = user.role;
         token.is_banned = user.is_banned;
+        
+        // Fetch fresh user data to check onboarding status
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { university: true, major: true }
+        });
+        token.is_onboarded = !!(dbUser?.university && dbUser?.major);
       }
+      
+      // Allow client-side update of onboarding status
+      if (trigger === "update" && session?.is_onboarded !== undefined) {
+        token.is_onboarded = session.is_onboarded;
+      }
+      
       return token;
     },
     async session({ session, token }) {
@@ -98,6 +112,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.sub;
         session.user.role = token.role as string;
         session.user.is_banned = token.is_banned as boolean | undefined;
+        session.user.is_onboarded = token.is_onboarded as boolean | undefined;
       }
       return session;
     }

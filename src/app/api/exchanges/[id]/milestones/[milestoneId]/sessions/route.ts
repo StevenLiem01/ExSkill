@@ -66,6 +66,18 @@ export async function POST(
       },
     });
 
+    // Buat Notifikasi untuk partner
+    const receiverId = exchange.participant_a_id === dbUser.id ? exchange.participant_b_id : exchange.participant_a_id;
+    await prisma.notification.create({
+      data: {
+        user_id: receiverId,
+        title: "Jadwal Belajar Baru",
+        type: "MEETING_SCHEDULED",
+        link: `/exchanges/${exchangeId}`,
+        message: `${dbUser.name} telah menjadwalkan "${title}" pada ${new Date(scheduled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}.`
+      }
+    });
+
     return NextResponse.json(newSession, { status: 201 });
   } catch (error: unknown) {
     console.error("Error creating session:", error);

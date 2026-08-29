@@ -72,6 +72,18 @@ export async function POST(
       include: { sender: { select: { id: true, name: true } } }
     });
 
+    // 2. Buat Notifikasi untuk partner
+    const receiverId = exchange.participant_a_id === user.id ? exchange.participant_b_id : exchange.participant_a_id;
+    await prisma.notification.create({
+      data: {
+        user_id: receiverId,
+        title: "Pesan Baru",
+        type: "CHAT_MESSAGE",
+        link: `/exchanges/${exchangeId}`,
+        message: `Pesan dari ${user.name}: ${content ? (content.length > 30 ? content.substring(0, 30) + '...' : content) : 'Mengirimkan sebuah lampiran.'}`
+      }
+    });
+
     return NextResponse.json(message, { status: 201 });
   } catch (error) {
     console.error("Error creating message:", error);

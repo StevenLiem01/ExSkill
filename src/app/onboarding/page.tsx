@@ -7,7 +7,7 @@ import AuthProvider from "@/components/AuthProvider";
 
 function OnboardingForm() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
 
   const [university, setUniversity] = useState("");
   const [major, setMajor] = useState("");
@@ -21,6 +21,12 @@ function OnboardingForm() {
 
   if (status === "unauthenticated") {
     router.push("/");
+    return null;
+  }
+
+  // Jika user sudah onboarding, kembalikan ke dashboard
+  if (session?.user?.is_onboarded) {
+    router.push("/dashboard");
     return null;
   }
 
@@ -43,10 +49,11 @@ function OnboardingForm() {
         throw new Error(data.message || "Gagal memperbarui profil");
       }
 
-      // Refresh router untuk memicu pemeriksaan session baru di layout/page server component
-      router.refresh();
-      // Redirect ke halaman utama setelah sukses
-      router.push("/");
+      // Panggil update session NextAuth agar JWT token di-refresh dengan is_onboarded = true
+      await update({ is_onboarded: true });
+      
+      // Redirect ke dashboard setelah sukses
+      router.push("/dashboard");
     } catch (err: unknown) {
       setError((err instanceof Error ? err.message : "Unknown error"));
     } finally {
